@@ -1,12 +1,16 @@
-import sys
-
-for entry in sys.path:
-    print(entry)
-
 from lib import HardwareAbstractionLayer, ProjectqQuantumSimulator
 from lib.hal import command_creator, measurement_unpacker
 
 from numpy import pi as PI
+
+
+def angle_to_integer(angle):
+    rescaled_angle = angle % 2*PI
+    return int(1024*rescaled_angle / (2*PI))
+INT_PI_BY_2 = angle_to_integer(PI/2)
+INT_PI_BY_4 = angle_to_integer(PI/4)
+INT_PI_BY_8 = angle_to_integer(PI/8)
+
 #
 # Shor's algorithm circuit
 # 1+4 qubits example with k=3, N = 15, a = 11
@@ -21,7 +25,7 @@ hal = HardwareAbstractionLayer(
 )
 
 #initialise qubit register
-hal.accept_command(command_creator("STATE_PREPARATION", 0, 0)) # TODO change to state prepare all
+hal.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
 
 # prepare qubits register |00001>
 hal.accept_command(command_creator("X", 0, n-1))
@@ -37,23 +41,24 @@ hal.accept_command(command_creator("H", 0, 0))
 # nothing to do
 # phase shift to apply depends on previous measurements
 if (c[0] == 1):
-    hal.accept_command(command_creator("RZ", PI/2,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_2,0))
 
 if (c[1] == 1):
-    hal.accept_command(command_creator("RZ", PI/4,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_4,0))
 
 if (c[2] == 1):
-    hal.accept_command(command_creator("RZ", PI/8,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_8,0))
 
 hal.accept_command(command_creator("H", 0, 0))
 # newest measurement outcome is associated with a pi/2 phase shift
 # in the next iteration, so shift all bits of c to the right
-c >>= 1
+c.insert(0,0) # Add bit to the left
+c.pop() # Remove rightmost bit
 
-q_index,status,readout = hal.accept_command(command_creator("MEASURE", 0, 0)) 
+q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
-hal.accept_command(command_creator("STATE_PREPARE", 0, 0))
+hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
 
 #------------------------------------------------
 #------------------- k = 1 ----------------------
@@ -65,23 +70,24 @@ hal.accept_command(command_creator("H", 0, 0))
 # nothing to do
 # phase shift to apply depends on previous measurements
 if (c[0] == 1):
-    hal.accept_command(command_creator("RZ", PI/2,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_2,0))
 
 if (c[1] == 1):
-    hal.accept_command(command_creator("RZ", PI/4,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_4,0))
 
 if (c[2] == 1):
-    hal.accept_command(command_creator("RZ", PI/8,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_8,0))
 
 hal.accept_command(command_creator("H", 0, 0))
 # newest measurement outcome is associated with a pi/2 phase shift
 # in the next iteration, so shift all bits of c to the right
-c >>= 1
+c.insert(0,0) # Add bit to the left
+c.pop() # Remove rightmost bit
 
-q_index,status,readout = hal.accept_command(command_creator("MEASURE", 0, 0)) 
+q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
-hal.accept_command(command_creator("STATE_PREPARE", 0, 0))
+hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
 
 #------------------------------------------------
 #------------------- k = 2 ----------------------
@@ -141,25 +147,28 @@ hal.accept_command(command_creator("CNOT", 0, 4))
 
 # phase shift to apply depends on previous measurements
 if (c[0] == 1):
-    hal.accept_command(command_creator("RZ", PI/2,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_2,0))
 
 if (c[1] == 1):
-    hal.accept_command(command_creator("RZ", PI/4,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_4,0))
 
 if (c[2] == 1):
-    hal.accept_command(command_creator("RZ", PI/8,0))
+    hal.accept_command(command_creator("RZ", INT_PI_BY_8,0))
 
 hal.accept_command(command_creator("H", 0, 0))
 # newest measurement outcome is associated with a pi/2 phase shift
 # in the next iteration, so shift all bits of c to the right
-c >>= 1
+c.insert(0,0) # Add bit to the left
+c.pop() # Remove rightmost bit
 
-q_index,status,readout = hal.accept_command(command_creator("MEASURE", 0, 0)) 
+q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
-hal.accept_command(command_creator("STATE_PREPARE", 0, 0))
+hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
 
 
 #------------------------------------------------
 #------------------- DONE -----------------------
 #------------------------------------------------
+print(f'Noiseless outcome expected to be 000 with probablity 50% and 100 with probability 50%. 100 corresponds to the correct period r of 2.')
+print(f'Output = {c}')
