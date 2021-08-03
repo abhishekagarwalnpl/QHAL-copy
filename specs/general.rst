@@ -1,7 +1,7 @@
 .. title:: general
 
-General
--------
+Introduction
+------------
 
 The main purpose of the HAL is to establish a unified northbound API based 
 framework across different QPU technologies.
