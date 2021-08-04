@@ -115,28 +115,30 @@ We would like to conclude this Section by proposing at least one possible format
 This has been investigated and tentatively validated on different integrations on both FPGA and CPUs for different quantum architectures. 
 The table that follows contains three representations, respectively for  "control commands", "single qubit commands" and "two qubits commands". All of them are encoded in 64 bits words. The goals of this format are (a) low complexity decoding logic (with buffering), (b) no significant performance penalty. 
 
-+-----------------------+---------------------+-----------------+------------------------+
-| Command type          | OPCODE              | ARGUMENT        | RELATIVE_QUBIT_IDX     |
-|                       |                     |                 |                        |
-| Control, Single or    | Command to execute  | Argument for    | Relative index of the  |
-| Dual Qubit command    |                     | the command     | QUBIT                  |
-+=======================+=====================+=================+========================+
-| CONTROL COMMANDS      | [63-52]             | [51-36]         | [35-0]                 |
-+-----------------------+---------------------+-----------------+------------------------+
-| SINGLE QUBIT COMMANDS | [63-52]             | [51-36]         | [19-10] padding        |
-|                       |                     |                 |                        |
-|                       |                     | [35-20] padding | [9-0]                  |
-+-----------------------+---------------------+-----------------+------------------------+
-| DUAL QUBIT COMMANDS   | [63-52]             | [51-36] qubit1  | [19-10] qubit1         |
-|                       |                     |                 |                        |
-|                       |                     | [35-20] qubit0  | [9-0] qubit0           |
-+-----------------------+---------------------+-----------------+------------------------+
++-----------------------+---------------------+-----------------+-----------------------------+
+| Command type          | OPCODE              | ARGUMENT        | RELATIVE_QUBIT_IDX          |
+|                       |                     |                 |                             |
+| Control, Single or    | Command to execute  | Argument for    | Relative index of the       |
+| Dual Qubit command    |                     | the command     | QUBIT                       |
++=======================+=====================+=================+=============================+
+| CONTROL COMMANDS      | [63-52]             | [51-36]         | [35-0] BASE_QUBIT0/1_IDX    |
++-----------------------+---------------------+-----------------+-----------------------------+
+| SINGLE QUBIT COMMANDS | [63-52]             | [51-36]         | [19-10] padding             |
+|                       |                     |                 |                             |
+|                       |                     | [35-20] padding | [9-0] RELATIVE_QUBIT0_IDX   |
++-----------------------+---------------------+-----------------+-----------------------------+
+| DUAL QUBIT COMMANDS   | [63-52]             | [51-36] qubit1  | [19-10] RELATIVE_QUBIT1_IDX |
+|                       |                     |                 |                             |
+|                       |                     | [35-20] qubit0  | [9-0] RELATIVE_QUBIT0_IDX   |
++-----------------------+---------------------+-----------------+-----------------------------+
   
 The following considerations have been made:
 
 - By fixing the OPCODE length, the decoder logic can use lookup tables. We consider 4096 codes (12 bits) to be more than sufficient. Note: It might be possible to reduce them to 256 (8 bits) by intelligent usage of special commands that allow an exception to the format (MODIFIERS, two examples will follow).
   
-- The RELATIVE_QUBIT_IDX is used in associate with the SET_PAGE_QUBIT0 and SET_PAGE_QUBIT1 commands to allow for extremely large addressability (2**46).
+- The RELATIVE_QUBIT_IDX is used in associate with the SET_PAGE_QUBIT0 and SET_PAGE_QUBIT1 commands to allow for extremely large addressability (2**46). Two registers in the quantum backend keep track of the addresses by applying the formulas: (BASE_QUBIT0_IDX << 10) + RELATIVE_QUBIT0_IDX and (BASE_QUBIT1_IDX << 10) + RELATIVE_QUBIT1_IDX for qubit0 and qubit1 respectively.
+
+- The BASE_QUBIT0_IDX and BASE_QUBIT1_IDX registers are preserved after being written. In other words, when a page is open it remains the same up to the next write to it. A START Session Command closes (resets to 0) both BASE_QUBIT0_IDX and BASE_QUBIT1_IDX values.
 
 - The OPCODE requires shifting and masking (12 bits) but we believe that the benefits of having a more compact word outnumber the additional complexity. Further optimizations can be enabled by using an additional bit (bit 11 of 12) to indicate a long OPCODE (length > 8).
 
