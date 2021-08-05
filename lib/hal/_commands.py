@@ -1,22 +1,33 @@
 """
 All the commands respect the following structure:
 
-SINGLE_WORD commands:
-OPCODE     |  ARGUMENT      |   QUBIT INDEX
-[63-48]    |  [47-32]       |   [31-0]
-
-DUAL_WORD commands:
-OPCODE       | PADDING    |   ARGUMENT0  |  ARGUMENT1   | QUBIT_IDX0 | QUBIT_IDX1
-[127-112]    |  [111-96]  |   [95-80]    |  [79-64]     |  [63-32]   |   [31-0]
++------------------+----------+-----------------+-----------------------------+
+| Command type     | OPCODE   | ARGUMENT        | RELATIVE_QUBIT_IDX          |
+|                  |          |                 |                             |
+| Control, Single, | Command  | Argument for    | Relative index of the       |
+| or Dual Qubit    | to       | the command     | QUBIT                       |
+| command          | execute  |                 |                             |
++==================+==========+=================+=============================+
+| CONTROL COMMANDS | [63-52]  | [51-36]         | [35-0] BASE_QUBIT0/1_IDX    |
++------------------+----------+-----------------+-----------------------------+
+| SINGLE QUBIT     | [63-52]  | [51-36] padding | [19-10] padding             |
+| COMMANDS         |          |                 |                             |
+|                  |          | [35-20]         | [9-0] RELATIVE_QUBIT0_IDX   |
++------------------+----------+-----------------+-----------------------------+
+| DUAL QUBIT       | [63-52]  | [51-36] qubit1  | [19-10] RELATIVE_QUBIT1_IDX |
+| COMMANDS         |          |                 |                             |
+|                  |          | [35-20] qubit0  | [9-0] RELATIVE_QUBIT0_IDX   |
++------------------+----------+-----------------+-----------------------------+
 
 OPCODE is structured as:
 SINGLE/DUAL | CONSTANT/PARAMETRIC   |   OPCODE
-[15]        |   [14]                |   [13-0]
+[11]        |   [10]                |   [9-0]
 
 """
 
-from enum import Enum, unique
-from typing import List, Tuple, Iterable
+from enum import Enum
+from typing import List, Tuple
+
 from numpy import uint64
 
 
@@ -26,49 +37,44 @@ class _Shifts(Enum):
     """
     OPCODE_TYPE = 63
 
-    OPCODE = 48
-    ARG0_SINGLE = 32
-    IDX0_SINGLE = 0
-
-    OPCODE_DOUBLE = 112
-    ARG0_DOUBLE = 0
-    ARG1_DOUBLE = 16
-    IDX1_DOUBLE = 32
-    IDX0_DOUBLE = 0
+    OPCODE = 52
+    ARG0 = 20
+    IDX0 = 0
+    ARG1 = 36
+    IDX1 = 10
 
 
 class _Masks(Enum):
     """ Masks used to decompose the commands """
 
-    QUBIT0_MASK = 0xFFFF
-    QUBIT1_MASK = 0xFFFF
-    ARG1_MASK = 0xFFFF
-    ARG0_MASK = 0xFFFF
-    SINGLE_MASK = 0x0000
-    DUAL_MASK = 0x8000
-    CONST_MASK = 0x0000
-    PARAM_MASK = 0x4000
-    OPCODE_MASK = 0xFFFF
-    TYPE_MASK = 0x1
+    # Relative to entire 64-bit command
+    QUBIT0_MASK = 0x3FF
+    QUBIT1_MASK = 0xFFC00
+    ARG0_MASK = 0xFFFF00000
+    ARG1_MASK = 0xFFFF000000000
+
+    # Relative to 12-bit OPCODE
+    OPCODE_PARAM_MASK = 0x200
+    OPCODE_DUAL_MASK = 0x400
 
 
 class Opcode:
-    def __init__(self, name, op_code, type, param):
+    def __init__(self, name, code, cmd_type, param):
         self.name = name
-        self.op_code = op_code
-        self.type = type
+        self.code = code
+        self.cmd_type = cmd_type
         self.param = param
         self._validate()
 
     def _validate(self):
-        if self.type == "DUAL":
-            assert (self.op_code & _Masks.DUAL_MASK.value != 0)
+        if self.cmd_type == "DUAL":
+            assert (self.code & _Masks.OPCODE_DUAL_MASK.value != 0)
         else:
-            assert (self.op_code & _Masks.DUAL_MASK.value == 0)
+            assert (self.code & _Masks.OPCODE_DUAL_MASK.value == 0)
         if self.param == "PARAM":
-            assert (self.op_code & _Masks.PARAM_MASK.value != 0)
+            assert (self.code & _Masks.OPCODE_PARAM_MASK.value != 0)
         else:
-            assert (self.op_code & _Masks.PARAM_MASK.value == 0)
+            assert (self.code & _Masks.OPCODE_PARAM_MASK.value == 0)
 
 
 _OPCODES = [
@@ -79,10 +85,10 @@ _OPCODES = [
     Opcode("STATE_PREPARATION", 2, "SINGLE", "CONST"),
     Opcode("QUBIT_MEASURE", 3, "SINGLE", "CONST"),
 
-    Opcode("RX", 10 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("RY", 11 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("RZ", 12 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("R", 13 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("RX", 10 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("RY", 11 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("RZ", 12 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("R", 13 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
 
     ## Paulis
     Opcode("PAULI_X", 20, "SINGLE", "CONST"),
@@ -91,7 +97,7 @@ _OPCODES = [
 
     ## Others
     Opcode("H", 30, "SINGLE", "CONST"),
-    Opcode("PHASE", 31 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("PHASE", 31 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("T", 32, "SINGLE", "CONST"),
     Opcode("S", 33, "SINGLE", "CONST"),
     Opcode("X", 34, "SINGLE", "CONST"),
@@ -102,47 +108,47 @@ _OPCODES = [
     Opcode("SX", 39, "SINGLE", "CONST"),
     Opcode("SY", 40, "SINGLE", "CONST"),
 
-    Opcode("PIXY", 41 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("PIYZ", 42 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("PIZX", 43 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("PIXY", 41 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("PIYZ", 42 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("PIZX", 43 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("SQRT_X", 44, "SINGLE", "CONST"),
 
     ## Flow commands (still to be considered/not accepted yet)
-    Opcode("FOR_START", 50 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("FOR_END", 51 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("IF", 52 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("WHILE", 53 | _Masks.PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("FOR_START", 50 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("FOR_END", 51 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("IF", 52 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("WHILE", 53 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
 
     # DUAL WORD Commands
-    Opcode("CNOT", 60 | _Masks.DUAL_MASK.value, "DUAL", "CONST"),
-    Opcode("SWAP", 61 | _Masks.DUAL_MASK.value, "DUAL", "CONST"),
+    Opcode("CNOT", 60 | _Masks.OPCODE_DUAL_MASK.value, "DUAL", "CONST"),
+    Opcode("SWAP", 61 | _Masks.OPCODE_DUAL_MASK.value, "DUAL", "CONST"),
     Opcode(
-        "PSWAP", 62 | (_Masks.DUAL_MASK.value + _Masks.PARAM_MASK.value),
+        "PSWAP", 62 | (_Masks.OPCODE_DUAL_MASK.value | _Masks.OPCODE_PARAM_MASK.value),
         "DUAL", "PARAM"
     ),
 
     # VERSIONING
-    Opcode("ID", 1000, "SINGLE", "CONST")
+    #Opcode("ID", 1000, "SINGLE", "CONST")
 ]
 
 
-def string_to_command(command: str) -> Opcode:
+def string_to_opcode(op: str) -> Opcode:
     for opcode in _OPCODES:
-        if opcode.name == command:
+        if opcode.name == op:
             return opcode
-    raise ValueError(f"{command} not found!")
+    raise ValueError(f"{op} not found!")
 
 
-def _opcode_to_command(op_code: uint64) -> Opcode:
+def int_to_opcode(op_code: uint64) -> Opcode:
     for opcode in _OPCODES:
-        if opcode.op_code == op_code:
+        if opcode.code == op_code:
             return opcode
     raise ValueError(f"{op_code} not found!")
 
 
 def command_creator(
     op: str, arg0: int = 0, qidx0: int = 0, arg1: int = 0, qidx1: int = 0
-) -> Tuple[uint64]:
+) -> uint64:
     """Helper function to create HAL commands.
 
     Parameters
@@ -155,78 +161,71 @@ def command_creator(
         Integer representation of qubit address
     Returns
     -------
-    List[uint64]
-        Tuple of 2 64-bit (8 bytes) parts of the command. Upper and lower half.
+    uint64
+        64-bit (8 bytes) HAL command.
     """
 
-    command = string_to_command(op)
+    opcode = string_to_opcode(op)
 
-    if "SINGLE" in command.type:
-        cmd_h = (
-            (command.op_code << _Shifts.OPCODE.value)
-            | (arg0 << _Shifts.ARG0_SINGLE.value)
-            | qidx0
+    cmd = (
+        (opcode.code << _Shifts.OPCODE.value)
+        | (arg0 << _Shifts.ARG0.value)
+        | qidx0
+    )
+
+    if opcode.cmd_type == "DUAL":
+
+        cmd = (
+            (_Masks.OPCODE_DUAL_MASK.value << _Shifts.OPCODE.value)
+            | (qidx1 << _Shifts.IDX1.value)
+            | (arg1 << _Shifts.ARG1.value)
+            | (cmd)
         )
-        cmd_l = 0x0
-    else:
-        cmd_h = (
-            (command.op_code << (_Shifts.OPCODE.value))
-            | (arg1 << (_Shifts.ARG1_DOUBLE.value))
-            | (arg0 << (_Shifts.ARG0_DOUBLE.value))
-        )
-        cmd_l = (qidx1 << _Shifts.IDX1_DOUBLE.value) | (
-            qidx0 << _Shifts.IDX0_DOUBLE.value
-        )
-    return (cmd_h, cmd_l)
+
+    if opcode.cmd_type == "PARAM":
+        cmd = cmd | _Masks.OPCODE_PARAM_MASK.value << _Shifts.OPCODE.value
+
+    return cmd
 
 
 def command_unpacker(
-    cmd: Tuple[uint64, uint64]
-) -> Tuple[str, List[int], List[int]]:
+    cmd: uint64
+) -> Tuple[str, str, List[int], List[int]]:
     """Helper function to unpack HAL commands.
 
     Parameters
     ----------
-    cmd : Tuple[uint64,uint64]
-        Tuple of 2 64-bit (8 bytes) parts of the command. Upper and lower half.
+    cmd : uint64
+        64-bit (8 bytes) HAL command.
 
     Returns
     -------
     op : str
         Name of opcode.
+    type: str
+        Type of opcode.
     arguments : List[int]
-        Integer representation of argument value.
-    qubit_indexs : List[int]
-        Integer representation of qubit address.
+        List of integer representation of argument value(s).
+    qubit_indexes : List[int]
+        List of integer representation of qubit addresses.
     """
-    cmd_hi, cmd_low = cmd
-    # Dual command
-    cmd_type = cmd_hi >> (_Shifts.OPCODE_TYPE.value) & _Masks.TYPE_MASK.value
-    cmd_code = (cmd_hi >> (_Shifts.OPCODE.value)) & _Masks.OPCODE_MASK.value
 
-    command = _opcode_to_command(cmd_code)
+    cmd_op_section = (cmd >> (_Shifts.OPCODE.value))
 
-    # Extracting args
+    opcode = int_to_opcode(cmd_op_section)
+
+    # Extracting args and qubits
     args = []
     qubits = []
-    if command.type == "SINGLE":
-        args.append(
-            (cmd_hi >> _Shifts.ARG0_SINGLE.value) & _Masks.ARG0_MASK.value
-        )
-        qubits.append(cmd_hi & _Masks.QUBIT0_MASK.value)
-    else:
-        args.append(
-            (cmd_hi >> _Shifts.ARG1_DOUBLE.value) & _Masks.ARG1_MASK.value
-        )
-        args.append(
-            (cmd_hi >> _Shifts.ARG0_DOUBLE.value) & _Masks.ARG0_MASK.value
-        )
-        qubits.append(
-            (cmd_low >> _Shifts.IDX1_DOUBLE.value) & _Masks.QUBIT1_MASK.value
-        )
-        qubits.append(cmd_low & _Masks.QUBIT0_MASK.value)
 
-    return (command.name, args, qubits)
+    qubits.append(cmd & _Masks.QUBIT0_MASK.value)
+    args.append((cmd & _Masks.ARG0_MASK.value) >> _Shifts.ARG0.value)
+
+    if opcode.cmd_type == "DUAL":
+        qubits.append((cmd & _Masks.QUBIT1_MASK.value) >> _Shifts.IDX1.value)
+        args.append((cmd & _Masks.ARG1_MASK.value) >> _Shifts.ARG1.value)
+
+    return (opcode.name, opcode.cmd_type, args, qubits)
 
 
 def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:

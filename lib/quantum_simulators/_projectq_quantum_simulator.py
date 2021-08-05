@@ -1,6 +1,4 @@
 import atexit
-import logging
-from typing import Tuple
 
 import numpy as np
 from numpy import uint64
@@ -13,7 +11,7 @@ from projectq.ops import (All, C, CNOT, DaggeredGate, H, Measure, R,
 from projectq.ops._basics import BasicGate, BasicRotationGate
 
 from . import IQuantumSimulator
-from ..hal import command_unpacker, string_to_command
+from ..hal import command_unpacker, string_to_opcode
 
 
 class SxGate(BasicGate):
@@ -227,11 +225,11 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
     def accept_command(
         self,
-        command: Tuple[uint64, uint64]
+        command: uint64
     ) -> uint64:
 
-        op, args, qubit_indexes = command_unpacker(command)
-        op_obj = string_to_command(op)
+        op, cmd_type, args, qubit_indexes = command_unpacker(command)
+        op_obj = string_to_opcode(op)
 
         for index in qubit_indexes:
             assert index <= self._qubit_register_size, \
@@ -288,7 +286,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
             angle = args[-1] * (2 * np.pi) / 1024
             gate = self._parameterised_gate_dict[op]
-            if op_obj.type == "SINGLE":
+            if op_obj.cmd_type == "SINGLE":
                 self.apply_gate(gate, qubit_indexes[0], parameter_0=angle)
             else:
                 self.apply_gate(
@@ -303,7 +301,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 raise ValueError("Qubit requires re-preparation!")
 
             gate = self._constant_gate_dict[op]
-            if op_obj.type == "SINGLE":
+            if op_obj.cmd_type == "SINGLE":
                 self.apply_gate(gate, qubit_indexes[0])
             else:
                 self.apply_gate(
