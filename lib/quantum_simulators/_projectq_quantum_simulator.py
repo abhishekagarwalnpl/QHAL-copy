@@ -286,7 +286,9 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if qubit_indexes[0] in self._measured_qubits:
                 raise ValueError("Qubit requires re-preparation!")
 
-            angle = args[-1] * (2 * np.pi) / 1024
+            # convert from 16-bit representation of angle
+            angle = args[-1] * (2 * np.pi) / 65536
+
             gate = self._parameterised_gate_dict[op]
             if op_obj.type == "SINGLE":
                 self.apply_gate(gate, qubit_indexes[0], parameter_0=angle)
