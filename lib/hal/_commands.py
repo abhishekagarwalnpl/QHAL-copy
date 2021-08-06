@@ -54,8 +54,8 @@ class _Masks(Enum):
     ARG1_MASK = 0xFFFF000000000
 
     # Relative to 12-bit OPCODE
-    OPCODE_PARAM_MASK = 0x200
-    OPCODE_DUAL_MASK = 0x400
+    OPCODE_PARAM_MASK = 0x400
+    OPCODE_DUAL_MASK = 0x800
 
 
 class Opcode:
@@ -128,7 +128,7 @@ _OPCODES = [
     ),
 
     # VERSIONING
-    #Opcode("ID", 1000, "SINGLE", "CONST")
+    Opcode("ID", 1000, "SINGLE", "CONST")
 ]
 
 
