@@ -172,6 +172,37 @@ class TestQuantumSimulators(unittest.TestCase):
 
         self.assertEqual(res, 1)
 
+    def test_qubit_index_offset(self):
+        """Tests that we can address qubit indices that exist 
+        """
+
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=10,
+            seed=234,
+            backend=Simulator,
+            offset_register_weight=8  # offset qubit index = 0 as multiples of 8
+        )
+
+        circuit = [
+            ["STATE_PREPARATION_ALL", 0, 0],
+            ["PAGE_SET_QUBIT_0", 0, 1],  # set offset
+            ['X', 0, 0]  # qubit index = 0 now refers to index = 8
+        ]
+
+        for commands in circuit:
+
+            hal_cmd = command_creator(*commands)
+            projQ_backend.accept_command(hal_cmd)
+
+        res = measurement_unpacker(
+            projQ_backend.accept_command(
+                command_creator(*['QUBIT_MEASURE', 0, 0])
+            )
+        )
+
+        self.assertEqual(res[0], 8)  # offset is still set
+        self.assertEqual(res[2], 1)
+
     def test_unrecognised_opcode(self):
         """Tests that an unrecognised opcode causes a fail.
         """

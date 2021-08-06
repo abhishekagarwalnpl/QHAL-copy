@@ -14,9 +14,9 @@ All the commands respect the following structure:
 | COMMANDS         |          |                 |                             |
 |                  |          | [35-20]         | [9-0] RELATIVE_QUBIT0_IDX   |
 +------------------+----------+-----------------+-----------------------------+
-| DUAL QUBIT       | [63-52]  | [51-36] qubit1  | [19-10] RELATIVE_QUBIT1_IDX |
+| DUAL QUBIT       | [63-52]  | [51-36] arg1    | [19-10] RELATIVE_QUBIT1_IDX |
 | COMMANDS         |          |                 |                             |
-|                  |          | [35-20] qubit0  | [9-0] RELATIVE_QUBIT0_IDX   |
+|                  |          | [35-20] arg0    | [9-0] RELATIVE_QUBIT0_IDX   |
 +------------------+----------+-----------------+-----------------------------+
 
 OPCODE is structured as:
@@ -80,11 +80,16 @@ class Opcode:
 _OPCODES = [
     # SINGLE WORD Commands
     ## Configuration Session
-    Opcode("NOP", 0, "SINGLE", "CONST"),
-    Opcode("STATE_PREPARATION_ALL", 1, "SINGLE", "CONST"),
-    Opcode("STATE_PREPARATION", 2, "SINGLE", "CONST"),
-    Opcode("QUBIT_MEASURE", 3, "SINGLE", "CONST"),
+    Opcode("START_SESSION", 0, "SINGLE", "CONST"),
+    Opcode("END_SESSION", 1, "SINGLE", "CONST"),
+    Opcode("PAGE_SET_QUBIT_0", 2, "SINGLE", "CONST"),
+    Opcode("PAGE_SET_QUBIT_1", 3, "SINGLE", "CONST"),
+    Opcode("NOP", 4, "SINGLE", "CONST"),
+    Opcode("STATE_PREPARATION_ALL", 5, "SINGLE", "CONST"),
+    Opcode("STATE_PREPARATION", 6, "SINGLE", "CONST"),
+    Opcode("QUBIT_MEASURE", 7, "SINGLE", "CONST"),
 
+    ## Arbitrary Rotations
     Opcode("RX", 10 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("RY", 11 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("RZ", 12 | _Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
@@ -202,7 +207,7 @@ def command_unpacker(
     -------
     op : str
         Name of opcode.
-    type: str
+    cmd_type: str
         Type of opcode.
     arguments : List[int]
         List of integer representation of argument value(s).
@@ -211,7 +216,6 @@ def command_unpacker(
     """
 
     cmd_op_section = (cmd >> (_Shifts.OPCODE.value))
-
     opcode = int_to_opcode(cmd_op_section)
 
     # Extracting args and qubits
@@ -231,7 +235,7 @@ def command_unpacker(
 def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
     """Helper function to decode 64-bit measurement status result from HAL.
     Converts this:
-    QUBIT INDEX [63-32] | STATUS [31-27] | PADDING [26-1] | VALUE [0]
+    QUBIT INDEX [63-54] | OFFSET [53-14] | STATUS [13-9] | PADDING [8-1] | VALUE [0]
     to this:
     (QUBIT_INDEX, STATUS, VALUE)
 
@@ -246,8 +250,8 @@ def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
     """
 
     return (
-        bitcode >> 32,
-        (bitcode & 4294967295) >> 32,
+        (bitcode >> 54) + ((bitcode >> 14) & 68719476735),
+        (bitcode & 15872) >> 9,
         bitcode & 1
     )
 
