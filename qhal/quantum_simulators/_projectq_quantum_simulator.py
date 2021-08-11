@@ -98,21 +98,12 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         circuit errors.
     backend
         ProjectQ backend, could use CircuitDrawer for debugging purposes.
-    offset_register_weight: int
-        Factor to multiply the values held in local offset registers. Offsets
-        are used to adress qubit indexes greater than the maximum value held
-        in the 10-bit base qubit index, therefore a natural value for
-        offset_register_weight is 1024, but this is too large for projectQ to
-        set up a register for, so for this simulator we set the default value
-        to 1, and advise caution to setting very high values...
-
     """
 
     def __init__(self,
                  register_size: int = 16,
                  seed: int = None,
-                 backend=Simulator,
-                 offset_register_weight=1):
+                 backend=Simulator):
         if backend == Simulator and seed is not None:
             self._engine = MainEngine(backend=Simulator(rnd_seed=seed))
 
@@ -128,7 +119,6 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         self._qubit_register = None
         self._measured_qubits = []
         self._offset_registers = [0, 0]  # offsets for qubit indexes 0 and 1
-        self._offset_reg_weight = offset_register_weight
 
         # defaulted to 16 because the bitcode status return
         # has 16 bits assigned for measurement results.
@@ -191,7 +181,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         self._engine.flush()
 
     def get_offset(self, qubit_index: int):
-        return self._offset_registers[qubit_index] * self._offset_reg_weight
+        return self._offset_registers[qubit_index]
 
     def apply_gate(self,
                    gate: BasicGate,

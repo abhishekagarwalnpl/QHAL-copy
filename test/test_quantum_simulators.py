@@ -3,8 +3,15 @@ import unittest
 import numpy as np
 from projectq.backends import Simulator
 
-from test.quantum_simulators import ProjectqQuantumSimulator
-from test.hal import command_creator, measurement_unpacker
+from qhal.quantum_simulators import ProjectqQuantumSimulator
+from qhal.hal import command_creator, measurement_unpacker
+
+# ProjectQ can only address a small number of qubits. We
+class MockProjectqQuantumSimulator(ProjectqQuantumSimulator):
+
+    def get_offset(self, qubit_index: int):
+        return self._offset_registers[qubit_index] * 8
+
 
 
 class TestQuantumSimulators(unittest.TestCase):
@@ -176,12 +183,10 @@ class TestQuantumSimulators(unittest.TestCase):
         """Tests that we can address qubit indices that exist
         """
 
-        projQ_backend = ProjectqQuantumSimulator(
+        projQ_backend = MockProjectqQuantumSimulator(
             register_size=10,
             seed=234,
-            backend=Simulator,
-            offset_register_weight=8  # offset qubit index = 0 as multiples of 8
-        )
+            backend=Simulator)
 
         circuit = [
             ["STATE_PREPARATION_ALL", 0, 0],
