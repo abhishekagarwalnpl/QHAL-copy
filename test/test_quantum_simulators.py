@@ -3,8 +3,8 @@ import unittest
 import numpy as np
 from projectq.backends import Simulator
 
-from lib.quantum_simulators import ProjectqQuantumSimulator
-from lib.hal import command_creator, measurement_unpacker
+from test.quantum_simulators import ProjectqQuantumSimulator
+from test.hal import command_creator, measurement_unpacker
 
 
 class TestQuantumSimulators(unittest.TestCase):
@@ -173,7 +173,7 @@ class TestQuantumSimulators(unittest.TestCase):
         self.assertEqual(res, 1)
 
     def test_qubit_index_offset(self):
-        """Tests that we can address qubit indices that exist 
+        """Tests that we can address qubit indices that exist
         """
 
         projQ_backend = ProjectqQuantumSimulator(

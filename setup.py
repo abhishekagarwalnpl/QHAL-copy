@@ -2,11 +2,10 @@ import setuptools
 
 install_reqs_path = 'environment/install_requirements.txt'
 
-with open('README.md') as f:
-    read_me = f.read()
+read_me = """ Quantum Hardware Abstraction Layer package. """
 
 about_info = {}
-with open("lib/__about__.py") as f:
+with open("qhal/__about__.py") as f:
     exec(f.read(), about_info)
 
 
@@ -23,8 +22,8 @@ def read_requirements_txt(file_name: str):
 
 
 setuptools.setup(
-    name="QHAL",
-    packages=setuptools.find_packages(include=['QHAL', 'QHAL.*']),
+    name="qhal",
+    packages=setuptools.find_packages(include=['qhal', 'qhal.*']),
     version=about_info['__version__'],
     author="ISCF Steering committee",
     author_email=about_info['__email__'],
@@ -46,5 +45,5 @@ setuptools.setup(
         'Programming Language :: Python :: 3'
     ],
     install_requires=read_requirements_txt(install_reqs_path),
-    python_requires='>=3.8'
+    python_requires='==3.8.*'
 )

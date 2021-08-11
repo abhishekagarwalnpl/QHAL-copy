@@ -1,6 +1,6 @@
 import unittest
 
-from lib.hal._commands import (command_creator,
+from qhal.hal._commands import (command_creator,
                                command_unpacker,
                                _OPCODES)
 
