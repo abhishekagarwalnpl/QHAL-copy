@@ -217,7 +217,6 @@ def command_unpacker(
 
     cmd_op_section = (cmd >> (_Shifts.OPCODE.value))
     opcode = int_to_opcode(cmd_op_section)
-
     # Extracting args and qubits
     args = []
     qubits = []
@@ -254,38 +253,3 @@ def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
         (bitcode & 15872) >> 9,
         bitcode & 1
     )
-
-
-def hal_command_sequence_decomposer(
-    cmd: Tuple[uint64, uint64]
-) -> Tuple[bytes, bytes]:
-    """ Decompose hal command sequence in lead word an remainder, return both.
-    TODO: is this function required?
-
-    Parameters
-    ----------
-    cmd : bytes
-        sequence of 64-bit or 128-bit HAL commands
-
-    Returns
-    -------
-    hal_cmd : bytes
-        64-bit or 128-bit HAL command
-    cmd_remainder : bytes
-        sequence of 64-bit or 128-bit HAL commands with lead word removed
-    """
-    idx = Sizes.OPCODE.value
-    op = int.from_bytes(cmd[:idx], byteorder="big")
-    # Initial way to retrieve the value
-    try:
-        opcode = Opcode((op, "SINGLE"))
-    except ValueError:
-        opcode = Opcode((op, "DUAL"))
-
-    # Extracting args
-    if opcode.type == "SINGLE":
-        idx = Sizes.SINGLE.value
-    else:
-        idx = Sizes.DUAL.value
-
-    return cmd[:idx], cmd[idx:]
