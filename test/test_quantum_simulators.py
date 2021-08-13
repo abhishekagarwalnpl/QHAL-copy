@@ -3,8 +3,15 @@ import unittest
 import numpy as np
 from projectq.backends import Simulator
 
-from lib.quantum_simulators import ProjectqQuantumSimulator
-from lib.hal import command_creator, measurement_unpacker
+from qhal.quantum_simulators import ProjectqQuantumSimulator
+from qhal.hal import command_creator, measurement_unpacker
+
+# ProjectQ can only address a small number of qubits. We
+class MockProjectqQuantumSimulator(ProjectqQuantumSimulator):
+
+    def get_offset(self, qubit_index: int):
+        return self._offset_registers[qubit_index] * 8
+
 
 
 class TestQuantumSimulators(unittest.TestCase):
@@ -32,13 +39,13 @@ class TestQuantumSimulators(unittest.TestCase):
             ["SX", 0, 1],
             ["T", 0, 2],
             ["S", 0, 2],
-            ["SWAP", 1, 2],
+            ["SWAP", 0, 1, 0, 2],
             ["T", 0, 2],
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
             ['PSWAP', 200, 0, 0, 1],
-            ["CNOT", 0, 2],
+            ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 1],
         ]
@@ -56,14 +63,14 @@ class TestQuantumSimulators(unittest.TestCase):
 
         self.assertEqual(
             list(psi_projq), [
-                (-0.24601908341310902-0.11268502695538912j),
-                0j,
-                (0.3562507168468382+0.547596678261246j),
-                0j,
-                (0.24601908341310902+0.11268502695538912j),
-                0j,
-                (-0.3562507168468382-0.547596678261246j),
-                0j
+                (-0.25903240188259363+0.24062879041156826j),
+                (-0.20711081870608414+0.28653989037286853j),
+                (0.349063763927275+0.05616483519893535j),
+                (0.35331381736695744-0.013013318469484697j),
+                (0.25903240188259363-0.24062879041156826j),
+                (0.20711081870608414-0.28653989037286853j),
+                (-0.349063763927275-0.05616483519893535j),
+                (-0.35331381736695744+0.013013318469484697j)
             ]
         )
 
@@ -171,6 +178,35 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         self.assertEqual(res, 1)
+
+    def test_qubit_index_offset(self):
+        """Tests that we can address qubit indices that exist
+        """
+
+        projQ_backend = MockProjectqQuantumSimulator(
+            register_size=10,
+            seed=234,
+            backend=Simulator)
+
+        circuit = [
+            ["STATE_PREPARATION_ALL", 0, 0],
+            ["PAGE_SET_QUBIT_0", 0, 1],  # set offset
+            ['X', 0, 0]  # qubit index = 0 now refers to index = 8
+        ]
+
+        for commands in circuit:
+
+            hal_cmd = command_creator(*commands)
+            projQ_backend.accept_command(hal_cmd)
+
+        res = measurement_unpacker(
+            projQ_backend.accept_command(
+                command_creator(*['QUBIT_MEASURE', 0, 0])
+            )
+        )
+
+        self.assertEqual(res[0], 8)  # offset is still set
+        self.assertEqual(res[2], 1)
 
     def test_unrecognised_opcode(self):
         """Tests that an unrecognised opcode causes a fail.
