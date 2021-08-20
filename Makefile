@@ -131,8 +131,8 @@ build-package: container ## Make the package
 	${DEXEC} ${CHECKPACKAGE}
 
 .PHONY: test-upload-package
- test-upload-package: build-package ## Make and upload the package to test.pypi.org
-     ${DEXEC} ${TESTUPLOADPACKAGE}
+test-upload-package: build-package ## Make and upload the package to test.pypi.org
+	${DEXEC} ${TESTUPLOADPACKAGE}
 
 .PHONY: upload-package
 upload-package: build-package ## Make and upload the package to pypi.org
