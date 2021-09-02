@@ -131,6 +131,8 @@ _OPCODES = [
         "PSWAP", 62 | (_Masks.OPCODE_DUAL_MASK.value | _Masks.OPCODE_PARAM_MASK.value),
         "DUAL", "PARAM"
     ),
+    Opcode("RZZ", 63 | _Masks.OPCODE_DUAL_MASK.value | _Masks.OPCODE_PARAM_MASK.value, "DUAL", "PARAM"),
+    Opcode("RXX", 64 | _Masks.OPCODE_DUAL_MASK.value | _Masks.OPCODE_PARAM_MASK.value, "DUAL", "PARAM"),
 
     # VERSIONING
     Opcode("ID", 1000, "SINGLE", "CONST")
