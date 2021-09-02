@@ -134,7 +134,9 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             'PIXY': PiXY,
             'PIYZ': PiYZ,
             'PIZX': PiZX,
-            'PSWAP': Pswap
+            'PSWAP': Pswap,
+            'RXX': Rxx,
+            'RZZ': Rzz
         }
 
         self._constant_gate_dict = {
