@@ -7,7 +7,8 @@ from numpy.random import RandomState
 from projectq import MainEngine
 from projectq.backends import Simulator
 from projectq.ops import (All, C, CNOT, DaggeredGate, H, Measure, R,
-                          Rx, Ry, Rz, S, SqrtX, Swap, T, X, Y, Z)
+                          Rx, Ry, Rz, S, SqrtX, Swap, T, X, Y, Z,
+                          Rxx, Rzz)
 from projectq.ops._basics import BasicGate, BasicRotationGate
 
 from . import IQuantumSimulator
