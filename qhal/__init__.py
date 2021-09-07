@@ -10,6 +10,7 @@ from .__about__ import (
 from .hal import (HardwareAbstractionLayer,
                   string_to_opcode,
                   command_creator,
-                  Masks)
+                  Masks,
+                  Shifts)
 from .quantum_simulators import (IQuantumSimulator,
                                  ProjectqQuantumSimulator)

@@ -31,7 +31,7 @@ from typing import List, Tuple
 from numpy import uint64
 
 
-class _Shifts(Enum):
+class Shifts(Enum):
     """
     Defines the position of the command subfields.
     """
@@ -175,22 +175,22 @@ def command_creator(
     opcode = string_to_opcode(op)
 
     cmd = (
-        (opcode.code << _Shifts.OPCODE.value)
-        | (arg0 << _Shifts.ARG0.value)
+        (opcode.code << Shifts.OPCODE.value)
+        | (arg0 << Shifts.ARG0.value)
         | qidx0
     )
 
     if opcode.cmd_type == "DUAL":
 
         cmd = (
-            (Masks.OPCODE_DUAL_MASK.value << _Shifts.OPCODE.value)
-            | (qidx1 << _Shifts.IDX1.value)
-            | (arg1 << _Shifts.ARG1.value)
+            (Masks.OPCODE_DUAL_MASK.value << Shifts.OPCODE.value)
+            | (qidx1 << Shifts.IDX1.value)
+            | (arg1 << Shifts.ARG1.value)
             | (cmd)
         )
 
     if opcode.cmd_type == "PARAM":
-        cmd = cmd | Masks.OPCODE_PARAM_MASK.value << _Shifts.OPCODE.value
+        cmd = cmd | Masks.OPCODE_PARAM_MASK.value << Shifts.OPCODE.value
 
     return cmd
 
@@ -217,18 +217,18 @@ def command_unpacker(
         List of integer representation of qubit addresses.
     """
 
-    cmd_op_section = (cmd >> (_Shifts.OPCODE.value))
+    cmd_op_section = (cmd >> (Shifts.OPCODE.value))
     opcode = int_to_opcode(cmd_op_section)
     # Extracting args and qubits
     args = []
     qubits = []
 
     qubits.append(cmd & Masks.QUBIT0_MASK.value)
-    args.append((cmd & Masks.ARG0_MASK.value) >> _Shifts.ARG0.value)
+    args.append((cmd & Masks.ARG0_MASK.value) >> Shifts.ARG0.value)
 
     if opcode.cmd_type == "DUAL":
-        qubits.append((cmd & Masks.QUBIT1_MASK.value) >> _Shifts.IDX1.value)
-        args.append((cmd & Masks.ARG1_MASK.value) >> _Shifts.ARG1.value)
+        qubits.append((cmd & Masks.QUBIT1_MASK.value) >> Shifts.IDX1.value)
+        args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
 
     return (opcode.name, opcode.cmd_type, args, qubits)
 

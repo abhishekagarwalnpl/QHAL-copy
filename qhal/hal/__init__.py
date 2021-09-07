@@ -3,5 +3,6 @@ from ._commands import (command_creator,
                         measurement_unpacker,
                         string_to_opcode,
                         Opcode,
-                        Masks)
+                        Masks,
+                        Shifts)
 from ._hardware_abstraction_layer_node import HardwareAbstractionLayer
