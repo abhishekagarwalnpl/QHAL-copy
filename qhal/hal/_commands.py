@@ -189,7 +189,7 @@ def command_creator(
             | (cmd)
         )
 
-    if opcode.cmd_type == "PARAM":
+    if opcode.param == "PARAM":
         cmd = cmd | Masks.OPCODE_PARAM_MASK.value << Shifts.OPCODE.value
 
     return cmd
