@@ -233,6 +233,30 @@ def command_unpacker(
     return (opcode.name, opcode.cmd_type, args, qubits)
 
 
+def measurement_creator(qidx: int, status: int = 0, value: int = 0) -> uint64:
+    """Helper function to pack data into a 64-bit HAL measurement status result.
+    Converts this:
+    (QUBIT_INDEX, STATUS, VALUE)
+    to this:
+    QUBIT INDEX [63-54] | OFFSET [53-14] | STATUS [13-9] | PADDING [8-1] | VALUE [0]
+
+    Parameters
+    ----------
+    qidx : int
+        Qubit index.
+    status : int, optional
+        Status code, by default 0.
+    value : int, optional
+        Measurement value, by default 0.
+
+    Returns
+    -------
+    unit64
+        64-bit measurement status from HAL.
+    """
+
+    return qidx << 54 | status << 9 | value
+
 def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
     """Helper function to decode 64-bit measurement status result from HAL.
     Converts this:
