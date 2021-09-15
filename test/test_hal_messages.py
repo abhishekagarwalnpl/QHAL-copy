@@ -46,6 +46,9 @@ class HALTest(unittest.TestCase):
                                 )
 
     def test_measurement_creator_unpacker(self):
+        """Tests measurement encoding is consistent between measurement creator
+        and unpacker functions.
+        """
 
         for idx in range(8):
             for status in range(8):
