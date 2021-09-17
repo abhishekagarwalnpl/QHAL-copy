@@ -51,13 +51,14 @@ class HALTest(unittest.TestCase):
         """
 
         for idx in range(8):
-            for status in range(8):
-                for res in range(2):
-                    args = (idx, status, res)
-                    self.assertEqual(
-                        args, 
-                        measurement_unpacker(measurement_creator(*args))
-                    )
+            for offset in range(8):
+                for status in range(8):
+                    for res in range(2):
+                        args = (idx, offset, status, res)
+                        self.assertEqual(
+                            args, 
+                            measurement_unpacker(measurement_creator(*args))
+                        )
 
 
 if __name__ == "__main__":

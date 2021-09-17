@@ -233,17 +233,24 @@ def command_unpacker(
     return (opcode.name, opcode.cmd_type, args, qubits)
 
 
-def measurement_creator(qidx: int, status: int = 0, value: int = 0) -> uint64:
+def measurement_creator(
+        qidx: int,
+        offset: int = 0,
+        status: int = 0,
+        value: int = 0
+    ) -> uint64:
     """Helper function to pack data into a 64-bit HAL measurement status result.
     Converts this:
     (QUBIT_INDEX, STATUS, VALUE)
     to this:
-    QUBIT INDEX [63-54] | OFFSET [53-14] | STATUS [13-9] | PADDING [8-1] | VALUE [0]
+    QUBIT INDEX [63-52] | OFFSET [51-12] | STATUS [11-7] | PADDING [6-1] | VALUE [0]
 
     Parameters
     ----------
     qidx : int
         Qubit index.
+    offset : int, optional
+        index offset, by default 0.
     status : int, optional
         Status code, by default 0.
     value : int, optional
@@ -255,14 +262,14 @@ def measurement_creator(qidx: int, status: int = 0, value: int = 0) -> uint64:
         64-bit measurement status from HAL.
     """
 
-    return qidx << 54 | status << 9 | value
+    return qidx << 52 | offset << 12 |status << 7 | value
 
-def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
+def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int, int]:
     """Helper function to decode 64-bit measurement status result from HAL.
     Converts this:
-    QUBIT INDEX [63-54] | OFFSET [53-14] | STATUS [13-9] | PADDING [8-1] | VALUE [0]
+    QUBIT INDEX [63-52] | OFFSET [51-12] | STATUS [11-7] | PADDING [6-1] | VALUE [0]
     to this:
-    (QUBIT_INDEX, STATUS, VALUE)
+    (QUBIT_INDEX, OFFSET, STATUS, VALUE)
 
     Parameters
     ----------
@@ -270,12 +277,13 @@ def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int]:
         64-bit measurement status from HAL.
     Returns
     -------
-    Tuple[int, int, int]
-        Tuple of decoded qubit index, status, and readout value.
+    Tuple[int, int, int, int]
+        Tuple of decoded qubit index, index offset, status, and readout value.
     """
 
     return (
-        (bitcode >> 54) + ((bitcode >> 14) & 68719476735),
-        (bitcode & 15872) >> 9,
+        (bitcode >> 52),
+        (bitcode >> 12) & 1023,
+        (bitcode & 3968) >> 7,
         bitcode & 1
     )
