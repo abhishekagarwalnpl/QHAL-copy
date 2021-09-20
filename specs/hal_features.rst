@@ -149,7 +149,7 @@ vendors might prefer not to disclose such information.
 Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit gate or 
 the CPHASE gate.
 
-.. list-table:: Optional HAL commands. * For optional commands the hardware provider has to define the HAL level(s) they apply to.
+.. list-table:: Optional HAL commands. [*]_ 
     
     * - Command
       - Parameters
@@ -171,6 +171,8 @@ the CPHASE gate.
       - None
       - Optional commands for hardware-specific instructions.
       - Specific.
+
+.. [*] For optional commands the hardware provider has to define the HAL level(s) they apply to.
 
 Required HAL responses
 ----------------------
