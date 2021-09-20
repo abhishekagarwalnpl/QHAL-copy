@@ -8,7 +8,7 @@ Introduction
 
 The HAL allows algorithm developers to abstract away the details of a 
 hardware implementation by providing a standard set of commands which 
-can be implemented to somedegree on most devices. 
+can be implemented to some degree on most devices. 
 This brings two benefits:
 
 - the developer can focus on the algorithm as opposed to the implementation.
@@ -40,7 +40,7 @@ than the decoherence time, and is equipotent to commercial quantum devices
 available over the cloud.
 
 In level 2, there is no change to the quantum 
-device's abilities, but the latency of the classicalcontrol is now in order 
+device's abilities, but the latency of the classical control is now in order 
 of qubit decoherence time. 
 The controlling hardware can now make circuit updates based upon a single 
 circuit's results, without a significant proportion of qubit "dead time".
@@ -105,8 +105,8 @@ It is important to raise awareness of the following considerations:
    
     - Example of check: verify all original gates can be transpiled into Hardware B native gateset
 
-  - Performance checks. In the case of guaranteed QOS (for example, on error rates), conversions need to analyse the final solution's performance. 
+  - Performance checks. In the case of guaranteed QoS (for example, on error rates), conversions need to analyse the final solution's performance. 
     
     - Example of conversion: from a Level 2 representation, Hardware A to a Level 2, Hardware B with user expecting final fidelity > X.
     
-    - Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by usingsingle and two qubits fidelities.
+    - Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by using single and two qubits fidelities.

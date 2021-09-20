@@ -22,8 +22,8 @@ that they enable.
 The definition includes the general HAL architecture, HAL features 
 (e.g. which commands need to be implemented) and the HAL specification format. 
 The document does not define the HAL implementation or how to compile/transpile 
-between the different levels.This document is a part of the NISQ.OS ISCF project as 
-a collaborative effort of Arm, Duality Quantum Photonics, Hitachi Europe Limited, 
+between the different levels. This document is a part of the NISQ.OS ISCF project as 
+a collaborative effort of ARM, Duality Quantum Photonics, Hitachi Europe Limited, 
 the National Physical Laboratory, Oxford Ionics, Oxford Quantum Circuits, 
 Riverlane, Seeqc, and Universal Quantum. 
     
@@ -33,7 +33,7 @@ and control-based applications and error correction.
 The operating system for quantum computers Deltaflow.OS, which will be developed 
 within the ISCF NISQ.OS project builds on this open HAL specification. 
     
-The HAL is to be an open standardwhich other parties can also build on. 
+The HAL is to be an open standard which other parties can also build on. 
 One aim of the ISCF project is to engage in international standardisation 
 efforts with this HAL.
 

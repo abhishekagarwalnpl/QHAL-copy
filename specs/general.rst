@@ -8,14 +8,15 @@ framework across different QPU technologies.
 The challenges and architectural issues we endeavour to resolve in developing 
 the HAL are:
 
-#. Define the position of Multi-level HAL within the system stack (see Figure 1 below)
+#. Defining the position of Multi-level HAL within the system stack (see :numref:`fig_multi_level_hal` below)
 
-#. Maximum portability with minimal loss of performance
+#. Maximizing portability with minimal loss of performance
 
-#. Maximise the range of common features, keeping the optional, HW dependent features at a minimum
+#. Maximizing the range of common features, keeping the optional, HW dependent features at a minimum
 
-#. Support for advanced features such as compiler optimisations, measurement-based control, and error correction
+#. Supporting for advanced features such as compiler optimisations, measurement-based control, and error correction
 
+.. _fig_multi_level_hal:
 
 .. figure:: ./images/image1.png
 
