@@ -20,7 +20,7 @@ Table entries marked as required are described in more details at the bottom of 
 We will use the definition *valid* to indicate that the circuit, shot, or gate does not infringe 
 the information provided by the metadata (e.g. a not valid circuit will use 5 qubits on a 4 qubit system).
 
-Tables should be seen as extensions of the higher levels. E.g. Level2 MUST contain all the fields of Level3. 
+Tables should be seen as extensions of the higher levels. E.g. Level 2 MUST contain all the fields of Level 3. 
 Fields of an higher level HAL MAY be converted from OPTIONAL to REQUIRED but not vice-versa.
 
 Level 3 HAL – application level
@@ -45,7 +45,7 @@ Hardware companies won't appreciate:
 - Unfair accusations on performance/correctness/costing that can't be easily disproved 
   and might lead to legal actions.
 
-.. list-table:: Level3 Metadata
+.. list-table:: Level 3 Metadata
 
   * - Metadata
     - Description
@@ -109,7 +109,7 @@ Hardware companies won't appreciate:
 - Unfair accusations on performance/costing that can't be easily disproved and might lead to legal actions.
 
 
-.. list-table:: Level2 Metadata
+.. list-table:: Level 2 Metadata
 
   * - Metadata
     - Description
@@ -223,7 +223,7 @@ Level 1 HAL – gate level
 
 At this level, the final stage compiler (executed by the hardware lab) takes care of converting and mapping a single gate and executing it. 
 
-.. list-table:: Level1 Metadata
+.. list-table:: Level 1 Metadata
 
   * - Metadata
     - Description

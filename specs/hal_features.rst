@@ -128,7 +128,7 @@ consideration, and it might even be outside the scope of this document. [2*]
 
 However, implementing core native 2-qubit gate sets will, in most cases, 
 be necessary. 
-Each vendor should define via optional commands the Level2 and Level1 implementation 
+Each vendor should define via optional commands the Level 2 and Level 1 implementation 
 of the CNOT command.
 
 Native two-qubit gates
@@ -179,7 +179,7 @@ Required HAL responses
 
 Users should at least be informed when:
 
-- The circuit completes successfully. Only required at Level3 and Level2 and define as completion ACKNOWLEDGE. 
+- The circuit completes successfully. Only required at Level 3 and Level 2 and define as completion ACKNOWLEDGE. 
   
 - The commands they have send are INVALID. An example would be CNOT(0,0), a cnot with both inputs being qubit 0;
   
