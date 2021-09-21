@@ -83,7 +83,7 @@ Considerations on decoding
 
     2.	or in a binary format (e.g. 1001 indicates that the index 9 is active). 
 
-    \(1) enables the addressing of multiple qubits via a single command while (2) provides a much larger qubit addressing space (N vs 2**N) 
+    \(1) enables the addressing of multiple qubits via a single command while (2) provides a much larger qubit addressing space (N vs 2\ :sup:`N`\ ) 
 
 - Commands that do not fit in a single word can be split and transmitted as a sequence of parts (multi-word commands). We envision three possible scenarios here:
 
@@ -136,7 +136,7 @@ The following considerations have been made:
 
 - By fixing the OPCODE length, the decoder logic can use lookup tables. We consider 4096 codes (12 bits) to be more than sufficient. Note: It might be possible to reduce them to 256 (8 bits) by intelligent usage of special commands that allow an exception to the format (MODIFIERS, two examples will follow).
   
-- The RELATIVE_QUBIT_IDX is used in associate with the SET_PAGE_QUBIT0 and SET_PAGE_QUBIT1 commands to allow for extremely large addressability (2**46). Two registers in the quantum backend keep track of the addresses by applying the formulas: (BASE_QUBIT0_IDX << 10) + RELATIVE_QUBIT0_IDX and (BASE_QUBIT1_IDX << 10) + RELATIVE_QUBIT1_IDX for qubit0 and qubit1 respectively.
+- The RELATIVE_QUBIT_IDX is used in associate with the SET_PAGE_QUBIT0 and SET_PAGE_QUBIT1 commands to allow for extremely large addressability (2\ :sup:`46`\ ). Two registers in the quantum backend keep track of the addresses by applying the formulas: (BASE_QUBIT0_IDX << 10) + RELATIVE_QUBIT0_IDX and (BASE_QUBIT1_IDX << 10) + RELATIVE_QUBIT1_IDX for qubit0 and qubit1 respectively.
 
 - The BASE_QUBIT0_IDX and BASE_QUBIT1_IDX registers are preserved after being written. In other words, when a page is open it remains the same up to the next write to it. A START Session Command closes (resets to 0) both BASE_QUBIT0_IDX and BASE_QUBIT1_IDX values.
 

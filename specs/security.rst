@@ -22,27 +22,28 @@ The threats that we currently consider out of the scope for this document are:
 Implementation aspects
 ----------------------
 
-We would like to start the discussion on Security of the Quantum machine and of the Quantum Operations. As for most other form of modern technologies, security in Quantum Systems requires the introduction of various mechanisms at potentially all the operational levels. In this Section will limit the scope to the measures that we think are implementable by the HAL or that have a direct effect on it.
+We would like to start the discussion on Security of the Quantum machine and of the Quantum Operations. As for most other form of modern technologies, security in Quantum Systems requires the introduction of various mechanisms at potentially all the operational levels. In this section, will limit the scope to the measures that we think are implementable by the HAL or that have a direct effect on it.
 With the broad-brush term of security, we will refer in the following to:
 
 1.	Application security. We should define rules and guidelines to minimise the risk of the user:
     
     a.	Having their application executed on a target that is not the expected one. A specific example: man-in-the-middle attacks
 
-    b.	Incurring extra costs caused by over-execution. A malicious attacker able to introduce extra computation causing unforeseen costs to the user.
+    b.	Incurring extra costs caused by over-execution. A malicious attacker might able to introduce extra computation causing unforeseen costs to the user.
 
 2.	Quantum machine security. We should define rules and guidelines to minimise the risk of a Quantum Machine:
     
-    a.	being damaged or its QoS reduced by the user via means of low-level attacks. Example: Attacks that leverage patterns to cause extra noise in the circuit execution (in case of multi-users), attacks that cause excessive power dissipation on the fridge logic etc.
+    a.	being damaged or its QoS reduced by the user via low-level attacks. Example: Attacks that leverage patterns to cause extra noise in the circuit execution (in case of multi-users), attacks that cause excessive power dissipation on the fridge logic etc.
 
     b.	being brought in a condition of not being able to take extra requests from other users. We should expect malicious users to try denial-of-service attacks by injecting small requests (in terms of their data payload) that cause an intense computation or conversely increase the delay in the communication by saturating input channels.
 
 3.	Supply Chain Security. The Quantum Machine drivers can be compromised or modified by malicious attackers. This can cause identity theft and/or exposure of confidential information.   
+
 We suggest the following level of severity for these class of security considerations:
 
 - **Extremely severe**: 2.a
 
-- **Severe**: 1.a, 1.b, 3.a
+- **Severe**: 1.a, 1.b, 3
 
 - **Moderate** 2.b,
 
@@ -91,9 +92,8 @@ All the commands that return data that can directly or indirectly be used to inf
 Should return values that have sufficiently coarse granularity to prevent 
 any type of reverse-engineering of power models, components behaviour and 
 number of users. This to reduce the likelihood of success of attacks of type 2.a
-A set of selected users (e.g. system maintainer) could be granted a finer 
-grain visibility to these data. Additionally, research groups could be granted 
-access to historical data for which users have been pre-approved public disclosure.
+A set of selected users (e.g. system maintainer) could be granted a finer visibility to these data. Additionally, research groups could be granted 
+access to historical data for which users have been pre-approved for public disclosure.
 
 Guideline 1: prevention of denial of service
 --------------------------------------------
