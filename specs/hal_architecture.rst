@@ -39,13 +39,13 @@ This is implementable in a setting with high latency, typically much larger
 than the decoherence time, and is equipotent to commercial quantum devices 
 available over the cloud.
 
-In level 2, there is no change to the quantum 
+In Level 2, there is no change to the quantum 
 device's abilities, but the latency of the classical control is now in order 
 of qubit decoherence time. 
 The controlling hardware can now make circuit updates based upon a single 
 circuit's results, without a significant proportion of qubit "dead time".
 
-In level 1, the ability to make mid circuit measurements, and control of 
+In Level 1, the ability to make mid circuit measurements, and control of 
 the QPU based on the measurement outcome, is included. 
 This requires the controlling device to make changes or store results on 
 the gate time order on the quantum device and hence well below the 
@@ -68,7 +68,7 @@ future developments and additions. [q3]
       - Faster, communication between QPU and controller (timescale in order of the coherence time)     
       - Actions can be taken based on the results of a single circuit and small batches of circuits 
         (e.g., may contain tenths of shots). 
-        This usually cannot be done in level 1 due to the bandwidth or latency issues encountered 
+        This usually cannot be done in Level 1 due to the bandwidth or latency issues encountered 
         when making decisions on small numbers of circuits. Operates within coherence time.
     * - 1
       - Fastest, within decoherencetime of qubits (timescale much shorter than the coherence time)     

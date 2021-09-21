@@ -5,11 +5,11 @@ Below is an implementation for a single circuit run of the XXZ
 model energy calculation circuit in [arXiv:2005.03023v1]. 
 The circuit requires intermediate measurements and resets of qubits, 
 but, it does not require modifying the circuit based on the measurement outcomes. 
-Hence, assuming the hardware supports active qubit reset as a level 2 (3) 
-command, this is an example of a level 2 (3) HAL algorithm. 
+Hence, assuming the hardware supports active qubit reset as a Level 2 (3) 
+command, this is an example of a Level 2 (3) HAL algorithm. 
 
 Note that if active qubit reset is not available, the algorithm can be 
-run using level 1 HAL by replacing:
+run using Level 1 HAL by replacing:
 
 .. code-block::
 

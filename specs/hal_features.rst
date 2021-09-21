@@ -134,7 +134,7 @@ of the CNOT command.
 Native two-qubit gates
 ----------------------
 
-Since native two-qubit gates are necessary to operate at a level 1 HAL, 
+Since native two-qubit gates are necessary to operate at a Level 1 HAL, 
 hardware vendors SHOULD specify their native gates in the Optional HAL section.
 
 Optional HAL commands [q4]
@@ -213,5 +213,5 @@ And the codes for the responses:
       - 2
       - One or more of the commands sent are incorrect. Nothing has been executed.
   
-Level-1 access types are not required to return responses as the latency to 
+Level 1 access types are not required to return responses as the latency to 
 acknowledge them would impact significantly performance and quantum up time.
