@@ -1,7 +1,6 @@
 Use Case Scenarios
 ==================
 
-[UC]
 To demonstrate the need for multiple HAL levels and the algorithms 
 that can be run on each level, we provide example pseudocodes of the following algorithms:
 
