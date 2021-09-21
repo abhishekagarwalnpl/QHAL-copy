@@ -79,7 +79,7 @@ Further enhancements to traditional protocols can be embedded into this HAL spec
 - Retrieve driver response
 
 
-Rule 2: Coarse-granularity machine statistics
+Rule 2: coarse-granularity machine statistics
 ---------------------------------------------
 
 All the commands that return data that can directly or indirectly be used to infer:
@@ -95,7 +95,7 @@ A set of selected users (e.g. system maintainer) could be granted a finer
 grain visibility to these data. Additionally, research groups could be granted 
 access to historical data for which users have been pre-approved public disclosure.
 
-Guideline 1: Prevention of Denial of Service
+Guideline 1: prevention of denial of service
 --------------------------------------------
 
 To prevent a malicious attacker from causing a denial of service to the 

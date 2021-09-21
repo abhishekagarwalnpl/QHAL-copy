@@ -23,7 +23,7 @@ the information provided by the metadata (e.g. a not valid circuit will use 5 qu
 Tables should be seen as extensions of the higher levels. E.g. Level2 MUST contain all the fields of Level3. 
 Fields of an higher level HAL MAY be converted from OPTIONAL to REQUIRED but not vice-versa.
 
-Level 3 HAL – Application Level
+Level 3 HAL – application level
 -------------------------------
 
 "Able to run large batches of circuits".
@@ -85,7 +85,7 @@ Hardware companies won't appreciate:
   
   - Forbidden Values: [0]
 
-Level 2 HAL – Shot Level
+Level 2 HAL – shot level
 ------------------------
 
 "The results of a single circuit and small batches of circuits can be acted upon."
@@ -216,7 +216,7 @@ Hardware companies won't appreciate:
   Topology used in the example
 
 
-Level 1 HAL – Gate Level
+Level 1 HAL – gate level
 ------------------------
 
 "Results of qubit measurement can be acted upon within a single circuit."

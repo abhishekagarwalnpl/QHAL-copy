@@ -16,7 +16,7 @@ Core HAL commands are mandatory and SHOULD be implemented for every system follo
 the HAL specification. HAL command support will be conveyed through HAL metadata. 
 Core commands MAY be extended in future with the introduction of new universal commands.
 
-Control Commands
+Control commands
 ----------------
 The following table lists control commands that are required to enable advanced functionalities (e.g. multi-users, large addressing).
 
@@ -44,12 +44,12 @@ The following table lists control commands that are required to enable advanced 
       - All
     
 
-Single Qubit HAL
-----------------
+Single-qubit HAL commands
+-------------------------
 
 The following table lists the basic single qubit HAL commands.
 
-.. list-table:: Single Qubit HAL
+.. list-table:: Single-qubit HAL commands
 
     * - Command
       - Parameters
@@ -109,13 +109,13 @@ The following table lists the basic single qubit HAL commands.
       - All
 
 
-Two Qubits commands
--------------------
+Two-qubit HAL commands
+----------------------
 
 The implementation of 2 qubit gates commands across the HAL is for further 
 consideration, and it might even be outside the scope of this document. [2*]
 
-.. list-table:: Two Qubit HAL
+.. list-table:: Two-qubit HAL commands
 
     * - Command
       - Parameters

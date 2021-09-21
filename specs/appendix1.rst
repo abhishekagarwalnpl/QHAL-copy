@@ -1,7 +1,7 @@
 Appendix 1
 ==========
 
-Notes and Questions 
+Notes and questions 
 -------------------
 
 [Metadata*]	How will this be implemented in other systems. Is this info stored in a config file? Assuming an application developer is writing an algorithm that then needs to be built to run on hardware, it would make sense that this data is store on the user's machine and used to compile and build?

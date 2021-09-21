@@ -58,7 +58,7 @@ Considerations on transmission
 [\***\]	Hard/Soft-CPU only. Only CPU that are integrated into the same die as the ASIC/FPGA (either permanently or in a reconfigurable fashion).
 [\****\]	Generally, controller limited. Some controllers support up to 65535 bytes.
 
-Considerations on Decoding 
+Considerations on decoding 
 --------------------------
 
 - To guarantee applications portability, we recommend for the HAL specification to define a consistent representation for all the commands in terms of the number of bits and their significance. 
@@ -108,7 +108,7 @@ Considerations on Decoding
 (1)-(4) require almost no changes to the architecture for 1 qubit commands in storage and decoding. (4) though does introduces a barrier on execution. Because now the two commands are independent, the transport layer can delay the transmission of the second one, requiring buffering of the command. (2) - (3) require an extra buffer/register to store the second portion of the command and potentially forces us to decouple the command width from the transport layer width, but they do enforce the command's atomicity. 
 
 
-Proposed Command Format
+Proposed command format
 -----------------------
 
 We would like to conclude this Section by proposing at least one possible format for the HAL commands. 
