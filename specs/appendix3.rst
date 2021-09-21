@@ -2,7 +2,7 @@ Appendix 3: Use Case 2 – holoVQE
 ================================
 
 Below is an implementation for a single circuit run of the XXZ 
-model energy calculation circuit in [arXiv:2005.03023v1]. 
+model energy calculation circuit in [REF_5]. 
 The circuit requires intermediate measurements and resets of qubits, 
 but, it does not require modifying the circuit based on the measurement outcomes. 
 Hence, assuming the hardware supports active qubit reset as a Level 2 (3) 
@@ -32,42 +32,49 @@ with the following:
     * 1 physical qubit, 1 bond qubit; 4 ‘burn in’ lattice sites
     */
 
-    int lattice_sites = 4; 	// number of ‘burn in’ state preparation lattice  sites
-    qubit q[2];    	// declare qubit register with 2 qubits (1 bond, 1 physical)
-    bits[4] c;    	// declare classical bit register with 4 bits  (4 measurement results stored)
-    float theta = 1.234;	// parameterised angle
+    /* number of ‘burn in’ state preparation lattice  sites */
+    int lattice_sites = 4;
 
-    // initialize qubit register
+    /* declare qubit register with 2 qubits (1 bond, 1 physical) */
+    qubit q[2];
+
+    /* declare classical bit register with 4 bits  (4 measurement results stored) */
+    bits[4] c;
+
+    /* parameterised angle */
+    float theta = 1.234;
+
+    /* initialize qubit register */
     reset q;
 
     // State preparation
     for i in [0: lattice_sites - 1] {
-    // Apply G_theta
-    rx (pi/2) q[0];
-    ry (pi/2) q[1];
-    cz q[0] q[1];
-    rx (-theta) q[0];
-    ry (theta) q[1];
-    cz q[0] q[1];
-    rx (-pi/2) q[0];
-    ry (-pi/2) q[1];
+        // Apply G_theta
+        rx (pi/2) q[0];
+        ry (pi/2) q[1];
+        cz q[0] q[1];
+        rx (-theta) q[0];
+        ry (theta) q[1];
+        cz q[0] q[1];
+        rx (-pi/2) q[0];
+        ry (-pi/2) q[1];
 
-    // Reset physical qubit
-    reset q[1];
+        // Reset physical qubit
+        reset q[1];
 
-    // Apply G_theta_tilda
-    rx (pi/2) q[0];
-    ry (pi/2) q[1];
-    cz q[0] q[1];
-    rx (-theta) q[0];
-    ry (theta) q[1];
-    cz q[0] q[1];
-    rx (-pi/2) q[0];
-    ry (-pi/2) q[1];
-    x q[1];
+        // Apply G_theta_tilda
+        rx (pi/2) q[0];
+        ry (pi/2) q[1];
+        cz q[0] q[1];
+        rx (-theta) q[0];
+        ry (theta) q[1];
+        cz q[0] q[1];
+        rx (-pi/2) q[0];
+        ry (-pi/2) q[1];
+        x q[1];
 
-    // Reset physical qubit
-    reset q[1];
+        // Reset physical qubit
+        reset q[1];
     }
     //Expectation value measurement
 
