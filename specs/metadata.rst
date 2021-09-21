@@ -166,7 +166,7 @@ Hardware companies won't appreciate:
   
   - An adjacency matrix (symmetric) of size N x N (where N is the number of qubits) that represents with a 1 an edge that connects two qubits and with a 0 a not-connected edge 
   
-  - Example (refer to Figure 2): 
+  - Example (refer to :numref:`fig_topology_example`): 
   
   .. code-block::
 
@@ -209,6 +209,7 @@ Hardware companies won't appreciate:
     
 - Forbidden Values: Empty matrixes and matrixes that violate connectivity. Entries outside the range [0,1].
 
+.. _fig_topology_example:
 
 .. figure:: ./images/image2.png
 

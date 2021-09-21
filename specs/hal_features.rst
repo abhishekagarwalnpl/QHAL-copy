@@ -147,22 +147,22 @@ topology is optional: disclosure to the user will improve performance, but some
 vendors might prefer not to disclose such information.
 
 Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit gate or 
-the CPHASE gate.
+the CPHASE gate. 
 
-.. list-table:: Optional HAL commands. [*]_ 
+.. list-table:: Optional HAL commands.  
     
     * - Command
       - Parameters
       - Description
-      - HAL Level
+      - HAL Level 
     * - 32 QBit Measure
       - Starting index of the qubit to read 
       - Returns 32 measurements in parallel.
-      - All*
+      - All [1]_
     * - For/If/While
       - To be defined. 
       - Conditional execution. Hardware specific in terms of format and limits
-      - All*
+      - All [1]_
     * - Opt1
       - None
       - Optional commands for hardware-specific instructions.
@@ -172,7 +172,7 @@ the CPHASE gate.
       - Optional commands for hardware-specific instructions.
       - Specific.
 
-.. [*] For optional commands the hardware provider has to define the HAL level(s) they apply to.
+.. [1] For optional commands the hardware provider has to define the HAL level(s) they apply to.
 
 Required HAL responses
 ----------------------
