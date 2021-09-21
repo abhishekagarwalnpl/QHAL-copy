@@ -193,7 +193,7 @@ The format of the response:
 
     * - Response (4 bits)
       - CIRCUIT ID (12 bits)
-    * - Defines the type of error as per Table 
+    * - Defines the type of error as per Table 6.6 
       - Unique ID that identifies user and circuit. Needed in case of multi-user/multi-circuit execution
 
 And the codes for the responses:

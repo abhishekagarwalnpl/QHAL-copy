@@ -17,7 +17,7 @@ Considerations on transmission
 
 - We will assume error-free (or classically error-corrected) transmission of the commands in this version of this proposal.
 
-- We will assume that different quantum hardware will have different requirements in terms of connectivity, required bandwidth (of commands), and link-latencies. For this reason, we have tentatively listed in Table 1 some metrics related to standard (public) interfaces.
+- We will assume that different quantum hardware will have different requirements in terms of connectivity, required bandwidth (of commands), and link-latencies. For this reason, we have tentatively listed in Table 7.1 some metrics related to standard (public) interfaces.
 
 - It is important to point out that:
 
@@ -75,7 +75,7 @@ Considerations on decoding
     
     2.	Variable-length (i.e. OPCODES can use a different number of bits)
 
-(1) provides the fastest decoding (e.g. look-up tables based) while (2) can increase the content of information transmitted via better usage of the available bits
+    \(1) provides the fastest decoding (e.g. look-up tables based) while (2) can increase the content of information transmitted via better usage of the available bits
 
 - Qubit indexing can be implemented as:
 
@@ -83,7 +83,7 @@ Considerations on decoding
 
     2.	or in a binary format (e.g. 1001 indicates that the index 9 is active). 
 
-(1) enables the addressing of multiple qubits via a single command while (2) provides a much larger qubit addressing space (N vs 2**N) 
+    \(1) enables the addressing of multiple qubits via a single command while (2) provides a much larger qubit addressing space (N vs 2**N) 
 
 - Commands that do not fit in a single word can be split and transmitted as a sequence of parts (multi-word commands). We envision three possible scenarios here:
 
@@ -93,7 +93,7 @@ Considerations on decoding
     
     3.	The list of multi-word commands is not known a priori. A special command needs to be issued to indicate that what follows is a sequence of multi-word commands. One possible implementation uses the first command argument to indicate the number of words composing the real multi-word command to execute.
 
-(1) provides the simplest decoding logic (fixed-length commands with deterministic latency), (2) and (3) have slightly more complex logic with at least one extra conditional branch. If statistically, the likelihood of multi-word commands is low, (3) provides a lower bit requirement overhead than (2).
+    \(1) provides the simplest decoding logic (fixed-length commands with deterministic latency), (2) and (3) have slightly more complex logic with at least one extra conditional branch. If statistically, the likelihood of multi-word commands is low, (3) provides a lower bit requirement overhead than (2).
 
 - Multi-Qubit commands (e.g. CNOT) require (a) the definition of two indexes as well as (b) the execution of two parallel sequences of control. While (a) is in line with previous considerations, (b) requires additional considerations. The decoder logic should effectively extract both the indexes (ideally in a single instruction) and inform the associated branches of the control logic (if independent). We identified the following options:
 
@@ -105,7 +105,7 @@ Considerations on decoding
 
     4.	Two-words command. We split the command into two portions, and we send them as two separate tokens. e.g., we split a CNOT into in a "Control" and "Controlled" set of commands (CNOT_CTRL, CNOT_DATA).
 
-(1)-(4) require almost no changes to the architecture for 1 qubit commands in storage and decoding. (4) though does introduces a barrier on execution. Because now the two commands are independent, the transport layer can delay the transmission of the second one, requiring buffering of the command. (2) - (3) require an extra buffer/register to store the second portion of the command and potentially forces us to decouple the command width from the transport layer width, but they do enforce the command's atomicity. 
+    \(1)-(4) require almost no changes to the architecture for 1 qubit commands in storage and decoding. (4) though does introduces a barrier on execution. Because now the two commands are independent, the transport layer can delay the transmission of the second one, requiring buffering of the command. (2) - (3) require an extra buffer/register to store the second portion of the command and potentially forces us to decouple the command width from the transport layer width, but they do enforce the command's atomicity. 
 
 
 Proposed command format
