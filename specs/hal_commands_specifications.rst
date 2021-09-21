@@ -1,4 +1,4 @@
-HAL Commands Format specification
+HAL Commands Format Specification
 =================================
 
 Introduction

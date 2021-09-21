@@ -1,6 +1,6 @@
 .. title:: metadata
 
-Metadata Format specification
+Metadata Format Specification
 =============================
 
 General

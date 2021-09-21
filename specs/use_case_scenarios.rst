@@ -1,4 +1,4 @@
-Use Case scenarios
+Use Case Scenarios
 ==================
 
 [UC]
