@@ -11,4 +11,4 @@ from .hal import (HardwareAbstractionLayer,
                   string_to_opcode,
                   command_creator)
 from .quantum_simulators import (IQuantumSimulator,
-                                 ProjectqQuantumSimulator)
+                                 ProjectqQuantumSimulator, MBQCQuantumSimulator)

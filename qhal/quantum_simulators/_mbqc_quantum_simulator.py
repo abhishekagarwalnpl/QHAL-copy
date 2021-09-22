@@ -5,7 +5,7 @@ import numpy as np
 from numpy import uint64
 from numpy.random import RandomState
 
-from _interface_quantum_simulator import IQuantumSimulator
+from ._interface_quantum_simulator import IQuantumSimulator
 from ..hal import command_unpacker, string_to_opcode
 
 # This interface uses the simulator at https://gitlab.com/johnrscott/mbqc-fpga
@@ -55,7 +55,9 @@ class MBQCQuantumSimulator(IQuantumSimulator):
 
     def cleanup(self):
         """Run command to implement circuit."""
-        os.system('mbqcsim -c {filename} -o results'.format(filename = self.file_name))
+        print("You got this far <3")
+        #os.system('mbqcsim -c {filename} -o results'.format(filename = self.file_name))
+        #This doesn't work yet but w/e
         #TODO: read results from log file 
 
 
@@ -72,14 +74,14 @@ class MBQCQuantumSimulator(IQuantumSimulator):
     def add_rotation(self, qubit_label : int, x1_angle : float, 
             z_angle : float, x2_angle : float):
 
-        with open(self.file_name, 'w') as f:
+        with open(self.file_name, 'a') as f:
             f.write('u {q0} {a1} {a2} {a3}\n'.format(q0 = qubit_label, 
                 a1 = x1_angle, a2 = z_angle, a3 = x2_angle))
 
 
     def add_cnot(self, control_qubit : int, target_qubit: int):
 
-        with open(self.file_name, 'w') as f:
+        with open(self.file_name, 'a') as f:
             f.write('cnot {c} {t}\n'.format(c = control_qubit, t = target_qubit))
     
     #These replace the 'apply gate' function in the projectq sim
@@ -104,7 +106,7 @@ class MBQCQuantumSimulator(IQuantumSimulator):
                 f"({self._qubit_register_size})!"
 
         if op == "STATE_PREPARATION_ALL":
-            if self_qubit_register_intialised == True:
+            if self._qubit_register_initialised == True:
                 raise ValueError("Qubit register has already been initialised!")
             else:
                 self.prepare_circuit()
@@ -128,6 +130,7 @@ class MBQCQuantumSimulator(IQuantumSimulator):
 
             angle = args[-1]*(2*np.pi)/65536 #What is going on here?
         #These conversions might be better off going somewhere else
+        #TODO: all conversions need to be checked
             if cmd_type == "SINGLE":
 
                 if op == "RX":
@@ -174,7 +177,7 @@ class MBQCQuantumSimulator(IQuantumSimulator):
                 elif op == "RZZ":
                     self.add_cnot(q_index_0, q_index_1)
                     self.add_rotation(q_index_1, 0.0, angle, 0.0)
-                    self.add_rotation(q_index_0, q_index_1)
+                    self.add_cnot(q_index_0, q_index_1)
 
 
         elif op_obj.param == "CONST":
