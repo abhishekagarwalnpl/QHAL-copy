@@ -266,6 +266,9 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             else:
                 raise ValueError("Qubit already prepared!")
 
+        elif op == "START_SESSION" or op == "END_SESSION":
+            pass
+
         elif op == "QUBIT_MEASURE":
 
             if q_index_0 in self._measured_qubits:
