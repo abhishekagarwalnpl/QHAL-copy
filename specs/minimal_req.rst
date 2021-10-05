@@ -24,6 +24,7 @@ Level 3 HAL
 "Able to run large batches of circuits"
 
 .. list-table:: Level 3 HAL commands
+    :header-rows: 1
 
     * - Command
       - Motivations
@@ -57,6 +58,7 @@ Level 2 HAL
 "The results of a single circuit and small batches of circuits can be acted upon."
 
 .. list-table:: Level 2 HAL commands 
+    :header-rows: 1
 
     * - Command
       - Motivations
@@ -81,6 +83,7 @@ Level 1 HAL
 "Results of qubit measurement can be acted upon within a single circuit."
 
 .. list-table:: Level 1 HAL commands 
+    :header-rows: 1
 
     * - Command
       - Motivations

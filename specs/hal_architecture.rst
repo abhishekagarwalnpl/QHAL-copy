@@ -57,6 +57,7 @@ future developments and additions. [q3]
 
     
 .. list-table:: HAL Levels
+    :header-rows: 1
 
     * - HAL Level
       - Timescale

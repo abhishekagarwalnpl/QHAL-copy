@@ -46,6 +46,7 @@ Hardware companies won't appreciate:
   and might lead to legal actions.
 
 .. list-table:: Level 3 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description
@@ -110,6 +111,7 @@ Hardware companies won't appreciate:
 
 
 .. list-table:: Level 2 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description
@@ -224,6 +226,7 @@ Level 1 HAL – gate level
 At this level, the final stage compiler (executed by the hardware lab) takes care of converting and mapping a single gate and executing it. 
 
 .. list-table:: Level 1 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description

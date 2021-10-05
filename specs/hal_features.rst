@@ -21,6 +21,7 @@ Control commands
 The following table lists control commands that are required to enable advanced functionalities (e.g. multi-users, large addressing).
 
 .. list-table:: Control Commands
+    :header-rows: 1
     
     * - Command
       - Parameters
@@ -50,6 +51,7 @@ Single-qubit HAL commands
 The following table lists the basic single qubit HAL commands.
 
 .. list-table:: Single-qubit HAL commands
+    :header-rows: 1
 
     * - Command
       - Parameters
@@ -116,6 +118,7 @@ The implementation of 2 qubit gates commands across the HAL is for further
 consideration, and it might even be outside the scope of this document. [2*]
 
 .. list-table:: Two-qubit HAL commands
+    :header-rows: 1
 
     * - Command
       - Parameters
@@ -150,6 +153,7 @@ Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit ga
 the CPHASE gate. 
 
 .. list-table:: Optional HAL commands.  
+    :header-rows: 1
     
     * - Command
       - Parameters
@@ -190,6 +194,7 @@ Hardware labs can specify additional error codes to handle specific scenarios.
 The format of the response:
 
 .. list-table:: Response format
+    :header-rows: 1
 
     * - Response (4 bits)
       - CIRCUIT ID (12 bits)
@@ -199,6 +204,7 @@ The format of the response:
 And the codes for the responses:
 
 .. list-table:: Response codes
+    :header-rows: 1
 
     * - Response 
       - VALUE 

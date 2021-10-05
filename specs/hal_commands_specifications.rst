@@ -27,6 +27,7 @@ Considerations on transmission
 
 
 .. list-table:: Transport Protocols - illustration
+  :header-rows: 1
 
   * - Protocol
     - Minimum Packet Size/Increments 
