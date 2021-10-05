@@ -186,7 +186,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, project + '.tex', project + ' Documentation',
+    (master_doc, project + '.tex', project,
      author, 'manual'),
 ]
 
@@ -196,7 +196,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, project, project + ' Documentation',
+    (master_doc, project, project,
      [author], 1)
 ]
 
@@ -207,7 +207,7 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, project, project + ' Documentation',
+    (master_doc, project, project,
      author, project, description_, category_),
 ]
 
@@ -270,7 +270,7 @@ for version in versions:
 rinoh_documents = [(
     master_doc,
     'target',
-    project + ' Documentation',
+    project,
     '© ' + copyright,
 )]
 today_fmt = "%B %d, %Y"
