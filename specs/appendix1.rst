@@ -6,7 +6,7 @@ Notes and questions
 
 [Metadata*]	How will this be implemented in other systems. Is this info stored in a config file? Assuming an application developer is writing an algorithm that then needs to be built to run on hardware, it would make sense that this data is store on the user's machine and used to compile and build?
 
-[1*]	This is still open for debate and will depend on HW provider as well as qubit tech. Likely, something to include in metadata rather than specify.
+[1*]	This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.
 
 [2*]	If a vendor conforms to the structure of the HAL for their internal features then they could benefit from examples and some standardisation for their group properties APIs even if not for their implementation.
 

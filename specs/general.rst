@@ -12,7 +12,7 @@ the HAL are:
 
 #. Maximizing portability with minimal loss of performance
 
-#. Maximizing the range of common features, keeping the optional, HW dependent features at a minimum
+#. Maximizing the range of common features, keeping the optional, hardware dependent features at a minimum
 
 #. Supporting for advanced features such as compiler optimisations, measurement-based control, and error correction
 
@@ -37,7 +37,7 @@ The HAL APIs considered in this document MAY be divided into the following group
 
   * Metadata of the system capabilities/properties
 
-  * Required HAL/QPU commandsoOptional HAL/QPU HW specific commands
+  * Required HAL/QPU commandsoOptional HAL/QPU hardware specific commands
 
 * Technical area specific (QPU System advanced features related)
 
