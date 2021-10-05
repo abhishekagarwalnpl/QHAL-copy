@@ -68,6 +68,7 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     :caption: Contents
     :hidden:
 
+    glossary
     history
     general
     hal_architecture
@@ -82,7 +83,6 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     appendix1
     appendix2
     appendix3
-    glossary
     references
 
 
