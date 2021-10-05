@@ -80,11 +80,11 @@ class Opcode:
 _OPCODES = [
     # SINGLE WORD Commands
     ## Configuration Session
-    Opcode("START_SESSION", 0, "SINGLE", "CONST"),
-    Opcode("END_SESSION", 1, "SINGLE", "CONST"),
-    Opcode("PAGE_SET_QUBIT_0", 2, "SINGLE", "CONST"),
-    Opcode("PAGE_SET_QUBIT_1", 3, "SINGLE", "CONST"),
-    Opcode("NOP", 4, "SINGLE", "CONST"),
+    Opcode("NOP", 0, "SINGLE", "CONST"),
+    Opcode("START_SESSION", 1, "SINGLE", "CONST"),
+    Opcode("END_SESSION", 2, "SINGLE", "CONST"),
+    Opcode("PAGE_SET_QUBIT_0", 3, "SINGLE", "CONST"),
+    Opcode("PAGE_SET_QUBIT_1", 4, "SINGLE", "CONST"),
     Opcode("STATE_PREPARATION_ALL", 5, "SINGLE", "CONST"),
     Opcode("STATE_PREPARATION", 6, "SINGLE", "CONST"),
     Opcode("QUBIT_MEASURE", 7, "SINGLE", "CONST"),
