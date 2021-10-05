@@ -115,23 +115,31 @@ We would like to conclude this Section by proposing at least one possible format
 This has been investigated and tentatively validated on different integrations on both FPGA and CPUs for different quantum architectures. 
 The table that follows contains three representations, respectively for  "control commands", "single qubit commands" and "two qubits commands". All of them are encoded in 64 bits words. The goals of this format are (a) low complexity decoding logic (with buffering), (b) no significant performance penalty. 
 
-+-----------------------+---------------------+-----------------+-----------------------------+
-| Command type          | OPCODE              | ARGUMENT        | RELATIVE_QUBIT_IDX          |
-|                       |                     |                 |                             |
-| Control, Single or    | Command to execute  | Argument for    | Relative index of the       |
-| Dual Qubit command    |                     | the command     | QUBIT                       |
-+=======================+=====================+=================+=============================+
-| CONTROL COMMANDS      | [63-52]             | [51-36]         | [35-0] BASE_QUBIT0/1_IDX    |
-+-----------------------+---------------------+-----------------+-----------------------------+
-| SINGLE QUBIT COMMANDS | [63-52]             | [51-36]         | [19-10] padding             |
-|                       |                     |                 |                             |
-|                       |                     | [35-20] padding | [9-0] RELATIVE_QUBIT0_IDX   |
-+-----------------------+---------------------+-----------------+-----------------------------+
-| DUAL QUBIT COMMANDS   | [63-52]             | [51-36] qubit1  | [19-10] RELATIVE_QUBIT1_IDX |
-|                       |                     |                 |                             |
-|                       |                     | [35-20] qubit0  | [9-0] RELATIVE_QUBIT0_IDX   |
-+-----------------------+---------------------+-----------------+-----------------------------+
-  
+.. list-table:: Proposed command format
+  :header-rows: 1
+
+  * - Command type
+    - OPCODE (command to execute) bits
+    - ARGUMENT (argument for the command) bits
+    - RELATIVE_QUBIT_IDX (Relative index of the QUBIT) bits
+  * - CONTROL COMMANDS
+    - [63-52]   
+    - | [51-36] 
+    - | [35-0]: BASE_QUBIT0/1_IDX
+  * - SINGLE QUBIT COMMANDS
+    - [63-52]   
+    - | [51-36] 
+      | [35-20]: padding
+    - | [19-10]: padding
+      | [9-0]:   RELATIVE_QUBIT0_IDX 
+  * - DUAL QUBIT COMMANDS
+    - [63-52]   
+    - | [51-36]: qubit1 
+      | [35-20]: qubit0
+    - | [19-10]: RELATIVE_QUBIT1_IDX
+      | [9-0]:   RELATIVE_QUBIT0_IDX
+
+
 The following considerations have been made:
 
 - By fixing the OPCODE length, the decoder logic can use lookup tables. We consider 4096 codes (12 bits) to be more than sufficient. Note: It might be possible to reduce them to 256 (8 bits) by intelligent usage of special commands that allow an exception to the format (MODIFIERS, two examples will follow).
