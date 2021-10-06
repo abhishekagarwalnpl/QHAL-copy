@@ -10,11 +10,11 @@ Glossary and Abbreviations
    * - Term 
      - Definition/Description
    * - SHALL
-     - This word, or the terms "REQUIRED" or "MUST", mean that the definition is an absolute requirement of the specification.[REF_3]
+     - This word, or the terms "REQUIRED" or "MUST", mean that the definition is an absolute requirement of the specification [1]_.
    * - SHOULD
-     - This word, or the adjective "RECOMMENDED", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.[REF_3]
+     - This word, or the adjective "RECOMMENDED", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course [1]_.
    * - MAY
-     - This word, or the adjective "OPTIONAL", mean that an item is trulyoptional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels thatit enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides.)[REF_3]
+     - This word, or the adjective "OPTIONAL", mean that an item is trulyoptional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels thatit enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides) [1]_.
    * - Northbound Interface
      - In Computer Networking and Computer Architecture, a northboundinterface of a component is an interface that allows the component to communicate to a higher-level component, using the latter component's southbound interface
    * - Transpiler
@@ -64,3 +64,5 @@ Glossary and Abbreviations
      - Variational Quantum Algorithm
    * - VQE
      - Variational Quantum Eigensolver 
+
+.. [1] RFC 2119: Key words for use in RFCs to Indicate Requirement Levels, S. Bradner, Harvard University, March 1997; https://www.ietf.org/rfc/rfc2119.txt
