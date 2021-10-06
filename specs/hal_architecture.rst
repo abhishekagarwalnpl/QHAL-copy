@@ -53,7 +53,7 @@ decoherence time, so communication must also be of very low latency.
 The following table summarises the HAL levels 3-1, the timescales and 
 corresponding algorithms considered in the first version of the specification. 
 A general aim is to define a multi-level HAL flexible enough to cater to 
-future developments and additions. [q3]
+future developments and additions. [1]_
 
     
 .. list-table:: HAL Levels
@@ -111,3 +111,5 @@ It is important to raise awareness of the following considerations:
     - Example of conversion: from a Level 2 representation, Hardware A to a Level 2, Hardware B with user expecting final fidelity > X.
     
     - Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by using single and two qubits fidelities.
+
+.. [1]	Again, are we going to encourage vendors to follow the level structure for their internal use, even if they don't expose them to any customers? Is Level 3 mandatory? Is Level 2 encouraged? Is Level 1 truly optional? Is there an implication that some or all levels may be licensed? Is it anticipated that some vendors may choose to open source their implementations? It is likely that there will be a need to validate the authenticity of any level for supply chain and security-related reasons. [Tentative response in Multi-Level HAL additional considerations] 

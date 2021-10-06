@@ -75,15 +75,15 @@ The following table lists the basic single qubit HAL commands.
       - All
     * - Arbitrary rotate x
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate y
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate z
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Pauli-X
       - None
@@ -115,7 +115,7 @@ Two-qubit HAL commands
 ----------------------
 
 The implementation of 2 qubit gates commands across the HAL is for further 
-consideration, and it might even be outside the scope of this document. [2*]
+consideration, and it might even be outside the scope of this document. [2]_
 
 .. list-table:: Two-qubit HAL commands
     :header-rows: 1
@@ -140,14 +140,14 @@ Native two-qubit gates
 Since native two-qubit gates are necessary to operate at a Level 1 HAL, 
 hardware vendors SHOULD specify their native gates in the Optional HAL section.
 
-Optional HAL commands [q4]
---------------------------
+Optional HAL commands
+---------------------
 
 Commands specific to qubit implementations that are not relevant to others 
 or contain potentially confidential information of a specific hardware platform 
 are optional. The disclosure of a specific native hardware gate or the hardware 
 topology is optional: disclosure to the user will improve performance, but some 
-vendors might prefer not to disclose such information.
+vendors might prefer not to disclose such information. [3]_
 
 Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit gate or 
 the CPHASE gate. 
@@ -162,11 +162,11 @@ the CPHASE gate.
     * - 32 QBit Measure
       - Starting index of the qubit to read 
       - Returns 32 measurements in parallel.
-      - All [1]_
+      - All [4]_
     * - For/If/While
       - To be defined. 
       - Conditional execution. Hardware specific in terms of format and limits
-      - All [1]_
+      - All [4]_
     * - Opt1
       - None
       - Optional commands for hardware-specific instructions.
@@ -176,7 +176,6 @@ the CPHASE gate.
       - Optional commands for hardware-specific instructions.
       - Specific.
 
-.. [1] For optional commands the hardware provider has to define the HAL level(s) they apply to.
 
 Required HAL responses
 ----------------------
@@ -198,8 +197,11 @@ The format of the response:
 
     * - Response (4 bits)
       - CIRCUIT ID (12 bits)
-    * - Defines the type of error as per Table 6.6 
+    * - Defines the type of error as per Table 7.6 
       - Unique ID that identifies user and circuit. Needed in case of multi-user/multi-circuit execution
+
+..
+  Comment: Manual referece to table below becuase of sphinx bug with Tables and numref
 
 And the codes for the responses:
 
@@ -221,3 +223,8 @@ And the codes for the responses:
   
 Level 1 access types are not required to return responses as the latency to 
 acknowledge them would impact significantly performance and quantum up time.
+
+.. [1]	This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.
+.. [2]	If a vendor conforms to the structure of the HAL for their internal features then they could benefit from examples and some standardisation for their group properties APIs even if not for their implementation.
+.. [3]	Consequently, do we want to explicitly state that members of this category may not translate across implementations, resulting in defaulting back to core commands and speeds? [Tentative response in Multi-Level HAL additional considerations] 
+.. [4] For optional commands the hardware provider has to define the HAL level(s) they apply to.

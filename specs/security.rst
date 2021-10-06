@@ -12,7 +12,7 @@ Even at the end of the NISQ era, chances of having low-cost Quantum machines are
 
 The two problems have direct implications for the Quantum hardware providers but as explained in the Section require countermeasures to be implemented at the classical interface level. 
 
-We would like to have the HAL to be future proof in terms of security with the caveat that additional work will be needed throughout the stack to guarantee the full security of the solution[3*].
+We would like to have the HAL to be future proof in terms of security with the caveat that additional work will be needed throughout the stack to guarantee the full security of the solution [1]_.
 The threats that we currently consider out of the scope for this document are:
 
 - Side channel attacks. Malicious users might try to infer what other users are running if multi-user access to the quantum resource is allowed. The number of practical experiments on the subject is not sufficient to identify the need for them and the mitigation strategies.
@@ -108,3 +108,6 @@ challenge operation. If multiple requests of the same class of commands are to
 be issued to the quantum machine to perform a Denial-of-Service attack, the 
 machine should respond with increasingly higher latency to this type of requests 
 to invalidate the attack.
+
+
+.. [1]	The one attack that could be most worrisome already is on the device firmware itself or on the management system—whether it be by alteration or replacement. Hence signatures and attestation should probably be assumed
