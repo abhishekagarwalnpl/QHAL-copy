@@ -12,7 +12,7 @@ The primary purpose of Metadata is to:
 
 - Allow the users to identify the hardware platform most suitable for their problems and utilise it at its best
   
-- Discourage independent and unverifiable efforts to extract/infer not disclosed information. 
+- Discourage independent efforts to extract/infer undisclosed information (the results of which may not be verifiable). 
   This prevents hardware companies from being falsely accused of (a) suboptimal service and/or (b) overcharging consumers.
 
 To reach these goals, we believe metadata should be different at the different layers of the HAL. 
