@@ -147,7 +147,7 @@ Hardware companies won't appreciate:
 
 - **NATIVE_GATES**: 
   
-  - Type: List of parametrisable Matrixes
+  - Type: List of parametrisable matrices
   
   - Example:
   
@@ -181,7 +181,7 @@ Hardware companies won't appreciate:
                     [0 0 0 0 0 0 0 1]
                     [0 0 0 0 0 1 1 0]
 
-  - Forbidden Values: Empty matrixes
+  - Forbidden Values: Empty matrices
   
 - **ERROR RATE**:
   
@@ -193,7 +193,7 @@ Hardware companies won't appreciate:
     executing single qubit gates on qubit0; **ERROR_RATE** (1,2) indicates 
     the average error rate when executing gates two qubit gates on qubit0 
     and qubit1 with (where applicable) 1 being the control qubit and 2 the 
-    target one. Multiple matrixes can be returned to define the behaviour of 
+    target one. Multiple matrices can be returned to define the behaviour of 
     different gates. Optionally the values can be provided as intervals.
 
 - Example:
@@ -209,7 +209,7 @@ Hardware companies won't appreciate:
                     [0     0     0     0     0     0     0.011  0    ]
                     [0     0     0     0     0     0     0.02   0.012]
     
-- Forbidden Values: Empty matrixes and matrixes that violate connectivity. Entries outside the range [0,1].
+- Forbidden Values: Empty matrices and matrices that violate connectivity. Entries outside the range [0,1].
 
 .. _fig_topology_example:
 
