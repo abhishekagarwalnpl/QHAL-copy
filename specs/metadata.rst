@@ -8,7 +8,7 @@ General
 
 The primary purpose of Metadata is to:
 
-- Allow the Hardware Companies to defend their trade secrets
+- Allow the hardware companies to defend their trade secrets
 
 - Allow the users to identify the hardware platform most suitable for their problems and utilise it at its best
   
