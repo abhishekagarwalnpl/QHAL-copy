@@ -1,13 +1,15 @@
-Appendix 2: Use Case 1 – Shor's Algorithm
+Appendix 2: Use Cases
 =========================================
+
+Use Case 1 – Shor's Algorithm
+-----------------------------
 
 Here we provide two ways of implementing quantum circuits used in Shor's algorithm
 The first implementation uses a FOR loop to repeat sets of circuit operations whereas the second implementation avoids using a loop by repeating the code for the set of circuit operations an appropriate number of times. Another difference between the two implementation is that in the first implementation, consecutive controlled phase gates are combined using classical logic before the command is sent to the quantum device.
 
 
 Implementation 1 pseudocode
----------------------------
-
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 .. code-block::
 
     /*
@@ -104,7 +106,7 @@ Implementation 1 pseudocode
 
     
 Implementation 2 pseudocode
----------------------------
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 .. code-block::
 
@@ -225,3 +227,151 @@ Implementation 2 pseudocode
     /* ------------------------------------------------
     *  ------------------- DONE ----------------------
     *  ------------------------------------------------ */
+
+Use Case 2 – holoVQE
+--------------------------------
+
+Below is an implementation for a single circuit run of the XXZ 
+model energy calculation circuit in [REF_5]. 
+The circuit requires intermediate measurements and resets of qubits, 
+but, it does not require modifying the circuit based on the measurement outcomes. 
+Hence, assuming the hardware supports active qubit reset as a Level 2 (3) 
+command, this is an example of a Level 2 (3) HAL algorithm. 
+
+Note that if active qubit reset is not available, the algorithm can be 
+run using Level 1 HAL by replacing:
+
+.. code-block::
+
+    reset q[1]; 
+
+with the following:
+
+.. code-block::
+
+    measure  q[1] -> c[0];
+    if (c[0] == 1) {
+        x q[1];
+    }
+
+
+.. code-block::
+
+    /*
+    * holoVQE circuit for XXZ spin chain energy calculation
+    * 1 physical qubit, 1 bond qubit; 4 ‘burn in’ lattice sites
+    */
+
+    /* number of ‘burn in’ state preparation lattice  sites */
+    int lattice_sites = 4;
+
+    /* declare qubit register with 2 qubits (1 bond, 1 physical) */
+    qubit q[2];
+
+    /* declare classical bit register with 4 bits  (4 measurement results stored) */
+    bits[4] c;
+
+    /* parameterised angle */
+    float theta = 1.234;
+
+    /* initialize qubit register */
+    reset q;
+
+    // State preparation
+    for i in [0: lattice_sites - 1] {
+        // Apply G_theta
+        rx (pi/2) q[0];
+        ry (pi/2) q[1];
+        cz q[0] q[1];
+        rx (-theta) q[0];
+        ry (theta) q[1];
+        cz q[0] q[1];
+        rx (-pi/2) q[0];
+        ry (-pi/2) q[1];
+
+        // Reset physical qubit
+        reset q[1];
+
+        // Apply G_theta_tilda
+        rx (pi/2) q[0];
+        ry (pi/2) q[1];
+        cz q[0] q[1];
+        rx (-theta) q[0];
+        ry (theta) q[1];
+        cz q[0] q[1];
+        rx (-pi/2) q[0];
+        ry (-pi/2) q[1];
+        x q[1];
+
+        // Reset physical qubit
+        reset q[1];
+    }
+    //Expectation value measurement
+
+    //Apply G_theta, measure in X basis, then reset physical qubit
+    rx (pi/2) q[0];
+    ry (pi/2) q[1];
+    cz q[0] q[1];
+    rx (-theta) q[0];
+    ry (theta) q[1];
+    cz q[0] q[1];
+    rx (-pi/2) q[0];
+    ry (-pi/2) q[1];
+
+    h q[1];
+    measure q[1] -> c[0];
+
+    reset q[1];
+
+    //Apply G_theta_tilda, measure in X basis, then reset physical qubit
+    rx (pi/2) q[0];
+    ry (pi/2) q[1];
+    cz q[0] q[1];
+    rx (-theta) q[0];
+    ry (theta) q[1];
+    cz q[0] q[1];
+    rx (-pi/2) q[0];
+    ry (-pi/2) q[1];
+    x q[1];
+
+    h q[1];
+    measure q[1] -> c[1];
+
+    reset q[1];
+
+    //Apply G_theta, measure in Z basis, then reset physical qubit
+    rx (pi/2) q[0];
+    ry (pi/2) q[1];
+    cz q[0] q[1];
+    rx (-theta) q[0];
+    ry (theta) q[1];
+    cz q[0] q[1];
+    rx (-pi/2) q[0];
+    ry (-pi/2) q[1];
+
+    measure q[1] -> c[2];
+
+    reset q[1];
+
+    //Apply G_theta_tilda, measure in Z basis, then reset physical qubit
+    rx (pi/2) q[0];
+    ry (pi/2) q[1];
+    cz q[0] q[1];
+    rx (-theta) q[0];
+    ry (theta) q[1];
+    cz q[0] q[1];
+    rx (-pi/2) q[0];
+    ry (-pi/2) q[1];
+    x q[1];
+
+    measure q[1] -> c[3];
+
+    reset q[1];
+
+    //------------------------------------------------
+    //------------------- DONE -----------------------
+    //------------------------------------------------
+
+
+
+
