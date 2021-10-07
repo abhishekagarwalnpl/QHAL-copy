@@ -244,7 +244,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 f"Qubit index {index} greater than register size " + \
                 f"({self._qubit_register_size})!"
 
-        if op == "STATE_PREPARATION_ALL":
+        if op == "STATE_PREPARATION_ALL" or op == "START_SESSION":
             if self._qubit_register is None:
                 self._qubit_register = self._engine.allocate_qureg(
                     self._qubit_register_size
@@ -266,8 +266,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             else:
                 raise ValueError("Qubit already prepared!")
 
-        elif op == "START_SESSION" or op == "END_SESSION":
-            pass
+        elif op == "END_SESSION":
+            self.cleanup()
 
         elif op == "QUBIT_MEASURE":
 
