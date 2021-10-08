@@ -239,7 +239,7 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
   * - **MAX_DEPTH** (as gates)
     - Maximum depth of the circuit to execute
     - Yes
-    - Total number of gates that can be executed (Heuristic metric). It can be used to force measurements, initializations, early stops.
+    - Total number of gates that can be executed (Heuristic metric). It can be used to force measurements, initialisations, early stops.
   * - **NATIVE_GATES**
     - List of Native Gates
     - Yes

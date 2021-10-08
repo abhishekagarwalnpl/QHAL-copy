@@ -149,7 +149,7 @@ The following considerations have been made:
 
 - The BASE_QUBIT0_IDX and BASE_QUBIT1_IDX registers are preserved after being written. In other words, when a page is open it remains the same up to the next write to it. A START Session Command closes (resets to 0) both BASE_QUBIT0_IDX and BASE_QUBIT1_IDX values.
 
-- The OPCODE requires shifting and masking (12 bits) but we believe that the benefits of having a more compact word outnumber the additional complexity. Further optimizations can be enabled by using an additional bit (bit 11 of 12) to indicate a long OPCODE (length > 8).
+- The OPCODE requires shifting and masking (12 bits) but we believe that the benefits of having a more compact word outnumber the additional complexity. Further optimisations can be enabled by using an additional bit (bit 11 of 12) to indicate a long OPCODE (length > 8).
 
 - No field has been allocated to support multi-word commands.
 

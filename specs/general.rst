@@ -10,9 +10,9 @@ the HAL are:
 
 #. Defining the position of Multi-level HAL within the system stack (see :numref:`fig_multi_level_hal` below) [1]_
 
-#. Maximizing portability with minimal loss of performance
+#. Maximising portability with minimal loss of performance
 
-#. Maximizing the range of common features, keeping the optional, hardware dependent features at a minimum
+#. Maximising the range of common features, keeping the optional, hardware dependent features at a minimum
 
 #. Supporting for advanced features such as compiler optimisations, measurement-based control, and error correction
 

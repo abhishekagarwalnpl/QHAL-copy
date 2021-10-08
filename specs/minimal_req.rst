@@ -37,7 +37,7 @@ Level 3 HAL
     * - Section commands
       - Confines the code that belong to one user and associate it to hardware or emulation facilities
       - The compilation flow should support both targets
-      - The user can transmit circuits back-to-back as a binary sequence. Section commands are used to delimit these sequences (as a START and STOP equivalent) allowing optimizatons and compilations on the received circuits.
+      - The user can transmit circuits back-to-back as a binary sequence. Section commands are used to delimit these sequences (as a START and STOP equivalent) allowing optimisations and compilations on the received circuits.
 
 At Level 3, the classical logic is in charge of acting upon measurements and 
 selecting the next sequence of circuits to execute. 
