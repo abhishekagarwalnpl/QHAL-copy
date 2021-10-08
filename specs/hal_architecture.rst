@@ -8,7 +8,7 @@ Introduction
 
 The HAL allows algorithm developers to abstract away the details of a 
 hardware implementation by providing a standard set of commands which 
-can be implemented to somedegree on most devices. 
+can be implemented to some degree on most devices. 
 This brings two benefits:
 
 - the developer can focus on the algorithm as opposed to the implementation.
@@ -39,13 +39,13 @@ This is implementable in a setting with high latency, typically much larger
 than the decoherence time, and is equipotent to commercial quantum devices 
 available over the cloud.
 
-In level 2, there is no change to the quantum 
-device's abilities, but the latency of the classicalcontrol is now in order 
+In Level 2, there is no change to the quantum 
+device's abilities, but the latency of the classical control is now in order 
 of qubit decoherence time. 
 The controlling hardware can now make circuit updates based upon a single 
 circuit's results, without a significant proportion of qubit "dead time".
 
-In level 1, the ability to make mid circuit measurements, and control of 
+In Level 1, the ability to make mid circuit measurements, and control of 
 the QPU based on the measurement outcome, is included. 
 This requires the controlling device to make changes or store results on 
 the gate time order on the quantum device and hence well below the 
@@ -53,10 +53,11 @@ decoherence time, so communication must also be of very low latency.
 The following table summarises the HAL levels 3-1, the timescales and 
 corresponding algorithms considered in the first version of the specification. 
 A general aim is to define a multi-level HAL flexible enough to cater to 
-future developments and additions. [q3]
+future developments and additions. [1]_
 
     
 .. list-table:: HAL Levels
+    :header-rows: 1
 
     * - HAL Level
       - Timescale
@@ -68,7 +69,7 @@ future developments and additions. [q3]
       - Faster, communication between QPU and controller (timescale in order of the coherence time)     
       - Actions can be taken based on the results of a single circuit and small batches of circuits 
         (e.g., may contain tenths of shots). 
-        This usually cannot be done in level 1 due to the bandwidth or latency issues encountered 
+        This usually cannot be done in Level 1 due to the bandwidth or latency issues encountered 
         when making decisions on small numbers of circuits. Operates within coherence time.
     * - 1
       - Fastest, within decoherencetime of qubits (timescale much shorter than the coherence time)     
@@ -105,8 +106,10 @@ It is important to raise awareness of the following considerations:
    
     - Example of check: verify all original gates can be transpiled into Hardware B native gateset
 
-  - Performance checks. In the case of guaranteed QOS (for example, on error rates), conversions need to analyse the final solution's performance. 
+  - Performance checks. In the case of guaranteed QoS (for example, on error rates), conversions need to analyse the final solution's performance. 
     
     - Example of conversion: from a Level 2 representation, Hardware A to a Level 2, Hardware B with user expecting final fidelity > X.
     
-    - Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by usingsingle and two qubits fidelities.
+    - Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by using single and two qubits fidelities.
+
+.. [1]	Again, are we going to encourage vendors to follow the level structure for their internal use, even if they don't expose them to any customers? Is Level 3 mandatory? Is Level 2 encouraged? Is Level 1 truly optional? Is there an implication that some or all levels may be licensed? Is it anticipated that some vendors may choose to open source their implementations? It is likely that there will be a need to validate the authenticity of any level for supply chain and security-related reasons. [Tentative response in Multi-Level HAL additional considerations] 
