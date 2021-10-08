@@ -45,7 +45,7 @@ of qubit decoherence time.
 The controlling hardware can now make circuit updates based upon a single 
 circuit's results, without a significant proportion of qubit "dead time".
 
-In Level 1, the ability to make mid circuit measurements, and control of 
+In Level 1, the ability to make mid-circuit measurements, and control of 
 the QPU based on the measurement outcome, is included. 
 This requires the controlling device to make changes or store results on 
 the gate time order on the quantum device and hence well below the 
