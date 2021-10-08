@@ -12,7 +12,7 @@ The primary purpose of Metadata is to:
 
 - Allow the users to identify the hardware platform most suitable for their problems and utilise it at its best
   
-- Discourage independent efforts to extract/infer undisclosed information (the results of which may not be verifiable). 
+- Discourage independent efforts to extract/infer undisclosed information. 
   This prevents hardware companies from being falsely accused of (a) suboptimal service and/or (b) overcharging consumers.
 
 To reach these goals, we believe metadata should be different at the different layers of the HAL. 
@@ -67,7 +67,7 @@ Hardware companies won't appreciate:
   * - **GATE_TIMES**
     - The duration of the gates in **NATIVE_GATES**
     - No
-    - Without this information, users won't be able to optimise their running costs. With or without the **NATIVE_GATES** information, advanced users can infer this information with sufficient detail as they should be charged on time spent on the quantum machine differently for the time spent on queues.
+    - With this information, users will be able to optimise their running costs. Note that advanced users are able to infer this information regardless of whether it is provided by the HAL. 
 
 
 - **NUM_QUBITS**: 
