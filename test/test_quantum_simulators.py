@@ -228,6 +228,56 @@ class TestQuantumSimulators(unittest.TestCase):
                 hal_cmd = command_creator(*commands)
                 projQ_backend.accept_command(hal_cmd)
 
+    def test_raise_error_after_end_session(self):
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=2,
+            seed=234,
+            backend=Simulator
+        )
+
+        projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
+        projQ_backend.accept_command(command_creator("END_SESSION", 0, 0))
+
+        with self.assertRaises(AttributeError) as ctx:
+            projQ_backend.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
+
+
+    def test_start_session_after_end_session(self):
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=2,
+            seed=234,
+            backend=Simulator
+        )
+
+        circuit = [
+            ["START_SESSION", 0, 0],
+            ["STATE_PREPARATION_ALL", 0, 0],
+            ['H', 0, 0],
+            ['X', 0, 1],
+            ['CNOT', 0, 0, 0, 1],
+        ]
+        
+        for _ in range(2):
+            for commands in circuit:
+                hal_cmd = command_creator(*commands)
+                projQ_backend.accept_command(hal_cmd)
+
+            hal_res_0 = projQ_backend.accept_command(
+                command_creator("QUBIT_MEASURE", 0, 0)
+            )
+            hal_res_1 = projQ_backend.accept_command(
+                command_creator("QUBIT_MEASURE", 0, 1)
+            )
+
+            decoded_hal_result_0 = measurement_unpacker(hal_res_0)
+            decoded_hal_result_1 = measurement_unpacker(hal_res_1)
+
+            self.assertEqual(decoded_hal_result_0[0], 0)
+            self.assertEqual(decoded_hal_result_1[0], 1)
+            self.assertEqual((decoded_hal_result_0[3] + decoded_hal_result_1[3]), 1)
+
+            hal_cmd = command_creator("END_SESSION", 0, 0)
+
 
 if __name__ == "__main__":
     unittest.main()
