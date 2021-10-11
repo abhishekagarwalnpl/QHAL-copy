@@ -6,5 +6,5 @@ Currently, in order to use our interface with the simulator, the following steps
 
 1. Install `g++-10` and `cmake`. You will also need to install [QSL](https://github.com/lanamineh/qsl) - instructions for how to install this on Linux are in the readme.
 2. Run `sh mbqc-install.sh`. This will install MBQC-sim in the parent folder `QHAL_internal`.
-3. You can then use the HAL as normal. Be aware that depending on how you are running it there may be errors caused by the paths specified - we use paths that start with `workdir/`, which is `QHAL_internal/`.
+3. You can then use the HAL as normal. Be aware that depending on how you are running it there may be errors caused by the paths specified - we use paths that start with `QHAL_internal/`.
 4. For more information on the results contained in the log file please check the MBQC-sim documentation.
