@@ -268,7 +268,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
         elif op == "STATE_PREPARATION":
             if self._qubit_register is None:
-                init_qureg()
+                self._init_qureg()
             elif q_index_0 in self._measured_qubits:
                 if int(self._qubit_register[q_index_0]):
                     X | self._qubit_register[q_index_0]
