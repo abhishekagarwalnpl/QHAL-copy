@@ -32,6 +32,7 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0],
             ['H', 0, 2],
@@ -81,6 +82,7 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0]
         ]
@@ -119,6 +121,7 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0],
             ['QUBIT_MEASURE', 0, 0]
@@ -142,6 +145,7 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0],
             ['QUBIT_MEASURE', 0, 0]
@@ -187,6 +191,7 @@ class TestQuantumSimulators(unittest.TestCase):
             backend=Simulator)
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ["PAGE_SET_QUBIT_0", 0, 1],  # set offset
             ['X', 0, 0]  # qubit index = 0 now refers to index = 10
@@ -218,6 +223,7 @@ class TestQuantumSimulators(unittest.TestCase):
         )
 
         circuit = [
+            ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['FAKE', 0, 0]
         ]
