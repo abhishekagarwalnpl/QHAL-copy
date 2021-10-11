@@ -16,11 +16,12 @@ Core HAL commands are mandatory and SHOULD be implemented for every system follo
 the HAL specification. HAL command support will be conveyed through HAL metadata. 
 Core commands MAY be extended in future with the introduction of new universal commands.
 
-Control Commands
+Control commands
 ----------------
 The following table lists control commands that are required to enable advanced functionalities (e.g. multi-users, large addressing).
 
 .. list-table:: Control Commands
+    :header-rows: 1
     
     * - Command
       - Parameters
@@ -44,12 +45,13 @@ The following table lists control commands that are required to enable advanced 
       - All
     
 
-Single Qubit HAL
-----------------
+Single-qubit HAL commands
+-------------------------
 
 The following table lists the basic single qubit HAL commands.
 
-.. list-table:: Single Qubit HAL
+.. list-table:: Single-qubit HAL commands
+    :header-rows: 1
 
     * - Command
       - Parameters
@@ -73,15 +75,15 @@ The following table lists the basic single qubit HAL commands.
       - All
     * - Arbitrary rotate x
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate y
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate z
       - Angle
-      - Perform qubit rotation [1*]
+      - Perform qubit rotation [1]_
       - All
     * - Pauli-X
       - None
@@ -109,13 +111,14 @@ The following table lists the basic single qubit HAL commands.
       - All
 
 
-Two Qubits commands
--------------------
+Two-qubit HAL commands
+----------------------
 
 The implementation of 2 qubit gates commands across the HAL is for further 
-consideration, and it might even be outside the scope of this document. [2*]
+consideration, and it might even be outside the scope of this document. [2]_
 
-.. list-table:: Two Qubit HAL
+.. list-table:: Two-qubit HAL commands
+    :header-rows: 1
 
     * - Command
       - Parameters
@@ -128,41 +131,42 @@ consideration, and it might even be outside the scope of this document. [2*]
 
 However, implementing core native 2-qubit gate sets will, in most cases, 
 be necessary. 
-Each vendor should define via optional commands the Level2 and Level1 implementation 
+Each vendor should define via optional commands the Level 2 and Level 1 implementation 
 of the CNOT command.
 
 Native two-qubit gates
 ----------------------
 
-Since native two-qubit gates are necessary to operate at a level 1 HAL, 
+Since native two-qubit gates are necessary to operate at a Level 1 HAL, 
 hardware vendors SHOULD specify their native gates in the Optional HAL section.
 
-Optional HAL commands [q4]
---------------------------
+Optional HAL commands
+---------------------
 
 Commands specific to qubit implementations that are not relevant to others 
 or contain potentially confidential information of a specific hardware platform 
 are optional. The disclosure of a specific native hardware gate or the hardware 
 topology is optional: disclosure to the user will improve performance, but some 
-vendors might prefer not to disclose such information.
+vendors might prefer not to disclose such information. [3]_
 
 Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit gate or 
-the CPHASE gate.
+the CPHASE gate. 
 
-.. list-table:: Optional HAL commands. * For optional commands the hardware provider has to define the HAL level(s) they apply to.
+.. list-table:: Optional HAL commands.  
+    :header-rows: 1
     
     * - Command
       - Parameters
       - Description
-      - HAL Level
+      - HAL Level 
     * - 32 QBit Measure
       - Starting index of the qubit to read 
       - Returns 32 measurements in parallel.
-      - All*
+      - All [4]_
     * - For/If/While
       - To be defined. 
       - Conditional execution. Hardware specific in terms of format and limits
-      - All*
+      - All [4]_
     * - Opt1
       - None
       - Optional commands for hardware-specific instructions.
@@ -172,12 +176,13 @@ the CPHASE gate.
       - Optional commands for hardware-specific instructions.
       - Specific.
 
+
 Required HAL responses
 ----------------------
 
 Users should at least be informed when:
 
-- The circuit completes successfully. Only required at Level3 and Level2 and define as completion ACKNOWLEDGE. 
+- The circuit completes successfully. Only required at Level 3 and Level 2 and define as completion ACKNOWLEDGE. 
   
 - The commands they have send are INVALID. An example would be CNOT(0,0), a cnot with both inputs being qubit 0;
   
@@ -188,15 +193,20 @@ Hardware labs can specify additional error codes to handle specific scenarios.
 The format of the response:
 
 .. list-table:: Response format
+    :header-rows: 1
 
     * - Response (4 bits)
       - CIRCUIT ID (12 bits)
-    * - Defines the type of error as per Table 
+    * - Defines the type of error as per Table 7.6 
       - Unique ID that identifies user and circuit. Needed in case of multi-user/multi-circuit execution
+
+..
+  Comment: Manual referece to table below becuase of sphinx bug with Tables and numref
 
 And the codes for the responses:
 
 .. list-table:: Response codes
+    :header-rows: 1
 
     * - Response 
       - VALUE 
@@ -211,5 +221,10 @@ And the codes for the responses:
       - 2
       - One or more of the commands sent are incorrect. Nothing has been executed.
   
-Level-1 access types are not required to return responses as the latency to 
+Level 1 access types are not required to return responses as the latency to 
 acknowledge them would impact significantly performance and quantum up time.
+
+.. [1]	This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.
+.. [2]	If a vendor conforms to the structure of the HAL for their internal features then they could benefit from examples and some standardisation for their group properties APIs even if not for their implementation.
+.. [3]	Consequently, do we want to explicitly state that members of this category may not translate across implementations, resulting in defaulting back to core commands and speeds? [Tentative response in Multi-Level HAL additional considerations] 
+.. [4] For optional commands the hardware provider has to define the HAL level(s) they apply to.

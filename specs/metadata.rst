@@ -1,6 +1,6 @@
 .. title:: metadata
 
-Metadata Format specification
+Metadata Format Specification
 =============================
 
 General
@@ -8,11 +8,11 @@ General
 
 The primary purpose of Metadata is to:
 
-- Allow the Hardware Companies to defend their trade secrets
+- Allow the hardware companies to defend their trade secrets
 
 - Allow the users to identify the hardware platform most suitable for their problems and utilise it at its best
   
-- Discourage independent and unverifiable efforts to extract/infer not disclosed information. 
+- Discourage independent efforts to extract/infer undisclosed information (the results of which may not be verifiable). 
   This prevents hardware companies from being falsely accused of (a) suboptimal service and/or (b) overcharging consumers.
 
 To reach these goals, we believe metadata should be different at the different layers of the HAL. 
@@ -20,10 +20,10 @@ Table entries marked as required are described in more details at the bottom of 
 We will use the definition *valid* to indicate that the circuit, shot, or gate does not infringe 
 the information provided by the metadata (e.g. a not valid circuit will use 5 qubits on a 4 qubit system).
 
-Tables should be seen as extensions of the higher levels. E.g. Level2 MUST contain all the fields of Level3. 
+Tables should be seen as extensions of the higher levels. E.g. Level 2 MUST contain all the fields of Level 3. 
 Fields of an higher level HAL MAY be converted from OPTIONAL to REQUIRED but not vice-versa.
 
-Level 3 HAL – Application Level
+Level 3 HAL – application level
 -------------------------------
 
 "Able to run large batches of circuits".
@@ -45,7 +45,8 @@ Hardware companies won't appreciate:
 - Unfair accusations on performance/correctness/costing that can't be easily disproved 
   and might lead to legal actions.
 
-.. list-table:: Level3 Metadata
+.. list-table:: Level 3 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description
@@ -85,7 +86,7 @@ Hardware companies won't appreciate:
   
   - Forbidden Values: [0]
 
-Level 2 HAL – Shot Level
+Level 2 HAL – shot level
 ------------------------
 
 "The results of a single circuit and small batches of circuits can be acted upon."
@@ -109,7 +110,8 @@ Hardware companies won't appreciate:
 - Unfair accusations on performance/costing that can't be easily disproved and might lead to legal actions.
 
 
-.. list-table:: Level2 Metadata
+.. list-table:: Level 2 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description
@@ -145,7 +147,7 @@ Hardware companies won't appreciate:
 
 - **NATIVE_GATES**: 
   
-  - Type: List of parametrisable Matrixes
+  - Type: List of parametrisable matrices
   
   - Example:
   
@@ -166,7 +168,7 @@ Hardware companies won't appreciate:
   
   - An adjacency matrix (symmetric) of size N x N (where N is the number of qubits) that represents with a 1 an edge that connects two qubits and with a 0 a not-connected edge 
   
-  - Example (refer to Figure 2): 
+  - Example (refer to :numref:`fig_topology_example`): 
   
   .. code-block::
 
@@ -179,7 +181,7 @@ Hardware companies won't appreciate:
                     [0 0 0 0 0 0 0 1]
                     [0 0 0 0 0 1 1 0]
 
-  - Forbidden Values: Empty matrixes
+  - Forbidden Values: Empty matrices
   
 - **ERROR RATE**:
   
@@ -191,7 +193,7 @@ Hardware companies won't appreciate:
     executing single qubit gates on qubit0; **ERROR_RATE** (1,2) indicates 
     the average error rate when executing gates two qubit gates on qubit0 
     and qubit1 with (where applicable) 1 being the control qubit and 2 the 
-    target one. Multiple matrixes can be returned to define the behaviour of 
+    target one. Multiple matrices can be returned to define the behaviour of 
     different gates. Optionally the values can be provided as intervals.
 
 - Example:
@@ -207,22 +209,24 @@ Hardware companies won't appreciate:
                     [0     0     0     0     0     0     0.011  0    ]
                     [0     0     0     0     0     0     0.02   0.012]
     
-- Forbidden Values: Empty matrixes and matrixes that violate connectivity. Entries outside the range [0,1].
+- Forbidden Values: Empty matrices and matrices that violate connectivity. Entries outside the range [0,1].
 
+.. _fig_topology_example:
 
 .. figure:: ./images/image2.png
 
   Topology used in the example
 
 
-Level 1 HAL – Gate Level
+Level 1 HAL – gate level
 ------------------------
 
 "Results of qubit measurement can be acted upon within a single circuit."
 
 At this level, the final stage compiler (executed by the hardware lab) takes care of converting and mapping a single gate and executing it. 
 
-.. list-table:: Level1 Metadata
+.. list-table:: Level 1 Metadata
+  :header-rows: 1
 
   * - Metadata
     - Description
