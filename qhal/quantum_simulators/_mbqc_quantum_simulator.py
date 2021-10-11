@@ -9,9 +9,6 @@ from ._interface_quantum_simulator import IQuantumSimulator
 from ..hal import command_unpacker, string_to_opcode
 
 # This interface uses the simulator at https://gitlab.com/johnrscott/mbqc-fpga
-#TODO: document properly
-#TODO: work out interface with the C++
-#TODO: full testing and debugging :)
 
 class MBQCQuantumSimulator(IQuantumSimulator):
     """MBQC implementation of the IQuantumSimulator interface.
@@ -47,18 +44,16 @@ class MBQCQuantumSimulator(IQuantumSimulator):
             'SY': [np.pi, np.pi/2.0, 0.0]
         }
     
-        atexit.register(self.cleanup)
-        # Is this the best way to do it? Or better to tie to a command?
-        #TODO: adding functionality to delete/clean circuit file.
+        atexit.register(self.run)
 
-    #TODO: set_state/get_state
+    #To set state, add an additional rotation.
+    #Input state is considered to be the all-zero state.
+    #Get state is not supported by this simulator.
 
-    def cleanup(self):
+    def run(self):
         """Run command to implement circuit."""
-        print("You got this far <3")
-        #os.system('mbqcsim -c {filename} -o results'.format(filename = self.file_name))
-        #This doesn't work yet but w/e
-        #TODO: read results from log file 
+        os.system('/workdir/qhal/quantum_simulators/mbqcsim -c {filename} -o results'.format(filename = self.file_name))
+        #Produces an output log file with results of measurement rounds.
 
 
     def get_offset(self, qubit_index: int):
@@ -83,14 +78,12 @@ class MBQCQuantumSimulator(IQuantumSimulator):
 
         with open(self.file_name, 'a') as f:
             f.write('cnot {c} {t}\n'.format(c = control_qubit, t = target_qubit))
-    
-    #These replace the 'apply gate' function in the projectq sim
 
     def accept_command(
         self,
         command: uint64
     ) -> uint64:
-        # Currently I don't think any of these actually give an output
+        # Currently none of these give an output
 
         op, cmd_type, args, qubit_indexes = command_unpacker(command)
         op_obj = string_to_opcode(op)
@@ -111,7 +104,6 @@ class MBQCQuantumSimulator(IQuantumSimulator):
             else:
                 self.prepare_circuit()
 
-        #TODO: Is qubit re-preparation something we can support with this simulator?
         elif op == "STATE_PREPARATION":
             raise ValueError("This command is not supported with this simulator. \n" + \
                     "Please use STATE_PREPARATION_ALL.")
@@ -119,7 +111,6 @@ class MBQCQuantumSimulator(IQuantumSimulator):
         #TODO: QUBIT_MEASURE
         #--Understand how to process output of simulator.--
 
-        # This bit is taken straight from the projectQ simulator so may need some adjustment.
         elif op.split("_")[0] == "PAGE":
             self._offset_registers[int(op.split("_")[3])] = qubit_indexes[0]
 
