@@ -233,7 +233,6 @@ class TestQuantumSimulators(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             for commands in circuit:
-
                 hal_cmd = command_creator(*commands)
                 projQ_backend.accept_command(hal_cmd)
         
@@ -249,8 +248,19 @@ class TestQuantumSimulators(unittest.TestCase):
         projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
         projQ_backend.accept_command(command_creator("END_SESSION", 0, 0))
 
-        with self.assertRaises(AttributeError) as ctx:
+        with self.assertRaises(AttributeError):
             projQ_backend.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
+
+    def test_raise_error_after_start_session_before_end(self):
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=2,
+            seed=234,
+            backend=Simulator
+        )
+
+        projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
+        with self.assertRaises(ValueError):
+            projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
 
     def test_start_session_after_end_session(self):
         projQ_backend = ProjectqQuantumSimulator(

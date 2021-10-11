@@ -175,9 +175,10 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
     def cleanup(self):
         """Release all the qubits that haven't been handled yet."""
-        if self._qubit_register is not None:
-            All(Measure) | self._qubit_register
         if self._engine is not None:
+            if self._qubit_register is not None:
+                All(Measure) | self._qubit_register
+            # if self._engine is not None:
             self._engine.flush()
             self._engine = None
 
@@ -225,6 +226,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             self._engine.flush()
 
     def _init_engine(self):
+        if self._engine is not None:
+            raise ValueError("Simulator engine already initialised!")
         if self.backend == Simulator and self.seed is not None:
             self._engine = MainEngine(backend=Simulator(rnd_seed=self.seed))
         else:
