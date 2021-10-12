@@ -1,6 +1,6 @@
-.. title:: references
+.. title:: Further reading
 
-References
+Further reading
 ----------
 
 - [REF_1] Practical Quantum Computing: the value of local computation; James R. Cruise,Neil I Gillespie, Brendan Reid; Riverlane Ltd; Sep 2020; https://arxiv.org/abs/2009.08513
