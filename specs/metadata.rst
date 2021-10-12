@@ -10,17 +10,17 @@ The primary purpose of Metadata is to:
 
 - Allow the hardware companies to defend their trade secrets
 
-- Allow the users to identify the hardware platform most suitable for their problems and utilise it at its best
+- Allow the users to identify the hardware platform most suitable for their problems and utilise it to its best
   
 - Discourage independent efforts to extract/infer undisclosed information. 
-  This prevents hardware companies from being falsely accused of (a) suboptimal service and/or (b) overcharging consumers.
+  This prevents hardware companies from being falsely accused of suboptimal service and/or overcharging consumers.
 
 To reach these goals, we believe metadata should be different at the different layers of the HAL. 
 Table entries marked as required are described in more details at the bottom of this section.
 We will use the definition *valid* to indicate that the circuit, shot, or gate does not infringe 
-the information provided by the metadata (e.g. a not valid circuit will use 5 qubits on a 4 qubit system).
+the information provided by the metadata (e.g. a five-qubit circuit on a four-qubit system).
 
-Tables should be seen as extensions of the higher levels. E.g. Level 2 MUST contain all the fields of Level 3. 
+Tables should be seen as extensions of the higher levels. For example, Level 2 MUST contain all the fields of Level 3. 
 Fields of an higher level HAL MAY be converted from OPTIONAL to REQUIRED but not vice-versa.
 
 Level 3 HAL – application level
@@ -33,8 +33,7 @@ of converting an abstract representation made with universal gatesets, into a na
 
 Users are entitled to:
 
-- Fair billing. This will likely entail different cost per time on the quantum machine vs time on the 
-  supporting infrastructure.
+- Fair billing. Note that the cost per time on the quantum machine will likely be different from that on the supporting classical infrastructure.
 
 Users won't appreciate:
 
@@ -53,9 +52,9 @@ Hardware companies won't appreciate:
     - Required
     - Notes
   * - **NUM_QBITS**
-    - Number of Qubits available
+    - Number of qubits available
     - Yes
-    - It can be lower than the actual number of available qubits.
+    - It can be smaller than the actual number of qubits in the quantum machine.
   * - **MAX_DEPTH** (as universal gates)
     - Maximum depth of the circuit to execute
     - Yes
@@ -63,7 +62,7 @@ Hardware companies won't appreciate:
   * - **NATIVE_GATES**
     - List of Native Gates
     - No
-    - The MAX_DEPTH could be improved significantly by having the definition of native gates here. Effect: Users will benefit from longer circuits.
+    - The **MAX_DEPTH** could be improved significantly by providing the definition of native gates here. Effect: Users will benefit from longer circuits.
   * - **GATE_TIMES**
     - The duration of the gates in **NATIVE_GATES**
     - No
@@ -97,13 +96,13 @@ Conversion is performed "on the fly".
 
 Users are entitled to:
 
-- Fair billing. This will likely entail different cost per time on the quantum machine vs time on the supporting infrastructure.
+- Fair billing. Note that the cost per time on the quantum machine will likely be different from that on the supporting classical infrastructure.
 
 - Guaranteed execution. If they send a valid circuit, it shouldn't get refused as it might be part of a long sequence.
   
 Users won't appreciate:
 
-- Unknown QoS – mainly in the context of error rates.
+- Unknown QoS – mainly if the error rates are unknown
 
 Hardware companies won't appreciate:
 
@@ -120,8 +119,8 @@ Hardware companies won't appreciate:
   * - **NUM_QBITS**
     - Number of Qubits available
     - Yes
-    - It can be lower than the actual number of available qubits.
-  * - **MAX_DEPTH** (as gates)
+    - It can be smaller than the actual number of qubits in the quantum machine.
+  * - **MAX_DEPTH** (as native gates)
     - Maximum depth of the circuit to execute
     - Yes
     - Total number of gates that can be executed. Without the **GATE_TIMES** information the depth will be conservative to allow for additional margin within the coherence time.
@@ -133,16 +132,19 @@ Hardware companies won't appreciate:
     - The connectivity matrix of the Qubits
     - Yes
     - It is required to support correct compilation of circuits. 
-      The hardware company can return different connectivity tables as 
-      they deem appropriate (e.g. when a subset of the qubits is exposed 
-      they won’t need to expose the full connectivity) every time the 
-      Metadata is queried. 
+      The hardware company can return a subgraph of the connectivity as 
+      they deem appropriate (e.g. when only a subset of the qubits is exposed 
+      they won’t need to expose the full connectivity).
       Connectivity MUST be maintained within two Metadata updates.
   * - **GATE_TIMES**
     - The duration of the gates in **NATIVE_GATES**
     - No
-    - Without this information, users won't be able to optimise their running costs. With or without the **NATIVE_GATES** information, advanced users can infer this information with sufficient detail as they should be charged on time spent on the quantum machine differently for the time spent on queues.
-
+    - With this information, users will be able to optimise their running costs. Note that advanced users are able to infer this information regardless of whether it is provided by the HAL. 
+  * - **ERROR_RATE**
+    - The average error rate for one- and two-qubit operations in **NATIVE_GATES**
+    - No
+    - Without this information the users will have to personally evaluate the performance of the hardware before committing to run intensive applications. 
+      Users at this level have all the information required to run randomised benchmarking or similar techniques to extract the metrics.
 
 
 - **NATIVE_GATES**: 
@@ -236,10 +238,10 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
     - Number of Qubits available
     - Yes
     - It can be lower than the actual number of available qubits.
-  * - **MAX_DEPTH** (as gates)
+  * - **MAX_DEPTH** (as native gates)
     - Maximum depth of the circuit to execute
     - Yes
-    - Total number of gates that can be executed (Heuristic metric). It can be used to force measurements, initialisations, early stops.
+    - Total number of gates that can be executed.
   * - **NATIVE_GATES**
     - List of Native Gates
     - Yes
@@ -253,7 +255,7 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
     - Yes
     - Shuttling time should be considered as an atomic command of which time execution will be required. This to prevent performance inconsistencies 
   * - **ERROR_RATE**
-    - The average error rate for 1Qbit, 2 Qbit operations **NATIVE_GATES**
+    - The average error rate for one- and two-qubit operations in **NATIVE_GATES**
     - No
     - Without this information the users will have to personally evaluate the performance of the hardware before committing to run intensive applications. 
       Users at this level have all the information required to run randomised benchmarking or similar techniques to extract the metrics.
