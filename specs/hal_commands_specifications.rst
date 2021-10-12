@@ -55,14 +55,14 @@ Considerations on transmission
     - Low bandwidth
 
 [\*\]	USB3.2 2x2 might require special cards to implement the initial speed negotiation (10 Gbps mode) that might not be commercially available.
-[\**\]	The AMBA protocol does not set an upper limit on the size of the bus but the physical routing of the logic normally limits this value to be 1024 bits threshold
+[\**\]	The AMBA protocol does not set an upper limit on the size of the bus but the physical routing of the logic normally limits this value to be 1024 bits threshold.
 [\***\]	Hard/Soft-CPU only. Only CPU that are integrated into the same die as the ASIC/FPGA (either permanently or in a reconfigurable fashion).
 [\****\]	Generally, controller limited. Some controllers support up to 65535 bytes.
 
 Considerations on decoding 
 --------------------------
 
-- To guarantee applications portability, we recommend for the HAL specification to define a consistent representation for all the commands in terms of the number of bits and their significance. 
+- To guarantee the portability of applications, we recommend for the HAL specification to define a consistent representation for all the commands in terms of the number of bits and their significance. 
 
 - Bit shifts and bit masking can be implemented with limited effort and low latency on CPU, FPGA and ASICs
 
@@ -96,7 +96,7 @@ Considerations on decoding
 
     \(1) provides the simplest decoding logic (fixed-length commands with deterministic latency), (2) and (3) have slightly more complex logic with at least one extra conditional branch. If statistically, the likelihood of multi-word commands is low, (3) provides a lower bit requirement overhead than (2).
 
-- Multi-Qubit commands (e.g. CNOT) require (a) the definition of two indexes as well as (b) the execution of two parallel sequences of control. While (a) is in line with previous considerations, (b) requires additional considerations. The decoder logic should effectively extract both the indexes (ideally in a single instruction) and inform the associated branches of the control logic (if independent). We identified the following options:
+- Two-qubit commands (e.g. CNOT) require (a) the definition of two indexes as well as (b) the execution of two parallel sequences of control. While (a) is in line with previous considerations, (b) requires additional considerations. The decoder logic should effectively extract both the indexes (ideally in a single instruction) and inform the associated branches of the control logic (if independent). We identified the following options:
 
     1.	Single-word command with halved addressing space. We preserve the format of the command but consider the lower half of the index field pertaining to qubit 0 and the upper part to qubit 1
 
