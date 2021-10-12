@@ -178,7 +178,6 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         if self._engine is not None:
             if self._qubit_register is not None:
                 All(Measure) | self._qubit_register
-            # if self._engine is not None:
             self._engine.flush()
             self._engine = None
 
