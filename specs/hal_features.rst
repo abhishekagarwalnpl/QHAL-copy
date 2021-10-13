@@ -13,7 +13,7 @@ The following is a non-exhaustive list of core HAL commands that MAY be extended
 in the future.
 Core HAL commands are mandatory and SHOULD be implemented for every system following 
 the HAL specification. HAL command support will be conveyed through HAL metadata. 
-Core commands MAY be extended in future with the introduction of new universal commands. asdfasd
+Core commands MAY be extended in future with the introduction of new universal commands. 
 
 Control commands
 ----------------
@@ -29,11 +29,11 @@ The following table lists control commands that are required to enable advanced 
     * - Start of Session
       - Type of Section
       - Defines the type of session, emulator, hardware, simulator. It is used to route the commands to the right destinations.
-      - 3-2 [1]_
+      - 3-2 \[\*\]
     * - End of Session
       - None
       - Closes a session.
-      - 3-2 [1]_
+      - 3-2 \[\*\]
     * - Set Page Qubit0
       - Offset for the qubit index (0)
       - Modifies the offset used in the qubit index computation. The register associated with the offset must be reset by a new Start of Session Command. 
@@ -43,6 +43,7 @@ The following table lists control commands that are required to enable advanced 
       - Modifies the offset used in the qubit index computation. The register associated with the offset must be reset by a new Start of Session Command.  
       - All
     
+.. \[\*\] Due to the requirment that a Level 1 HAL operates well within qubit decoherence time, it is assumed that the latencies required to implement these commands are too large.
 
 Single-qubit HAL commands
 -------------------------
@@ -74,15 +75,15 @@ The following table lists the basic single qubit HAL commands.
       - All
     * - Arbitrary rotate x
       - Angle
-      - Perform qubit rotation [2]_
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate y
       - Angle
-      - Perform qubit rotation [2]_
+      - Perform qubit rotation [1]_
       - All
     * - Arbitrary rotate z
       - Angle
-      - Perform qubit rotation [2]_
+      - Perform qubit rotation [1]_
       - All
     * - Pauli-X
       - None
@@ -223,8 +224,7 @@ And the codes for the responses:
 Level 1 access types are not required to return responses as the latency to 
 acknowledge them would impact significantly performance and quantum up time.
 
-.. [1] Due to the requirment that a Level 1 HAL operates well within qubit decoherence time, it is assumed that the latencies required to implement these commands are too large.
-.. [2]	This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.
+.. [1]	This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.
 .. [3]	If a vendor conforms to the structure of the HAL for their internal features then they could benefit from examples and some standardisation for their group properties APIs even if not for their implementation.
 .. [4]	Consequently, do we want to explicitly state that members of this category may not translate across implementations, resulting in defaulting back to core commands and speeds? [Tentative response in Multi-Level HAL additional considerations] 
 .. [5] For optional commands, the hardware provider has to specify the HAL level(s) to which they apply.

@@ -69,7 +69,6 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     :hidden:
 
     glossary
-    history
     general
     hal_architecture
     metadata
@@ -82,6 +81,6 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     use_case_scenarios
     appendix1
     appendix2
-    references
+    further_reading
 
 

@@ -48,7 +48,7 @@ a single circuit, without significant qubit "dead time".
 In Level 1, the ability to make mid-circuit measurements, and control of 
 the QPU based on the measurement outcome, is included. 
 This requires the controlling device to make changes or store results on the quantum device, 
-on the order of gate time order and hence well below the decoherence time, 
+on the order of gate time and hence well below the decoherence time, 
 so communication must also be of very low latency. 
 The following table summarises the HAL three levels, and the timescales and 
 corresponding algorithms considered in the first version of the specification. 
@@ -74,7 +74,7 @@ future developments and additions. [1]_
     * - 1
       - Fastest, within decoherence time of qubits (timescale much shorter than coherence time)     
       - Results of qubit measurement can be acted upon within a single circuit. This requires the HAL to be implemented via fast local control elements (e.g. FPGAs, application-specific CPUs). 
-      Supported algorithms: QNN dropout, holo-VQE, quantum autoencoder, simple error correction.
+        Supported algorithms: QNN dropout, holo-VQE, quantum autoencoder, simple error correction.
 
 
 Multi-level HAL extra considerations
@@ -84,7 +84,7 @@ It is important to raise awareness of the following considerations:
 
 - Hardware companies can expose one or more of the HAL levels
 - Companies may want to expose a high HAL level publicly, 
-    but only expose a lower HAL level to selected partners or customers.
+  but only expose a lower HAL level to selected partners or customers.
   In this case, care should be taken to implement public level(s) as per specifications. 
   A potential benefit of this approach: 
   A hardware company can outsource the development of applications to preferred developers, 
