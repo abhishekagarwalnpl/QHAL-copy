@@ -72,7 +72,8 @@ PYTEST=pytest \
 	--log-level=INFO \
 	--junitxml=testreport.xml \
 	--cov-report xml \
-	--cov-report term
+	--cov-report term \
+	--cov=qhal
 
 MAKEPACKAGE=python3 setup.py sdist bdist_wheel
 
