@@ -16,4 +16,4 @@ Notes and questions
 
 6. Should we include gates with more than two qubits? ? [Added to the Notes on commands Layer 2 and 1]
 
-7. Add a command to the standard regarding selection of the backend - emulator or hardware. Deltaflow OS can utilise this command to select a backend for HAL Software to run the algorithms on? [Addressed by HAL Commands Minimum Requirements]
+7. Add a command to the standard regarding selection of the backend - emulator or hardware. Deltaflow.OS can utilise this command to select a backend for HAL Software to run the algorithms on? [Addressed by HAL Commands Minimum Requirements]

@@ -271,10 +271,10 @@ with the following:
     /* declare classical bit register with 4 bits  (4 measurement results stored) */
     bits[4] c;
 
-    /* parameterised angle */
+    /* parametrised angle */
     float theta = 1.234;
 
-    /* initialize qubit register */
+    /* initialise qubit register */
     reset q;
 
     // State preparation

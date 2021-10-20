@@ -14,14 +14,14 @@ Glossary and Abbreviations
    * - SHOULD
      - This word, or the adjective "RECOMMENDED", mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course [1]_.
    * - MAY
-     - This word, or the adjective "OPTIONAL", mean that an item is trulyoptional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels thatit enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides) [1]_.
-   * - Northbound Interface
-     - In Computer Networking and Computer Architecture, a northboundinterface of a component is an interface that allows the component to communicate to a higher-level component, using the latter component's southbound interface
+     - This word, or the adjective "OPTIONAL", mean that an item is truly optional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels that it enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides) [1]_.
+   * - Northbound interface
+     - In Computer Networking and Computer Architecture, a northbound interface of a component is an interface that allows the component to communicate to a higher-level component, using the latter component's southbound interface.
    * - Transpiler
-     - Transpiling is a specific term for taking source code written in one language and transforming into another language that has a similar level of abstraction
-   * - Quantum Machine
-     - A human-made device whose collective operation follows the laws of quantum mechanics
-   * - Adjacency Matrix
+     - Transpiling is a specific term for taking source code written in one language and transforming into another language that has a similar level of abstraction.
+   * - Quantum machine
+     - A human-made device whose collective operation follows the laws of quantum mechanics.
+   * - Adjacency matrix
      - A square matrix normally used to represent a finite graph by defining adjacency of vertices as well as self-loops.
 
 .. list-table:: Abbreviations
@@ -31,38 +31,38 @@ Glossary and Abbreviations
    * - Term 
      - Definition/Description
    * - AMBA
-     - Advanced Microcontroller Bus Architecture
+     - Advanced microcontroller bus architecture
    * - API
-     - Application Programming Interface
+     - Application programming interface
    * - ASIC
-     - Application Specific Integrated Circuit
+     - Application specific integrated circuit
    * - CNOT
-     - Controlled-NOT
+     - Controlled-not
    * - CPU
-     - Central Processing Unit
+     - Central processing unit
    * - FPGA
-     - Field Programmable Gate Array
+     - Field programmable gate array
    * - HAL
-     - Hardware Abstraction Layer
+     - Hardware abstraction layer
    * - ISCF
-     - Industrial Strategy Challenge Fund
+     - Industrial strategy challenge fund
    * - NISQ
-     - Noisy Intermediate-Scale Quantum
+     - Noisy intermediate-scale quantum
    * - PCI
-     - Peripheral Component Interconnect
+     - Peripheral component interconnect
    * - QFT
-     - Quantum Fourier Transform
+     - Quantum Fourier transform
    * - QNN
-     - Quantum Neural Network
+     - Quantum neural network
    * - QoS
-     - Quality of Service
+     - Quality of service
    * - QPU
-     - Quantum Processing Unit
+     - Quantum processing unit
    * - SPI
-     - Serial Peripheral Interface
+     - Serial peripheral interface
    * - VQA
-     - Variational Quantum Algorithm
+     - Variational quantum algorithm
    * - VQE
-     - Variational Quantum Eigensolver 
+     - Variational quantum eigensolver 
 
 .. [1] RFC 2119: Key words for use in RFCs to Indicate Requirement Levels, S. Bradner, Harvard University, March 1997; https://www.ietf.org/rfc/rfc2119.txt

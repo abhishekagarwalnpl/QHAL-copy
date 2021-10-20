@@ -18,5 +18,5 @@ that can be run on each level, we provide example pseudocodes of the following a
     
 The pseudocodes are given in Appendix 2. Further use cases will be added in the future versions of this document, for example a minimal example of a conventional VQE code, and a minimal example of an alpha-VQE code.
 
-.. [1] Monz, Thomas, et al. "Realisation of a scalable Shor algorithm." Science 351.6277 (2016): 1068-1070.[REF_5]Foss-Feig, Michael, et al. "Holographic quantum algorithms for simulating correlated spin systems." https://arxiv.org/abs/2005.03023 (2020)
+.. [1] Monz, Thomas, et al. "Realisation of a scalable Shor algorithm." Science 351.6277 (2016): 1068-1070.
 .. [2] Foss-Feig, Michael, et al. "Holographic quantum algorithms for simulating correlated spin systems." https://arxiv.org/abs/2005.03023 (2020).

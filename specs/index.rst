@@ -30,10 +30,10 @@ Riverlane, Seeqc, and Universal Quantum.
 This joint project's commitment is to implement applications that 
 require the fastest classical/quantum interaction, such as measurement 
 and control-based applications and error correction. 
-The operating system for quantum computers Deltaflow.OS, which will be developed 
-within the ISCF NISQ.OS project builds on this open HAL specification. 
+Deltaflow.OS, the operating system for quantum computers which will be developed 
+within the ISCF NISQ.OS project, builds on this open HAL specification. 
     
-The HAL is to be an open standard which other parties can also build on. 
+The HAL is to be an open standard on which other parties can also build. 
 One aim of the ISCF project is to engage in international standardisation 
 efforts with this HAL.
 
@@ -69,7 +69,6 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     :hidden:
 
     glossary
-    history
     general
     hal_architecture
     metadata
@@ -82,6 +81,6 @@ This disclaimer will be removed once the document reaches sufficient maturity.
     use_case_scenarios
     appendix1
     appendix2
-    references
+    further_reading
 
 
