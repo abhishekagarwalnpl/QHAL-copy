@@ -12,7 +12,7 @@ All the commands respect the following structure:
 +------------------+----------+-----------------+-----------------------------+
 | SINGLE QUBIT     | [63-52]  | [51-36] padding | [19-10] padding             |
 | COMMANDS         |          |                 |                             |
-|                  |          | [35-20]         | [9-0] RELATIVE_QUBIT0_IDX   |
+|                  |          | [35-20] arg     | [9-0] RELATIVE_QUBIT0_IDX   |
 +------------------+----------+-----------------+-----------------------------+
 | DUAL QUBIT       | [63-52]  | [51-36] arg1    | [19-10] RELATIVE_QUBIT1_IDX |
 | COMMANDS         |          |                 |                             |
