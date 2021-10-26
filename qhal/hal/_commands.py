@@ -88,6 +88,12 @@ _OPCODES = [
     Opcode("STATE_PREPARATION_ALL", 5, "SINGLE", "CONST"),
     Opcode("STATE_PREPARATION", 6, "SINGLE", "CONST"),
     Opcode("QUBIT_MEASURE", 7, "SINGLE", "CONST"),
+    Opcode(
+        "REQUEST_METADATA",
+        8 | Masks.OPCODE_DUAL_MASK.value | Masks.OPCODE_PARAM_MASK.value,
+        "DUAL",
+        "PARAM"
+    ),
 
     ## Arbitrary Rotations
     Opcode("RX", 10 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
@@ -238,7 +244,7 @@ def measurement_creator(
         offset: int = 0,
         status: int = 0,
         value: int = 0
-    ) -> uint64:
+) -> uint64:
     """Helper function to pack data into a 64-bit HAL measurement status result.
     Converts this:
     (QUBIT_INDEX, STATUS, VALUE)
@@ -262,7 +268,8 @@ def measurement_creator(
         64-bit measurement status from HAL.
     """
 
-    return qidx << 52 | offset << 12 |status << 7 | value
+    return qidx << 52 | offset << 12 | status << 7 | value
+
 
 def measurement_unpacker(bitcode: uint64) -> Tuple[int, int, int, int]:
     """Helper function to decode 64-bit measurement status result from HAL.
