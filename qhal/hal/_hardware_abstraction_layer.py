@@ -39,6 +39,7 @@ class HardwareAbstractionLayer:
         # set up some of the metadata in correct format
         self._hal_metadata = hal_metadata
         self._encoded_metadata = {}
+        self._final_mask = (1 << 60)
 
         self._encoded_metadata["NUM_QUBITS"] = \
             (1 << 61) + self._hal_metadata.num_qubits
@@ -73,7 +74,7 @@ class HardwareAbstractionLayer:
         Returns
         -------
         uint64
-            Result of a measurement command.
+            Result of a measurement command or metadata request.
         """
 
         # check if we've receieved a metadata request
@@ -84,13 +85,16 @@ class HardwareAbstractionLayer:
                 self._metadata_index == 0
 
             if param[0] == 1:
-                return self._encoded_metadata["NUM_QUBITS"] + (1 << 60)
+                return self._encoded_metadata["NUM_QUBITS"] + self._final_mask
 
             elif param[0] == 2:
-                return self._encoded_metadata["MAX_DEPTH"] + (1 << 60)
+                return self._encoded_metadata["MAX_DEPTH"] + self._final_mask
 
             elif param[0] == 3:
                 self._previous_metadata_request = param[0]
+
+                if len(self._encoded_metadata["NATIVE_GATES"]) == 0:
+                    return (3 << 61) + self._final_mask
 
                 gate_list = [
                     i[0] for i in list(
@@ -101,11 +105,15 @@ class HardwareAbstractionLayer:
                 data = gate_list[self._metadata_index]
                 self._metadata_index += 1
                 if self._metadata_index == len(gate_list):
-                    data = data + (1 << 60)   # add final flag
+                    data = data + self._final_mask   # add final flag
                     self._metadata_index = 0
                 return data
 
             elif param[0] == 4:
+
+                if len(self._hal_metadata.connectivity) == 0:
+                    return (4 << 61) + self._final_mask
+
                 if "CONNECTIVITY" not in self._encoded_metadata:
 
                     self._encoded_metadata["CONNECTIVITY"] = []
@@ -137,11 +145,15 @@ class HardwareAbstractionLayer:
                 self._metadata_index += 1
                 if self._metadata_index == \
                         len(self._encoded_metadata["CONNECTIVITY"]):
-                    data = data + (1 << 60)  # add final flag
+                    data = data + self._final_mask  # add final flag
                     self._metadata_index = 0
                 return int(data)
 
             elif param[0] == 5:
+
+                if len(self._encoded_metadata["NATIVE_GATES"]) == 0:
+                    return (5 << 61) + self._final_mask
+
                 gate_index = param[1] >> 13
 
                 gate_data_list = self._encoded_metadata["NATIVE_GATES"][
@@ -194,10 +206,11 @@ class HardwareAbstractionLayer:
 
                 data = gate_data_list[self._metadata_index + 1]
                 if self._metadata_index == len(gate_data_list) - 2:
-                    data = data + (1 << 60)  # add final flag
+                    data = data + self._final_mask  # add final flag
                     self._metadata_index = 0
                 else:
                     self._metadata_index += 1
                 return int(data)
 
-        return self._quantum_simulator.accept_command(hal_command)
+        else:
+            return self._quantum_simulator.accept_command(hal_command)

@@ -240,10 +240,10 @@ def command_unpacker(
 
 
 def measurement_creator(
-        qidx: int,
-        offset: int = 0,
-        status: int = 0,
-        value: int = 0
+    qidx: int,
+    offset: int = 0,
+    status: int = 0,
+    value: int = 0
 ) -> uint64:
     """Helper function to pack data into a 64-bit HAL measurement status result.
     Converts this:

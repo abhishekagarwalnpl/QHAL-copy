@@ -295,6 +295,23 @@ to be collected and decoded into the appropriate data format.
 Below is the list of individual metadata items that may be requested and the
 structure of their corresponding HAL command request:
 
+.. list-table:: Summary of metadata indexes
+  :header-rows: 1
+
+  * - Metadata 
+    - Index (binary)
+  * - NUM_QUBITS
+    - 1 (001)
+  * - MAX_DEPTH
+    - 2 (010)
+  * - NATIVE_GATES/GATE_TIMES 
+    - 3 (011)
+  * - CONNECTIVITY
+    - 4 (100)
+  * - ERROR_RATE
+    - 5 (101)
+
+
 **NUM_QUBITS**:
 
 
@@ -339,7 +356,7 @@ structure of their corresponding HAL command request:
 .. list-table:: HAL response for MAX_DEPTH metadata
   :header-rows: 1
 
-  * - Metadata Index [3] *(MAX_DEPTH = 1)*
+  * - Metadata Index [3] *(MAX_DEPTH = 2)*
     - Number of qubits [61] *(e.g. 200)*
   * - 010
     - 000000000000000000000000000000000000000000000000000011001000
@@ -369,7 +386,7 @@ structure of their corresponding HAL command request:
     - Gate index [4] *(e.g. 0)*
     - Opcode [12] *(e.g. 10 = RX gate)*
     - Parameter [16] *(e.g. 32768 = pi/2)*
-    - Gate Time [30] *(e.g. 16000 ps)*
+    - Gate Time [28] *(e.g. 16000 ps)*
   * - 011
     - 1
     - 0000
@@ -380,9 +397,12 @@ structure of their corresponding HAL command request:
 - Notes:
    
     - **Final**: flag used to specify last stream packet
+    - **Gate index**: used to enumerate the native gates, where the gates can
+      be described by the opcode+parameter. The gate indexes are used when
+      requesting native gate-specific metadata, such as the ERROR_RATE below
     - **Parameter**: used to specify the parameter for gates that have a generic
       matrix definition parameterised by some rotation angle
-    - **Gate Time**: 30-bit unsigned integer for gate time, specified in picoseconds
+    - **Gate Time**: 28-bit unsigned integer for gate time, specified in picoseconds
 
 
 **CONNECTIVITY**:
