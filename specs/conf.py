@@ -267,11 +267,11 @@ for version in versions:
 # POPULATE LINKS TO OTHER FORMATS/DOWNLOADS
 
 # settings for creating PDF with rinoh
-rinoh_documents = [(
-    master_doc,
-    'target',
-    project,
-    '© ' + copyright,
+rinoh_documents = [dict(
+    doc=master_doc,
+    target='target',
+    title=project,
+    author='© ' + copyright,
 )]
 today_fmt = "%B %d, %Y"
 

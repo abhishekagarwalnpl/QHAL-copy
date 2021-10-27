@@ -6,9 +6,9 @@ we should allow each HAL layer to have a different set of commands.
 This allows a tuning of the commands to fit the associated level best.
 In this Section we have used the following considerations to drive our proposal:
 
-- Level 3 and Level 2 need to perform one or more of compilation, transpilation and 
-  timing allocation of instructions. Level 1 instead should present commands that 
-  are already usable by the hardware.
+- A Level 3 or Level 2 HAL needs to perform one or more of compilation, transpilation and 
+  timing allocation of instructions. At Level 1, commands that are already usable by the hardware
+  should be presented.
 - Users will want to execute on emulators as well as on real quantum resources. 
   Hardware vendors might want to expose a single HAL interface and internally route 
   the circuits to an emulator or the real system. To ease this process and consequently 
@@ -30,14 +30,14 @@ Level 3 HAL
       - Motivations
       - Implications
       - Notes
-    * - A universal gateset
+    * - Gates from a universal gateset
       - Define the circuits to execute
       - Compilers and transpilers are needed to convert it to a usable representation
       - None
     * - Section commands
       - Confines the code that belong to one user and associate it to hardware or emulation facilities
       - The compilation flow should support both targets
-      - The user can transmit circuits back-to-back as a binary sequence. Section commands are used to delimit these sequences (as a START and STOP equivalent) allowing optimizatons and compilations on the received circuits.
+      - The user can transmit circuits back-to-back as a binary sequence. Section commands are used to delimit these sequences (as a START and STOP equivalent) allowing optimisations and compilations on the received circuits.
 
 At Level 3, the classical logic is in charge of acting upon measurements and 
 selecting the next sequence of circuits to execute. 
@@ -64,7 +64,7 @@ Level 2 HAL
       - Motivations
       - Implications
       - Notes
-    * - A native gateset
+    * - Gates from the native gateset
       - Define the circuits to execute
       - Transpilers are needed to convert it to a hardware representation (e.g. sequence of pulses)
       - It can contain optional commands (e.g. CPHASE, CCX, ACTIVE RESET) that the hardware supports
@@ -89,10 +89,10 @@ Level 1 HAL
       - Motivations
       - Implications
       - Notes
-    * - A native gateset
+    * - Gates from the native gateset
       - Define the circuits to execute
       - None
-      - If the hardware supports them the user should be allowed to use: (a) arbitrary controlled gates (e.g. CPHASE) (b) multi (>2) qubits gates 
+      - If the hardware supports them the user should be allowed to use arbitrary controlled gates (e.g. CPHASE) and (b) multi-qubit (>2) gates 
 
 At Level 1, the classical logic is in charge of acting upon measurements and select the next gate(s) to execute. 
 
