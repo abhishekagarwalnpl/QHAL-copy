@@ -21,7 +21,7 @@ jobs:
           pip install --upgrade pip
           pip install sphinx~=3.3
           git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
-          git merge ${GITHUB_REF##*/}
+          git merge origin/${GITHUB_REF##*/}
         shell: bash
 
       - name: Execute script to build the pdf specification
