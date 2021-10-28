@@ -1,10 +1,11 @@
 name: specs_merge_pdf_build_check
 on:
   push:
-    branches:    
+    branches: 
+      - '*'   
       - '!dev'
 
-      
+
 jobs: 
   build_docs_job:
     runs-on: ubuntu-latest
