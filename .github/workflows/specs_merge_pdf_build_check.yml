@@ -1,0 +1,29 @@
+name: specs_merge_pdf_build_check
+on:
+  push:
+    branches:    
+      - '!dev'
+
+jobs: 
+  build_docs_job:
+    runs-on: ubuntu-latest
+
+    container: ubuntu:20.04
+
+    steps:
+      - name: Clone the repo
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          apt-get update
+          apt-get install -y git sphinx~=3.3
+          git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+        shell: bash
+
+      - name: Execute script to build the pdf specification
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cd specs
+          sphinx-build -v -n -a -b rinoh -w sphinx-build-pdf.log .
+        shell: bash
