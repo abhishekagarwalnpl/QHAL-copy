@@ -2,9 +2,7 @@ name: specs_merge_pdf_build_check
 on:
   push:
     branches: 
-      - '*'   
-      - '!dev'
-
+      - "${GITHUB_REF##*/}"
 
 jobs: 
   merge_build_pdf_job:
@@ -22,6 +20,7 @@ jobs:
           pip install --upgrade pip
           pip install sphinx~=3.3
           git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          git merge ${GITHUB_REF##*/}
         shell: bash
 
       - name: Execute script to build the pdf specification
@@ -29,5 +28,5 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           cd specs
-          sphinx-build -v -n -a -b rinoh -w sphinx-build-pdf.log .
+          sphinx-build -v -n -a -b rinoh -w sphinx-build-pdf.log . _build/pdf/
         shell: bash
