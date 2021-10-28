@@ -7,7 +7,7 @@ on:
 
 
 jobs: 
-  build_docs_job:
+  merge_build_pdf_job:
     runs-on: ubuntu-latest
 
     container: ubuntu:20.04
@@ -18,7 +18,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           apt-get update
-          apt-get install -y git sphinx~=3.3
+          apt-get install -y git sphinx=3.3
           git clone "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
         shell: bash
 
