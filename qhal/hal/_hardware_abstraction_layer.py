@@ -27,15 +27,15 @@ class HALMetadata:
             _error_raiser("max_depth")
         else:
             self.max_depth = max_depth
+        self.connectivity = connectivity if \
+            connectivity.shape[0] == num_qubits \
+            else _error_raiser("connectivity")
         self.native_gates = native_gates if \
             all([
                 mat.shape[0] <= num_qubits for mat in
                 [t[1] for t in native_gates.values()]
             ]) \
             else _error_raiser("native_gates")
-        self.connectivity = connectivity if \
-            connectivity.shape[0] == num_qubits \
-            else _error_raiser("connectivity")
 
 
 class HardwareAbstractionLayer:

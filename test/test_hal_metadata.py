@@ -147,6 +147,50 @@ class HALMetadataTest(unittest.TestCase):
                 (metadata_index << 61) + (1 << 60)
             )
 
+    def test_metadata_valid(self):
+        """Tests that inputs to HALMetadata object are self-consistent.
+        """
+
+        with self.assertRaises(ValueError):
+
+            # max depth makes no sense for 0 qubits
+            HALMetadata(
+                num_qubits=0,
+                max_depth=1000
+            )
+
+            # error rate matrices dimensions larger than hilbert space
+            HALMetadata(
+                num_qubits=2,
+                native_gates={
+                    "RX": (100, np.array([0.014, 0.015, 0.013, 0.014, 0.012])),
+                    "RY": (200, np.array([0.019, 0.017, 0.016, 0.018])),
+                    "RZ": (200, np.array([0.015, 0.016, 0.016, 0.017])),
+                    "CNOT": (1000, np.array(
+                        [
+                            [0, 0.02, 0, 0],
+                            [0.03, 0, 0.03, 0],
+                            [0, 0.05, 0, 0.04],
+                            [0, 0, 0.02, 0]
+                        ]
+                    ))
+                }
+            )
+
+            # conenctivity matrix dimension smaller than hilbert space
+            HALMetadata(
+                num_qubits=10,
+                connectivity=np.array(
+                    [
+                        [1, 1, 0, 0, 0],
+                        [1, 1, 1, 0, 0],
+                        [0, 1, 1, 1, 0],
+                        [0, 0, 1, 1, 1],
+                        [0, 0, 0, 1, 1]
+                    ]
+                )
+            )
+
 
 if __name__ == "__main__":
     unittest.main()
