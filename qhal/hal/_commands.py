@@ -78,7 +78,6 @@ class Opcode:
 
 
 _OPCODES = [
-    # SINGLE WORD Commands
     ## Configuration Session
     Opcode("NOP", 0, "SINGLE", "CONST"),
     Opcode("START_SESSION", 1, "SINGLE", "CONST"),
@@ -95,6 +94,7 @@ _OPCODES = [
         "PARAM"
     ),
 
+    # SINGLE WORD Commands
     ## Arbitrary Rotations
     Opcode("RX", 10 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("RY", 11 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
