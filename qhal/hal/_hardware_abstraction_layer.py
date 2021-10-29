@@ -1,4 +1,4 @@
-from typing import Dict, NamedTuple, Tuple
+from typing import Dict, Tuple
 
 import numpy as np
 
@@ -6,13 +6,36 @@ from . import command_unpacker, string_to_opcode
 from ..quantum_simulators import IQuantumSimulator
 
 
-class HALMetadata(NamedTuple):
+class HALMetadata:
     """Class for storing HAL metadata items in pre-defined form.
     """
-    num_qubits: int = 0
-    max_depth: int = 0
-    native_gates: Dict[int, Tuple[int, np.array]] = {}
-    connectivity: np.array = np.array([])
+    def __init__(
+        self,
+        num_qubits: int = 0,
+        max_depth: int = 0,
+        native_gates: Dict[int, Tuple[int, np.array]] = {},
+        connectivity: np.array = np.array([])
+    ):
+
+        def _error_raiser(metadata_item: str) -> None:
+            raise ValueError(
+                f"Metadata item {metadata_item} inconsistent with other items!"
+            )
+
+        self.num_qubits = num_qubits
+        if max_depth > 0 and num_qubits == 0:
+            _error_raiser("max_depth")
+        else:
+            self.max_depth = max_depth
+        self.native_gates = native_gates if \
+            all([
+                mat.shape[0] <= num_qubits for mat in
+                [t[1] for t in native_gates.values()]
+            ]) \
+            else _error_raiser("native_gates")
+        self.connectivity = connectivity if \
+            connectivity.shape[0] == num_qubits \
+            else _error_raiser("connectivity")
 
 
 class HardwareAbstractionLayer:
