@@ -223,20 +223,21 @@ class HardwareAbstractionLayer:
                         list(self._hal_metadata.native_gates.keys())[gate_index]
                     ][1]
 
+                    if len(error_rate_matrix.shape) > 1:
+                        mat_upper = np.triu(error_rate_matrix)
+                        mat_lower = np.tril(error_rate_matrix)
+                        new_mat = np.concatenate(
+                            (mat_upper, np.transpose(mat_lower)), axis=1
+                        )
+                        r, c = np.nonzero(new_mat)
+                        error_rate_matrix = new_mat[r, c]
+
                     # build up 64-bit encoded response
                     encoded_error_rates = 0
                     count = 3
                     for i, error_rate in enumerate(error_rate_matrix):
 
-                        if type(error_rate) == np.ndarray:
-                            for element in error_rate:
-                                if element != 0:
-                                    encoded_error_rate = error_rate_encoder(
-                                        element
-                                    )
-
-                        else:
-                            encoded_error_rate = error_rate_encoder(error_rate)
+                        encoded_error_rate = error_rate_encoder(error_rate)
 
                         encoded_error_rates += \
                             int(encoded_error_rate) << (count * 14)
@@ -247,7 +248,7 @@ class HardwareAbstractionLayer:
                                 (5 << 61) | int(encoded_error_rates)
                             )
                             encoded_error_rates = 0
-                            count = 2
+                            count = 3
 
                 self._previous_metadata_request = param[0]
 

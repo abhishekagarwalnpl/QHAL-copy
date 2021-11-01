@@ -81,13 +81,14 @@ class HALMetadataTest(unittest.TestCase):
             ),
             (  # ERROR_RATES - metadata index 5 (101)
                 # input data already given in NATIVE_GATES
-                [0, 0, 1, 2, 3],
+                [0, 0, 1, 2, 3, 3],
                 [
                     11530204671229837537,  # gate 0
-                    12682136602483359744,  # gate 0
+                    12682985373651959808,  # gate 0
                     12683478028148293921,  # gate 1
                     12683196548876615953,  # gate 2
-                    12682281699364585505  # gate 3
+                    11529360194757476433,  # gate 3
+                    12682422432556908544  # gate 3
                 ]
             )
         ]
@@ -103,6 +104,9 @@ class HALMetadataTest(unittest.TestCase):
 
             # poll HAL with metadata reqs for index until receives final flags
             while True:
+
+                if metadata_index == 5:
+                    print(test_input_output_data[4][0][output_count])
 
                 res = hal.accept_command(
                     command_creator(
@@ -123,7 +127,11 @@ class HALMetadataTest(unittest.TestCase):
                 output_count += 1
 
                 if (res >> 61) == metadata_index and (res >> 60) & 1:
-                    break
+                    if metadata_index == 5 and \
+                        len(test_input_output_data[4][0]) != output_count:
+                        continue
+                    else:
+                        break
 
         # additional test for requesting single row entries for connectivity
         while True:
