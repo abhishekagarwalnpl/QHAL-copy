@@ -134,40 +134,60 @@ class HardwareAbstractionLayer:
 
             elif param[0] == 4:
 
-                if len(self._hal_metadata.connectivity) == 0:
-                    return (4 << 61) + self._final_mask
-
-                if "CONNECTIVITY" not in self._encoded_metadata:
-
-                    self._encoded_metadata["CONNECTIVITY"] = []
+                def encode_connectivity_mat(upper_mat_array, row_index=None):
 
                     # get all non-zero off-diagonal indexes
-                    row_col_indexes = np.transpose(
-                        np.nonzero(np.triu(self._hal_metadata.connectivity, 1))
-                    )
+                    row_col_indexes = np.transpose(np.nonzero(upper_mat_array))
 
-                    # build up 64-bit encoded response
+                    encoded_metadata = []
                     encoded_indexes = 0
                     count = 2
                     for i, row_col in enumerate(row_col_indexes):
 
-                        encoded_indexes += \
-                            ((row_col[0] << 10) + row_col[1]) << (count * 20)
+                        if len(row_col) > 1:
+                            indexes = ((row_col[0] << 10) + row_col[1])
+                        else:
+                            indexes = ((row_index << 10) + row_col[0])
+
+                        encoded_indexes += indexes << (count * 20)
                         count -= 1
 
                         if count == -1 or i == len(row_col_indexes) - 1:
-                            self._encoded_metadata["CONNECTIVITY"].append(
+                            encoded_metadata.append(
                                 int(encoded_indexes) | (4 << 61)
                             )
                             encoded_indexes = 0
                             count = 2
 
+                    return encoded_metadata
+
+                if len(self._hal_metadata.connectivity) == 0:
+                    return (4 << 61) + self._final_mask
+
+                upper_mat_array = np.triu(self._hal_metadata.connectivity, 1)
+
+                # are we requesting a single row?
+                if param[1] >> 15:
+                    row_index = idx[0] + idx[1]
+                    upper_mat_array = upper_mat_array[row_index]
+                    # build 64-bit encoded response
+                    encoded_list = encode_connectivity_mat(
+                        upper_mat_array, row_index
+                    )
+
+                else:
+                    # keep internal store so we dont construct every time
+                    if "CONNECTIVITY" not in self._encoded_metadata:
+                        # build 64-bit encoded response
+                        self._encoded_metadata["CONNECTIVITY"] = \
+                            encode_connectivity_mat(upper_mat_array)
+                    encoded_list = self._encoded_metadata["CONNECTIVITY"]
+
                 self._previous_metadata_request = param[0]
 
-                data = self._encoded_metadata["CONNECTIVITY"][self._metadata_index]
+                data = encoded_list[self._metadata_index]
                 self._metadata_index += 1
-                if self._metadata_index == \
-                        len(self._encoded_metadata["CONNECTIVITY"]):
+                if self._metadata_index == len(encoded_list):
                     data = data + self._final_mask  # add final flag
                     self._metadata_index = 0
                 return int(data)
@@ -178,6 +198,10 @@ class HardwareAbstractionLayer:
                     return (5 << 61) + self._final_mask
 
                 gate_index = param[1] >> 13
+
+                # are we requesting a single row?
+                if param[1] >> 15:
+                    row_index = idx[0] + idx[1]
 
                 gate_data_list = self._encoded_metadata["NATIVE_GATES"][
                     gate_index
@@ -222,7 +246,7 @@ class HardwareAbstractionLayer:
                             gate_data_list.append(
                                 (5 << 61) | int(encoded_error_rates)
                             )
-                            encoded_indexes = 0
+                            encoded_error_rates = 0
                             count = 2
 
                 self._previous_metadata_request = param[0]

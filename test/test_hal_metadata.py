@@ -84,7 +84,7 @@ class HALMetadataTest(unittest.TestCase):
                 [0, 0, 1, 2, 3],
                 [
                     11530204671229837537,  # gate 0
-                    12683126227644727521,  # gate 0
+                    12682136602483359744,  # gate 0
                     12683478028148293921,  # gate 1
                     12683196548876615953,  # gate 2
                     12682281699364585505  # gate 3
@@ -124,6 +124,28 @@ class HALMetadataTest(unittest.TestCase):
 
                 if (res >> 61) == metadata_index and (res >> 60) & 1:
                     break
+
+        # additional test for requesting single row entries for connectivity
+        while True:
+
+            res = hal.accept_command(
+                command_creator(
+                    "REQUEST_METADATA",
+                    arg0=4,
+                    arg1=(1 << 15),  # request single row
+                    qidx0=1  # specifiy row index
+                )
+            )
+
+            self.assertEqual(
+                res,
+                10377421640391720960
+            )
+
+            output_count += 1
+
+            if (res >> 61) == 4 and (res >> 60) & 1:
+                break
 
     def test_default_values(self):
         """Tests that when no values are specified for the HALMetadata then
