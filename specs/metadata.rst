@@ -149,22 +149,14 @@ Hardware companies won't appreciate:
 
 - **NATIVE_GATES**: 
   
-  - Type: List of parametrisable matrices
+  - Type: List of unsigned ints representing HAL gate indexes (specified in HAL library)
   
-  - Example:
-  
-  .. code-block::
-
-          [0 1]                   [1 0 0      0      ]
-     X =  [1 0]       CR(theta) = [0 1 0      0      ]
-                                  [0 0 1      0      ]
-                                  [0 0 0 exp(i*theta)]
+  - Example: 10 (RX gate), 30 (H Gate), 60 (CNOT)
 
   - Forbidden Values:
    
-    - Any non-canonical form representation
-  
-    - Null matrix
+    - Any index not included in HAL library
+
 
 - **CONNECTIVITY**:
   
@@ -387,14 +379,12 @@ structure of their corresponding HAL command request:
     - Final [1] *(e.g. True)*
     - Gate index [4] *(e.g. 0)*
     - Opcode [12] *(e.g. 10 = RX gate)*
-    - Parameter [16] *(e.g. 32768 = pi/2)*
-    - Gate Time [28] *(e.g. 16000 ps)*
+    - Gate Time [44] *(e.g. 16000 ps)*
   * - 011
     - 1
     - 0000
     - 000000001010
-    - 1000000000000000
-    - 000000000000000011111010000000
+    - 0000000000000000000000000000000011111010000000
 
 - Notes:
    
@@ -402,8 +392,6 @@ structure of their corresponding HAL command request:
     - **Gate index**: used to enumerate the native gates, where the gates can
       be described by the opcode+parameter. The gate indexes are used when
       requesting native gate-specific metadata, such as the ERROR_RATE below
-    - **Parameter**: used to specify the parameter for gates that have a generic
-      matrix definition parameterised by some rotation angle
     - **Gate Time**: 28-bit unsigned integer for gate time, specified in picoseconds
 
 
@@ -524,8 +512,9 @@ structure of their corresponding HAL command request:
     after the decimal point. For example, the number 0.01 is expressed by
     0000000001|0001, and the number 0.00245 is expressed by 0011110101|0010
   - Error rate matrix is **not** symmetric, so off-diagonal upper and lower
-    halves of matrix returned. Upper half is returned in the same order of
-    row/column indexes returned from CONNECTIVITY metadata request (row-wise),
-    lower half returned with equivalent row/column indexes flipped (column-wise)
+    halves of matrix returned. Upper half row is returned in the same order of
+    row/column indexes returned from CONNECTIVITY metadata request (row-wise).
+    Each row return is followed by column return from lower half with same index,
+    before moving to the next upper half row.
   - **Must** have knowledge of CONNECTIVITY metadata in order to map the error
     rate values to appropriate qubits

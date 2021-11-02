@@ -105,9 +105,6 @@ class HALMetadataTest(unittest.TestCase):
             # poll HAL with metadata reqs for index until receives final flags
             while True:
 
-                if metadata_index == 5:
-                    print(test_input_output_data[4][0][output_count])
-
                 res = hal.accept_command(
                     command_creator(
                         "REQUEST_METADATA",
@@ -128,7 +125,7 @@ class HALMetadataTest(unittest.TestCase):
 
                 if (res >> 61) == metadata_index and (res >> 60) & 1:
                     if metadata_index == 5 and \
-                        len(test_input_output_data[4][0]) != output_count:
+                            len(test_input_output_data[4][0]) != output_count:
                         continue
                     else:
                         break
@@ -154,6 +151,34 @@ class HALMetadataTest(unittest.TestCase):
 
             if (res >> 61) == 4 and (res >> 60) & 1:
                 break
+
+        # additional test for requesting single row entries for error rate
+        output_count = 0
+        expected_vals = [12682352076697632768]
+
+        for i, expected_val in enumerate(expected_vals):
+
+            while True:
+
+                res = hal.accept_command(
+                    command_creator(
+                        "REQUEST_METADATA",
+                        arg0=5,
+                        # request single row
+                        arg1=(i << 13) + (1 << 12),
+                        qidx0=(3 - i)  # specifiy row index
+                    )
+                )
+
+                self.assertEqual(
+                    res,
+                    expected_val
+                )
+
+                output_count += 1
+
+                if (res >> 61) == 5 and (res >> 60) & 1:
+                    break
 
     def test_default_values(self):
         """Tests that when no values are specified for the HALMetadata then

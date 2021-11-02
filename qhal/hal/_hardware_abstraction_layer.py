@@ -194,66 +194,101 @@ class HardwareAbstractionLayer:
 
             elif param[0] == 5:
 
-                if len(self._encoded_metadata["NATIVE_GATES"]) == 0:
-                    return (5 << 61) + self._final_mask
-
-                gate_index = param[1] >> 13
-
-                # are we requesting a single row?
-                if param[1] >> 15:
-                    row_index = idx[0] + idx[1]
-
-                gate_data_list = self._encoded_metadata["NATIVE_GATES"][
-                    gate_index
-                ]
-
-                if len(gate_data_list) == 1:
-
-                    def error_rate_encoder(num: float) -> int:
-                        exp = -1
-
-                        while num - int(num) != 0:
-                            if num < 1:
-                                exp += 1
-                            num = float(f'{num:.3g}') * 10
-
-                        return (int(num) << 4) + exp
-
-                    error_rate_matrix = self._hal_metadata.native_gates[
-                        list(self._hal_metadata.native_gates.keys())[gate_index]
-                    ][1]
-
-                    if len(error_rate_matrix.shape) > 1:
-                        mat_upper = np.triu(error_rate_matrix)
-                        mat_lower = np.tril(error_rate_matrix)
-                        new_mat = np.concatenate(
-                            (mat_upper, np.transpose(mat_lower)), axis=1
-                        )
-                        r, c = np.nonzero(new_mat)
-                        error_rate_matrix = new_mat[r, c]
+                def encode_error_mat(error_rate_matrix):
 
                     # build up 64-bit encoded response
+                    encoded_metadata = []
                     encoded_error_rates = 0
                     count = 3
                     for i, error_rate in enumerate(error_rate_matrix):
 
-                        encoded_error_rate = error_rate_encoder(error_rate)
+                        # encode the error rate (mantissa, exp)
+                        exp = -1
+
+                        while error_rate - int(error_rate) != 0:
+                            if error_rate < 1:
+                                exp += 1
+                            error_rate = float(f'{error_rate:.3g}') * 10
+
+                        encoded_error_rate = (int(error_rate) << 4) + exp
 
                         encoded_error_rates += \
                             int(encoded_error_rate) << (count * 14)
                         count -= 1
 
                         if count == -1 or i == len(error_rate_matrix) - 1:
-                            gate_data_list.append(
+                            encoded_metadata.append(
                                 (5 << 61) | int(encoded_error_rates)
                             )
                             encoded_error_rates = 0
                             count = 3
 
+                    return encoded_metadata
+
+                if len(self._encoded_metadata["NATIVE_GATES"]) == 0:
+                    return (5 << 61) + self._final_mask
+
+                gate_index = param[1] >> 13
+
+                error_rate_matrix = self._hal_metadata.native_gates[
+                    list(self._hal_metadata.native_gates.keys())[gate_index]
+                ][1]
+
+                # are we requesting a single row?
+                if (param[1] >> 12) & 1:
+
+                    row_index = idx[0] + idx[1]
+
+                    if len(error_rate_matrix.shape) > 1:
+
+                        mat_upper = np.triu(error_rate_matrix)
+                        mat_lower = np.tril(error_rate_matrix)
+
+                        new_mat = np.concatenate(
+                            (
+                                mat_upper[row_index],
+                                np.transpose(mat_lower)[row_index]
+                            )
+                        )
+
+                        c = np.nonzero(new_mat)
+                        error_rate_matrix = new_mat[c]
+                    else:
+                        error_rate_matrix = error_rate_matrix[row_index]
+
+                    gate_data_list = encode_error_mat(error_rate_matrix)
+
+                else:
+
+                    gate_data_list = self._encoded_metadata["NATIVE_GATES"][
+                        gate_index
+                    ][1:]
+
+                    # if there is no encoded data yet
+                    # keep internal store so we dont construct every time
+                    if len(gate_data_list) == 0:
+
+                        if len(error_rate_matrix.shape) > 1:
+
+                            mat_upper = np.triu(error_rate_matrix)
+                            mat_lower = np.tril(error_rate_matrix)
+
+                            new_mat = np.concatenate(
+                                (mat_upper, np.transpose(mat_lower)),
+                                axis=1
+                            )
+
+                            r, c = np.nonzero(new_mat)
+                            error_rate_matrix = new_mat[r, c]
+
+                        gate_data_list.extend(
+                            encode_error_mat(error_rate_matrix)
+                        )
+
                 self._previous_metadata_request = param[0]
 
-                data = gate_data_list[self._metadata_index + 1]
-                if self._metadata_index == len(gate_data_list) - 2:
+                data = gate_data_list[self._metadata_index]
+                if self._metadata_index == len(gate_data_list) - 1:
                     data = data + self._final_mask  # add final flag
                     self._metadata_index = 0
                 else:
