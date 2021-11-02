@@ -73,9 +73,23 @@ PYTEST=pytest \
 	--junitxml=testreport.xml \
 	--cov-report xml \
 	--cov-report term
-	
-# --------------- DOCKER STUFF -----------------------------------------------#
 
+MAKEPACKAGE=python3 setup.py sdist bdist_wheel
+
+CHECKPACKAGE=python3 -m twine check dist/*
+
+TESTUPLOADPACKAGE=python3 -m twine upload \
+	--repository testpypi \
+	-u $(user) \
+	-p $(pass) \
+	dist/*
+
+UPLOADPACKAGE=python3 -m twine upload \
+     -u $(user) \
+     -p $(pass) \
+     dist/*
+
+# --------------- DOCKER STUFF -----------------------------------------------#
 .PHONY: build
 build: ./environment/Dockerfile ## Build the image
 	${DBUILD}
@@ -97,8 +111,6 @@ shell: container
 	docker exec -it $(shell cat container) /bin/bash
 
 # --------------- QA ---------------------------------------------------------#
-
-
 .PHONY: pylint
 pylint: container ## Run code quality checker
 	${DEXEC} ${PYLINT}
@@ -108,20 +120,30 @@ pycodestyle: container ## Run PEP8 checker
 	${DEXEC} ${PYCODESTYLE}
 
 # --------------- SPECIFICATIONS ---------------------------------------------#
-
 .PHONY: specs
 specs: container ## Generate specs
 	${DEXEC} make -C specs $(SPECS_ARGS)
 
+# --------------- PYPI SERVER ------------------------------------------------#
+.PHONY: build-package
+build-package: container ## Make the package
+	${DEXEC} ${MAKEPACKAGE}
+	${DEXEC} ${CHECKPACKAGE}
+
+.PHONY: test-upload-package
+test-upload-package: build-package ## Make and upload the package to test.pypi.org
+	${DEXEC} ${TESTUPLOADPACKAGE}
+
+.PHONY: upload-package
+upload-package: build-package ## Make and upload the package to pypi.org
+	${DEXEC} ${UPLOADPACKAGE}
 
 # --------------- TESTING ----------------------------------------------------#
-
-
 .PHONY: test
-test: test-nose ## Run all the tests
+test: pytest ## Run all the tests
 
-.PHONY: test-nose
-test-nose: container ## Run the test suite via nose
+.PHONY: pytest
+pytest: container ## Run the test suite via pytest
 	${DEXEC} ${PYTEST}
 
 .PHONY: test-unit
@@ -163,7 +185,7 @@ clean-container: ## Stop and remove the container
 
 .PHONY: clean-cover
 clean-cover: ## Clean the test suite results
-	rm -f .coverage coverage.xml nosetests.xml trace.vcd
+	rm -f .coverage *.xml trace.vcd
 
 .PHONY: clean-data
 clean-data: ## Clean any data
@@ -177,10 +199,10 @@ clean-logs: ## Clean logs
 # the development container via VSCode
 
 .PHONY: dev-test
-dev-test: dev-test-nose ## See non-dev version
+dev-test: dev-pytest ## See non-dev version
 
-.PHONY: dev-test-nose
-dev-test-nose: ## See non-dev version
+.PHONY: dev-pytest
+dev-pytest: ## See non-dev version
 	${PYTEST}
 
 .PHONY: dev-test-unit

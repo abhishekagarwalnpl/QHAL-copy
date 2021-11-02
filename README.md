@@ -49,3 +49,5 @@ More information are provided at [code and testing](code_and_testing.md)
 ## License 
 
 see License [here](LICENSE)
+
+[![Ochrona](https://img.shields.io/badge/secured_by-ochrona-blue)](https://ochrona.dev)
