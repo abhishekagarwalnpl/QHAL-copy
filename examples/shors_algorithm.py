@@ -1,15 +1,11 @@
-from lib import HardwareAbstractionLayer, ProjectqQuantumSimulator
-from lib.hal import command_creator, measurement_unpacker
-
+from qhal import HardwareAbstractionLayer, ProjectqQuantumSimulator
+from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal._utils import angle_binary_representation
 from numpy import pi as PI
 
-
-def angle_to_integer(angle):
-    rescaled_angle = angle % 2*PI
-    return int(1024*rescaled_angle / (2*PI))
-INT_PI_BY_2 = angle_to_integer(PI/2)
-INT_PI_BY_4 = angle_to_integer(PI/4)
-INT_PI_BY_8 = angle_to_integer(PI/8)
+INT_PI_BY_2 = angle_binary_representation(PI/2)
+INT_PI_BY_4 = angle_binary_representation(PI/4)
+INT_PI_BY_8 = angle_binary_representation(PI/8)
 
 #
 # Shor's algorithm circuit
@@ -24,6 +20,7 @@ hal = HardwareAbstractionLayer(
     ProjectqQuantumSimulator(n)
 )
 
+hal.accept_command(command_creator("START_SESSION", 0, 0))
 #initialise qubit register
 hal.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
 
@@ -55,7 +52,7 @@ hal.accept_command(command_creator("H", 0, 0))
 c.insert(0,0) # Add bit to the left
 c.pop() # Remove rightmost bit
 
-q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
+q_index,index_offset,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
 hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
@@ -84,7 +81,7 @@ hal.accept_command(command_creator("H", 0, 0))
 c.insert(0,0) # Add bit to the left
 c.pop() # Remove rightmost bit
 
-q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
+q_index,index_offset,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
 hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
@@ -161,11 +158,12 @@ hal.accept_command(command_creator("H", 0, 0))
 c.insert(0,0) # Add bit to the left
 c.pop() # Remove rightmost bit
 
-q_index,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
+q_index,index_offset,status,readout = measurement_unpacker(hal.accept_command(command_creator("QUBIT_MEASURE", 0, 0))) 
 c[0] = readout
 # Reset qubit to |0> after measurement
 hal.accept_command(command_creator("STATE_PREPARATION", 0, 0))
 
+hal.accept_command(command_creator("END_SESSION", 0, 0))
 
 #------------------------------------------------
 #------------------- DONE -----------------------

@@ -1,10 +1,5 @@
-import sys
-
-for entry in sys.path:
-    print(entry)
-
-from lib import HardwareAbstractionLayer, ProjectqQuantumSimulator
-from lib.hal import command_creator, measurement_unpacker
+from qhal import HardwareAbstractionLayer, ProjectqQuantumSimulator
+from qhal.hal import command_creator, measurement_unpacker
 
 # set up HAL using projectq backend for 3 qubits
 hal = HardwareAbstractionLayer(
@@ -13,6 +8,7 @@ hal = HardwareAbstractionLayer(
 
 # prepare commands
 circuit = [
+    ["START_SESSION", 0, 0],
     ["STATE_PREPARATION", 0, 0],
     ['X', 0, 0],
     ['H', 0, 2],
@@ -39,6 +35,7 @@ for commands in circuit:
 
 # send measure command to HAL and get encoded HAL result
 hal_result = hal.accept_command(command_creator(*['QUBIT_MEASURE', 0, 2]))
+hal.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
 # decode hal result and print qubit index, status, readout
 print(measurement_unpacker(hal_result))
