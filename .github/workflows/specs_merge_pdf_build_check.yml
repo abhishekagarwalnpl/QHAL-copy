@@ -31,3 +31,10 @@ jobs:
           cd specs
           sphinx-build -v -n -a -b rinoh -w sphinx-build-pdf.log . _build/pdf/
         shell: bash
+      
+      - name: Upload built pdf artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: specification-pdf-build
+          path: specs/_build/pdf/target.pdf
+          retention:-days: 10
