@@ -37,4 +37,4 @@ jobs:
         with:
           name: specification-pdf-build
           path: specs/_build/pdf/target.pdf
-          retention:-days: 10
+          retention:-days: 5
