@@ -392,7 +392,7 @@ structure of their corresponding HAL command request:
     - **Gate index**: used to enumerate the native gates, where the gates can
       be described by the opcode+parameter. The gate indexes are used when
       requesting native gate-specific metadata, such as the ERROR_RATE below
-    - **Gate Time**: 28-bit unsigned integer for gate time, specified in picoseconds
+    - **Gate Time**: 44-bit unsigned integer for gate time, specified in picoseconds
 
 
 **CONNECTIVITY**:
