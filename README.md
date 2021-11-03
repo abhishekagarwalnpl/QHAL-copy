@@ -39,7 +39,7 @@ This disclaimer will be removed once the document reaches sufficient maturity.
 ## Current version
 
 The specification file gets updated every time a merge into the dev branch happens.
-Any PR that entails a change to the specificaiton PDF document will not get built
+Any PR that entails a change to the specification PDF document will not get built
 until merged into the dev branch, so during a PR any changes on the PDF that need
 to be inspected can be viewed as an artifact of this [workflow](https://github.com/riverlane/QHAL_internal/actions/workflows/specs_merge_pdf_build_check.yml).
 See [specification](specifications.pdf) for the latest version. 
