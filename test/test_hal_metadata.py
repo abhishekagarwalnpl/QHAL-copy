@@ -83,12 +83,12 @@ class HALMetadataTest(unittest.TestCase):
                 # input data already given in NATIVE_GATES
                 [0, 0, 1, 2, 3, 3],
                 [
-                    11530204671229837537,  # gate 0
-                    12682985373651959808,  # gate 0
-                    12683478028148293921,  # gate 1
-                    12683196548876615953,  # gate 2
-                    11529360194757476433,  # gate 3
-                    12682422432556908544  # gate 3
+                    12106665423533261025,  # gate 0
+                    13259446125955383296,  # gate 0
+                    13331996374489645345,  # gate 1
+                    13403772489255895313,  # gate 2
+                    11745532976871260241,  # gate 3
+                    12898595214670692352  # gate 3
                 ]
             )
         ]
@@ -154,7 +154,12 @@ class HALMetadataTest(unittest.TestCase):
 
         # additional test for requesting single row entries for error rate
         output_count = 0
-        expected_vals = [12682352076697632768]
+        expected_vals = [
+            13259586863443738624,  # gate 0, row index 3 (diagonal, 1-qubit)
+            13331785194970021888,  # gate 1, row index 2 (diagonal, 1-qubit)
+            13403842789007949824,  # gate 2, row index 1 (diagonal, 1-qubit)
+            12898454481477304320  # gate 3, row index 0, col index 0 (2-qubit)
+        ]
 
         for i, expected_val in enumerate(expected_vals):
 

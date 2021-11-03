@@ -83,8 +83,8 @@ class HardwareAbstractionLayer:
         self._encoded_metadata["NATIVE_GATES"] = native_gates
 
         # useful state flags
-        self._metadata_index = 0
-        self._previous_metadata_request = 0
+        self._metadata_index = 0  # keep track of previously sent data chunk
+        self._previous_metadata_request_index = 0  # previous metadata request index
 
     def accept_command(self, hal_command: np.uint64) -> np.uint64:
         """Interface for ``quantum_simulator.accept_command``.
@@ -102,26 +102,27 @@ class HardwareAbstractionLayer:
             series of 64-bit data chunks, while the caller waits for a flag
             that specifies the final chunk has been sent.
             Since this is a Python implementation we can't stream back
-            multiple returns from a singl function call, so the caller function
-            must simulate the stream by sending multiple metadata request calls
-            until the "final" flag is receieved.
+            multiple returns from a single function call, so the caller must
+            simulate receiving the stream by sending multiple metadata request
+            calls until the "final" flag is receieved.
         """
 
         # check if we've receieved a metadata request
         opcode, _, param, idx = command_unpacker(hal_command)
         if opcode == "REQUEST_METADATA":
 
-            if param[0] != self._previous_metadata_request:
+            # reset the internal counter for streaming back data
+            if param[0] != self._previous_metadata_request_index:
                 self._metadata_index == 0
 
-            if param[0] == 1:
+            if param[0] == 1:  # num_qubits request
                 return self._encoded_metadata["NUM_QUBITS"] + self._final_mask
 
-            elif param[0] == 2:
+            elif param[0] == 2:  # max depth request
                 return self._encoded_metadata["MAX_DEPTH"] + self._final_mask
 
-            elif param[0] == 3:
-                self._previous_metadata_request = param[0]
+            elif param[0] == 3:  # native gate request
+                self._previous_metadata_request_index = param[0]
 
                 if len(self._encoded_metadata["NATIVE_GATES"]) == 0:
                     return (3 << 61) + self._final_mask
@@ -139,7 +140,7 @@ class HardwareAbstractionLayer:
                     self._metadata_index = 0
                 return data
 
-            elif param[0] == 4:
+            elif param[0] == 4:  # connectivity matrix request
 
                 def encode_connectivity_mat(upper_mat_array, row_index=None):
 
@@ -182,7 +183,7 @@ class HardwareAbstractionLayer:
                         upper_mat_array, row_index
                     )
 
-                else:
+                else:  # request the whole matrix
                     # keep internal store so we dont construct every time
                     if "CONNECTIVITY" not in self._encoded_metadata:
                         # build 64-bit encoded response
@@ -190,7 +191,7 @@ class HardwareAbstractionLayer:
                             encode_connectivity_mat(upper_mat_array)
                     encoded_list = self._encoded_metadata["CONNECTIVITY"]
 
-                self._previous_metadata_request = param[0]
+                self._previous_metadata_request_index = param[0]
 
                 data = encoded_list[self._metadata_index]
                 self._metadata_index += 1
@@ -199,7 +200,7 @@ class HardwareAbstractionLayer:
                     self._metadata_index = 0
                 return int(data)
 
-            elif param[0] == 5:
+            elif param[0] == 5:  # error rate matrix request
 
                 def encode_error_mat(error_rate_matrix):
 
@@ -236,6 +237,7 @@ class HardwareAbstractionLayer:
                     return (5 << 61) + self._final_mask
 
                 gate_index = param[1] >> 13
+                diagonal = False
 
                 error_rate_matrix = self._hal_metadata.native_gates[
                     list(self._hal_metadata.native_gates.keys())[gate_index]
@@ -246,7 +248,8 @@ class HardwareAbstractionLayer:
 
                     row_index = idx[0] + idx[1]
 
-                    if len(error_rate_matrix.shape) > 1:
+                    # set up data to be encoded
+                    if len(error_rate_matrix.shape) > 1:  # 1- or 2-qubit gate?
 
                         mat_upper = np.triu(error_rate_matrix)
                         mat_lower = np.tril(error_rate_matrix)
@@ -261,11 +264,13 @@ class HardwareAbstractionLayer:
                         c = np.nonzero(new_mat)
                         error_rate_matrix = new_mat[c]
                     else:
-                        error_rate_matrix = error_rate_matrix[row_index]
+                        error_rate_matrix = [error_rate_matrix[row_index]]
+                        diagonal = True
 
+                    # build 64-bit encoded response
                     gate_data_list = encode_error_mat(error_rate_matrix)
 
-                else:
+                else:  # return thr whole matrix
 
                     gate_data_list = self._encoded_metadata["NATIVE_GATES"][
                         gate_index
@@ -275,6 +280,7 @@ class HardwareAbstractionLayer:
                     # keep internal store so we dont construct every time
                     if len(gate_data_list) == 0:
 
+                        # 1- or 2-qubit gate?
                         if len(error_rate_matrix.shape) > 1:
 
                             mat_upper = np.triu(error_rate_matrix)
@@ -287,14 +293,19 @@ class HardwareAbstractionLayer:
 
                             r, c = np.nonzero(new_mat)
                             error_rate_matrix = new_mat[r, c]
+                        else:
+                            diagonal = True
 
+                        # build 64-bit encoded response
                         gate_data_list.extend(
                             encode_error_mat(error_rate_matrix)
                         )
 
-                self._previous_metadata_request = param[0]
+                self._previous_metadata_request_index = param[0]
 
                 data = gate_data_list[self._metadata_index]
+                data = data + (diagonal << 59)  # add diagonal flag
+                data = data + (gate_index << 56)  # add gate index
                 if self._metadata_index == len(gate_data_list) - 1:
                     data = data + self._final_mask  # add final flag
                     self._metadata_index = 0
