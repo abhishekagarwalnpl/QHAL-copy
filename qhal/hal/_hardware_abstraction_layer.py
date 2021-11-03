@@ -98,6 +98,13 @@ class HardwareAbstractionLayer:
         -------
         uint64
             Result of a measurement command or metadata request.
+            NOTE: Metadata requests are designed to be streamed back as a
+            series of 64-bit data chunks, while the caller waits for a flag
+            that specifies the final chunk has been sent.
+            Since this is a Python implementation we can't stream back
+            multiple returns from a singl function call, so the caller function
+            must simulate the stream by sending multiple metadata request calls
+            until the "final" flag is receieved.
         """
 
         # check if we've receieved a metadata request
