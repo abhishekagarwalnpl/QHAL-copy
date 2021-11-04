@@ -71,7 +71,7 @@ Hardware companies won't appreciate:
 
 - **NUM_QUBITS**: 
   
-  - Type: 64 bit unsigned int
+  - Type: unsigned int
   
   - Example: 5
   
@@ -79,7 +79,7 @@ Hardware companies won't appreciate:
      
 - **MAX_DEPTH**:
 
-  - Type: 64 bit unsigned int
+  - Type: unsigned int
   
   - Example: 200
   
@@ -149,22 +149,14 @@ Hardware companies won't appreciate:
 
 - **NATIVE_GATES**: 
   
-  - Type: List of parametrisable matrices
+  - Type: List of unsigned ints representing HAL gate indexes (specified in HAL library)
   
-  - Example:
-  
-  .. code-block::
-
-          [0 1]                   [1 0 0      0      ]
-     X =  [1 0]       CR(theta) = [0 1 0      0      ]
-                                  [0 0 1      0      ]
-                                  [0 0 0 exp(i*theta)]
+  - Example: 10 (RX gate), 30 (H Gate), 60 (CNOT)
 
   - Forbidden Values:
    
-    - Any non-canonical form representation
-  
-    - Null matrix
+    - Any index not included in HAL library
+
 
 - **CONNECTIVITY**:
   
@@ -262,7 +254,7 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
   
 **MAX_DEPTH**:
   
-  - Type: 64 bit unsigned int [unit ps]
+  - Type: unsigned int [unit ps]
   
   - Example: 32000000 ps\ \ [32 us]
   
@@ -270,7 +262,7 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
 
 **GATE_TIMES**:
     
-    - Type: List of 64 bit unsigned int [unit ps]
+    - Type: List of unsigned int [unit ps]
     
     - Example: X: 16000, Y: 16000, CNOT: 28000
     
@@ -278,9 +270,251 @@ At this level, the final stage compiler (executed by the hardware lab) takes car
 
 **ERROR_RATE**: [optional]
 
-  - Type: List of tuples (mean, standard deviation) defined as floating point numbers.
+  - Type: List of decimal numbers (between 0 and 1) defining probability of quantum
+    gate to introduce an error.
   
-  - Example: X: (0.05*10^-3, 0.05*10^-5) , Y: (0.05*10^-3, 0.04*10^-5)
+  - Example: X: 0.05 , Y: 0.04
   
   - Forbidden Values: Any usage of NaN (not a number)
+
+
+Metadata Encoding
+------------------------
+
+Here we outline the format in which metadata requests and results are encoded
+into 64 bit HAL commands. Depending on the metadata requested the result will
+either be returned as a single 64 bit integer or a stream of 64 bit integers
+to be collected and decoded into the appropriate data format.
+
+Below is the list of individual metadata items that may be requested and the
+structure of their corresponding HAL command request:
+
+.. list-table:: Summary of metadata indexes
+  :header-rows: 1
+
+  * - Metadata 
+    - Index (binary)
+  * - NUM_QUBITS
+    - 1 (001)
+  * - MAX_DEPTH
+    - 2 (010)
+  * - NATIVE_GATES/GATE_TIMES 
+    - 3 (011)
+  * - CONNECTIVITY
+    - 4 (100)
+  * - ERROR_RATE
+    - 5 (101)
+
+
+**NUM_QUBITS**:
+
+
+- Request
+.. list-table:: HAL command for NUM_QUBITS metadata
+  :header-rows: 1
+
+  * - Opcode [12]
+    - Argument [16]
+    - Padding [36]
+  * - 000000001000
+    - 0000000000000001
+    - 000000000000000000000000000000000000
+
+
+- Response (single)
+.. list-table:: HAL response for NUM_QUBITS metadata
+  :header-rows: 1
+
+  * - Metadata Index [3] *(NUM_QUBITS = 1)*
+    - Number of qubits [61] *(e.g. 4 qubits)*
+  * - 001
+    - 000000000000000000000000000000000000000000000000000000000100
+
+
+**MAX_DEPTH**:
+
+
+- Request
+.. list-table:: HAL command for MAX_DEPTH metadata
+  :header-rows: 1
+
+  * - Opcode [12]
+    - Argument [16]
+    - Padding [36]
+  * - 000000001000
+    - 0000000000000010
+    - 000000000000000000000000000000000000
+
+
+- Response (single)
+.. list-table:: HAL response for MAX_DEPTH metadata
+  :header-rows: 1
+
+  * - Metadata Index [3] *(MAX_DEPTH = 2)*
+    - Number of qubits [61] *(e.g. 200)*
+  * - 010
+    - 000000000000000000000000000000000000000000000000000011001000
+
+
+**NATIVE_GATES/GATE_TIMES**:
+
+
+- Request
+.. list-table:: HAL command for NATIVE_GATES/GATE_TIMES metadata
+  :header-rows: 1
+
+  * - Opcode [12]
+    - Argument [16] *(3)*
+    - Padding [36]
+  * - 000000001000
+    - 0000000000000011
+    - 000000000000000000000000000000000000
+
+
+- Response (one per native gate)
+.. list-table:: HAL response for NATIVE_GATES/GATE_TIMES metadata
+  :header-rows: 1
+
+  * - Metadata Index [3] *(3)*
+    - Final [1] *(e.g. True)*
+    - Gate index [4] *(e.g. 0)*
+    - Opcode [12] *(e.g. 10 = RX gate)*
+    - Gate Time [44] *(e.g. 16000 ps)*
+  * - 011
+    - 1
+    - 0000
+    - 000000001010
+    - 0000000000000000000000000000000011111010000000
+
+- Notes:
+   
+    - **Final**: flag used to specify last stream packet
+    - **Gate index**: used to enumerate the native gates, where the gates can
+      be described by the opcode+parameter. The gate indexes are used when
+      requesting native gate-specific metadata, such as the ERROR_RATE below
+    - **Gate Time**: 44-bit unsigned integer for gate time, specified in picoseconds
+
+
+**CONNECTIVITY**:
+
+
+- Request
+.. list-table:: HAL command for CONNECTIVITY metadata
+  :header-rows: 1
+
+  * - Opcode [12]
+    - Argument [16] *(4)*
+    - Single row [1] *(e.g. False)*
+    - Row index [35] *(e.g. 0)*
+  * - 000000001000
+    - 0000000000000100
+    - 0
+    - 00000000000000000000000000000000000
+
+
+- Response (one per N/3 groupings of non-zero off-diagonal matrix elements)
+.. list-table:: HAL response for CONNECTIVITY metadata
+  :header-rows: 1
+
+  * - Metadata Index [3] *(4)*
+    - Final [1] *(e.g. False)*
+    - Row idx 1 [10] *(e.g. 0)*
+    - Col idx 1 [10] *(e.g. 1)*
+    - Row idx 2 [10] *(e.g. 1)*
+    - Col idx 2 [10] *(e.g. 2)*
+    - Row idx 3 [10] *(e.g. 2)*
+    - Col idx 3 [10] *(e.g. 3)*
+  * - 100
+    - 0
+    - 0000000000
+    - 0000000001
+    - 0000000001
+    - 0000000010
+    - 0000000010
+    - 0000000011
+
+- Notes:
+   
+    - We make use of the 36-bit padding in the HAL request to specify if we 
+      want the whole matrix back or just a single row
+    - **Final**: Non-zero off-diagonal row/column pairs are returned in groups 
+      of 3 in row-order, where the final respone packet is marked by this flag
+    - Connectivity matrix is symmetric, so only off-diagonal upper half of
+      matrix is returned
+
+
+**ERROR_RATE**:
+
+
+- Request
+.. list-table:: HAL command for ERROR_RATE metadata
+  :header-rows: 1
+
+  * - Opcode [12]
+    - Argument [16] *(5)*
+    - Gate index [3] *(e.g. 2)*
+    - Single row [1] *(e.g. False)*
+    - Row index [32] *(e.g. 0)*
+  * - 000000001000
+    - 0000000000000101
+    - 010
+    - 0
+    - 00000000000000000000000000000000000
+
+
+- Response (one per N/4 groupings of non-zero matrix elements)
+.. list-table:: HAL response for ERROR_RATE metadata (first 8 bits)
+  :header-rows: 1
+
+  * - Metadata Index [3] *(5)*
+    - Final [1] *(e.g. False)*
+    - Diagonal [1] *(e.g. True)*
+    - Gate index [3] *(e.g. 2)*
+  * - 101
+    - 0
+    - 1
+    - 010
+
+
+.. list-table:: HAL response for ERROR_RATE metadata (final 56 bits)
+  :header-rows: 1
+
+  * - Mantissa 1 [10] *(e.g. 2)*
+    - Exponent 1 [4] *(e.g. 1)*
+    - Mantissa 2 [10] *(e.g. 3)*
+    - Exponent 2 [4] *(e.g. 1)*
+    - Mantissa 3 [10] *(e.g. 4)*
+    - Exponent 3 [4] *(e.g. 1)*
+    - Mantissa 3 [10] *(e.g. 3)*
+    - Exponent 3 [4] *(e.g. 1)*
+  * - 0000000010
+    - 0001
+    - 0000000011
+    - 0001
+    - 0000000100
+    - 0001
+    - 0000000011
+    - 0001
+
+- Notes:
   
+  - We make use of the 36-bit padding in the HAL request to specify which
+    native gate we want data for (obtained from the order of NATIVE_GATES 
+    metadata responses), and if we want the whole matrix back or just a single row
+  - **Final**: Non-zero error rate values are returned in groups 
+    of 4 in top-left to bottom-right order for diagonal (1-qubit gate) data,
+    and in the same order of row/column indexes returned from CONNECTIVITY metadata
+    request for off-diagonal (2-qubit gate) data. The final respone packet
+    for a given gate is marked by this flag
+  - Error rate data (value between 0 and 1) is stored in a pair of integers
+    with a 10-bit mantissa and 4-bit exponent (distance of mantissa from decimal
+    point). This allows us to store mantissas up to three 9s, up to 15 places
+    after the decimal point. For example, the number 0.01 is expressed by
+    0000000001|0001, and the number 0.00245 is expressed by 0011110101|0010
+  - Error rate matrix is **not** symmetric, so off-diagonal upper and lower
+    halves of matrix returned. Upper half row is returned in the same order of
+    row/column indexes returned from CONNECTIVITY metadata request (row-wise).
+    Each row return is followed by column return from lower half with same index,
+    before moving to the next upper half row.
+  - **Must** have knowledge of CONNECTIVITY metadata in order to map the error
+    rate values to appropriate qubits
