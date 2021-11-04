@@ -21,7 +21,7 @@ All the commands respect the following structure:
 
 OPCODE is structured as:
 SINGLE/DUAL | CONSTANT/PARAMETRIC   |   OPCODE
-[11]        |   [10]                |   [9-0]
+[63]        |   [62]                |   [61-52]
 
 """
 
