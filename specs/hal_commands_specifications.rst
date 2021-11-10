@@ -129,8 +129,8 @@ The table that follows contains three representations, respectively for  "contro
     - | [35-0]: BASE_QUBIT0/1_IDX
   * - SINGLE QUBIT COMMANDS
     - [63-52]   
-    - | [51-36] 
-      | [35-20]: padding
+    - | [51-36]: padding
+      | [35-20]: qubit0
     - | [19-10]: padding
       | [9-0]:   RELATIVE_QUBIT0_IDX 
   * - DUAL QUBIT COMMANDS

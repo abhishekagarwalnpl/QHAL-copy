@@ -54,7 +54,7 @@ The following table lists the basic single qubit HAL commands.
     :header-rows: 1
 
     * - Command
-      - Parameters
+      - Parameters (excluding qubit address)
       - Description
       - HAL Level
     * - NOP
@@ -62,52 +62,52 @@ The following table lists the basic single qubit HAL commands.
       - Performs no operation
       - All
     * - State Prepare
-      - \|0>\ or \|1>\, qubit address
+      - \|0>\ or \|1>\
       - Prepare specific qubit to a known state
       - All
     * - State Prepare all
-      - \|0>\ or \|1>\, qubit address
+      - \|0>\ or \|1>\
       - Prepares all the qubits to a known state
       - All
     * - Qubit measure
       - None
       - Return the measured state of a qubit
       - All
-    * - Arbitrary rotate x
+    * - Rx
       - Angle
-      - Perform qubit rotation [1]_
+      - Perform qubit rotation [1]_ about X axis of Bloch sphere
       - All
-    * - Arbitrary rotate y
+    * - Ry
       - Angle
-      - Perform qubit rotation [1]_
+      - Perform qubit rotation [1]_ about Y axis of Bloch sphere
       - All
-    * - Arbitrary rotate z
+    * - Rz
       - Angle
-      - Perform qubit rotation [1]_
+      - Perform qubit rotation [1]_ about Z axis of Bloch sphere
       - All
-    * - Pauli-X
+    * - X
       - None
-      - None
+      - Perform 180° qubit rotation about X axis of Bloch sphere 
       - All
-    * - Pauli-Y
+    * - Y
       - None
-      - None
+      - Perform 180° qubit rotation about Y axis of Bloch sphere 
       - All
-    * - Pauli-Z
+    * - Z
       - None
-      - None
+      - Perform 180° qubit rotation about Z axis of Bloch sphere 
       - All
-    * - Hadamard
+    * - H
       - None
-      - None
+      - Perform Hadamard gate equivalent to Rx(180°) then Ry(90°)
       - All
-    * - Phase
+    * - S
       - None
-      - None
+      - Perform Phase gate equivalent to Rz(90°)
       - All
     * - T
       - None
-      - None
+      - Perform T gate equivalent to Rz(45°)
       - All
 
 
@@ -126,7 +126,7 @@ consideration, and it might even be outside the scope of this document. [3]_
       - HAL Level
     * - CNOT
       - Qubit addresses
-      - Performs a CNOT operation
+      - Performs a Controlled-NOT operation
       - 3
 
 However, implementing core native 2-qubit gate sets will, in most cases, 
