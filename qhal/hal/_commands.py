@@ -86,7 +86,7 @@ _OPCODES = [
     Opcode("PAGE_SET_QUBIT_1", 4, "SINGLE", "CONST"),
     Opcode("STATE_PREPARATION_ALL", 5, "SINGLE", "CONST"),
     Opcode("STATE_PREPARATION", 6, "SINGLE", "CONST"),
-    Opcode("QUBIT_MEASURE", 7, "SINGLE", "CONST"),
+    Opcode("QUBIT_MEASURE", 7 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode(
         "REQUEST_METADATA",
         8 | Masks.OPCODE_DUAL_MASK.value | Masks.OPCODE_PARAM_MASK.value,
@@ -186,6 +186,13 @@ def command_creator(
         | qidx0
     )
 
+    if opcode.name == "QUBIT_MEASURE":
+
+        cmd = (
+            (arg1 << Shifts.ARG1.value)
+            | (cmd)
+        )
+
     if opcode.cmd_type == "DUAL":
 
         cmd = (
@@ -234,6 +241,9 @@ def command_unpacker(
 
     if opcode.cmd_type == "DUAL":
         qubits.append((cmd & Masks.QUBIT1_MASK.value) >> Shifts.IDX1.value)
+        args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
+
+    if opcode.name == "QUBIT_MEASURE":
         args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
 
     return (opcode.name, opcode.cmd_type, args, qubits)
