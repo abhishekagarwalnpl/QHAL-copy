@@ -1,5 +1,5 @@
 from qhal import HardwareAbstractionLayer, ProjectqQuantumSimulator
-from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal import command_creator, measurement_unpacker, HALMetadata
 from qhal.hal._utils import angle_binary_representation
 from numpy import pi as PI
 
@@ -17,7 +17,8 @@ int_minus_theta = angle_binary_representation(-theta)
 # initialize qubit register
 # set up HAL using projectq backend for 2 qubits (1 bond, 1 physical)
 hal = HardwareAbstractionLayer(
-    ProjectqQuantumSimulator(2)
+    ProjectqQuantumSimulator(2),
+    HALMetadata()
 )
 
 hal.accept_command(command_creator("START_SESSION",0,0))

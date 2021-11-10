@@ -1,9 +1,10 @@
 from qhal import HardwareAbstractionLayer, ProjectqQuantumSimulator
-from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal import command_creator, measurement_unpacker, HALMetadata
 
 # set up HAL using projectq backend for 3 qubits
 hal = HardwareAbstractionLayer(
-    ProjectqQuantumSimulator(3)
+    ProjectqQuantumSimulator(3),
+    HALMetadata()
 )
 
 # prepare commands

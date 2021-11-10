@@ -1,5 +1,5 @@
 from qhal import HardwareAbstractionLayer, ProjectqQuantumSimulator
-from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal import command_creator, measurement_unpacker, HALMetadata
 from qhal.hal._utils import angle_binary_representation
 from numpy import pi as PI
 
@@ -17,7 +17,8 @@ c = [0,0,0] # declare classical bit register with QFT bits ordered from most sig
 
 # set up HAL using projectq backend for n qubits
 hal = HardwareAbstractionLayer(
-    ProjectqQuantumSimulator(n)
+    ProjectqQuantumSimulator(n),
+    HALMetadata()
 )
 
 hal.accept_command(command_creator("START_SESSION", 0, 0))
