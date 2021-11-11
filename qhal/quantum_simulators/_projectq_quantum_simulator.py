@@ -283,7 +283,14 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if q_index_0 in self._measured_qubits:
                 raise ValueError("Qubit already measured!")
 
-            # This measures a single qubit at the time.
+            # In the ProjectQ simulator we implement this via a rotation and then measurement.
+            angles = np.zeros(2) #I feel like this is a slightly excessive way to do it?
+            for i in range(len(args)):
+                angles[i] = args[i]
+            arg0 = angles[0] * (2 * np.pi) / 65536
+            arg1 = angles[1] * (2 * np.pi) / 65536
+            Rz(-arg1) | self._qubit_register[q_index_0]
+            Ry(-arg0) | self._qubit_register[q_index_0]
             Measure | self._qubit_register[q_index_0]
             self._engine.flush()
 
