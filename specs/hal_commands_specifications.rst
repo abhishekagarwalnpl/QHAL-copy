@@ -155,4 +155,4 @@ The following considerations have been made:
 
 - The DUAL QUBIT COMMANDS can be clearly identified by the OPCODE (we suggest using the MSB bit to indicate whether it is a SINGLE or DUAL WORD command). 
 
-  
+- The MEASURE_QUBIT command is an exception to the other SINGLE QUBIT COMMANDS, as it takes two arguments, both relating to qubit0. Argument 0 (stored in bits [35-20]) is the polar angle, and argument 1 (stored in bits [51-36]) is the azimuthal angle.  
