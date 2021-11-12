@@ -110,6 +110,23 @@ class TestQuantumSimulators(unittest.TestCase):
         to a rotation then measurement in the computational basis.
         """
 
+        n = 4
+
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=n,
+            seed=234,
+            backend=Simulator
+        )
+
+        list_arg0 = [0, 458, 0, 672]
+        list_arg1 = [0, 0, 234, 458]
+
+        for i in range(n):
+            projQ_backend.accept_command(command_creator("RY", list_arg0[i], i))
+            projQ_backend.accept_command(command_creator("RZ", list_arg1[i], i))
+            hal_res = projQ_backend.accept_command(command_creator("QUBIT_MEASURE", list_arg0[i], i, list_arg1[i]))
+            decoded_hal_result = measurement_unpacker(hal_res)
+            self.assertEqual(decoded_hal_result, 0)
 
 
     def test_measurement_failures(self):
