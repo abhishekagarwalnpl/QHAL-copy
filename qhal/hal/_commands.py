@@ -183,7 +183,7 @@ def command_creator(
     cmd = (
         (opcode.code << Shifts.OPCODE.value)
         | (arg0 << Shifts.ARG0.value)
-        | (arg1 << Shifts.ARG0.value)
+        | (arg1 << Shifts.ARG1.value)
         | qidx0
     )
 
