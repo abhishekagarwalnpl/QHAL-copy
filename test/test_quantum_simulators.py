@@ -118,6 +118,9 @@ class TestQuantumSimulators(unittest.TestCase):
             backend=Simulator
         )
 
+        projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
+        projQ_backend.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
+
         list_arg0 = [0, 458, 0, 672]
         list_arg1 = [0, 0, 234, 458]
 
@@ -126,7 +129,7 @@ class TestQuantumSimulators(unittest.TestCase):
             projQ_backend.accept_command(command_creator("RZ", list_arg1[i], i))
             hal_res = projQ_backend.accept_command(command_creator("QUBIT_MEASURE", list_arg0[i], i, list_arg1[i]))
             decoded_hal_result = measurement_unpacker(hal_res)
-            self.assertEqual(decoded_hal_result, 0)
+            self.assertEqual(decoded_hal_result[3], 0)
 
 
     def test_measurement_failures(self):
