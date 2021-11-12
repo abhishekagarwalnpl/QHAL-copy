@@ -105,6 +105,13 @@ class TestQuantumSimulators(unittest.TestCase):
         self.assertEqual(decoded_hal_result_1[0], 1)
         self.assertEqual(decoded_hal_result_1[3], 0)
 
+    def test_variable_basis_measurement(self):
+        """Tests that measuring in a rotated basis is equivalent
+        to a rotation then measurement in the computational basis.
+        """
+
+
+
     def test_measurement_failures(self):
         """Tests thats you can't measure the same qubit twice, or can't
         manipulate the qubit after measurement, but you can if you re-prepare
