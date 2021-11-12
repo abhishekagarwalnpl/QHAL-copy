@@ -284,7 +284,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 raise ValueError("Qubit already measured!")
 
             # In the ProjectQ simulator we implement this via a rotation and then measurement.
-            angles = np.zeros(2) #I feel like this is a slightly excessive way to do it?
+            angles = np.zeros(2) 
             for i in range(len(args)):
                 angles[i] = args[i]
             arg0 = angles[0] * (2 * np.pi) / 65536
