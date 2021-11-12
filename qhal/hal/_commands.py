@@ -183,22 +183,15 @@ def command_creator(
     cmd = (
         (opcode.code << Shifts.OPCODE.value)
         | (arg0 << Shifts.ARG0.value)
+        | (arg1 << Shifts.ARG0.value)
         | qidx0
     )
-
-    if opcode.name == "QUBIT_MEASURE":
-
-        cmd = (
-            (arg1 << Shifts.ARG1.value)
-            | (cmd)
-        )
 
     if opcode.cmd_type == "DUAL":
 
         cmd = (
             (Masks.OPCODE_DUAL_MASK.value << Shifts.OPCODE.value)
             | (qidx1 << Shifts.IDX1.value)
-            | (arg1 << Shifts.ARG1.value)
             | (cmd)
         )
 
