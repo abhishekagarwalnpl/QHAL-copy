@@ -52,10 +52,10 @@ class HALMetadataTest(unittest.TestCase):
                 },
                 # expected output for metadata req 011
                 [
-                    6953909668380934244,
-                    7098060040828879048,
-                    7242210413276823752,
-                    8576964752838755304
+                    6935719348011008100,
+                    7007794534234980552,
+                    7079869720458952904,
+                    8323707642543342568
                 ],
                 # expected output for metadata req 101
                 [

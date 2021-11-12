@@ -75,8 +75,8 @@ class HardwareAbstractionLayer:
 
             native_gates[i].append(
                 (3 << 61) +
-                (i << 57) +
-                (string_to_opcode(gate).code << 45) +
+                (i << 56) +
+                (string_to_opcode(gate).code << 44) +
                 gate_data[0]
             )
 
