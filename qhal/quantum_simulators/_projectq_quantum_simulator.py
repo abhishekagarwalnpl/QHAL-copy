@@ -213,13 +213,13 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             else:  # multi qubit gate
                 if parameter_0 is not None:
                     gate(parameter_0) | (
-                        self._qubit_register[qubit_index_1],
-                        self._qubit_register[qubit_index_0]
+                        self._qubit_register[qubit_index_0],
+                        self._qubit_register[qubit_index_1]
                     )
                 else:
                     gate | (
-                        self._qubit_register[qubit_index_1],
-                        self._qubit_register[qubit_index_0]
+                        self._qubit_register[qubit_index_0],
+                        self._qubit_register[qubit_index_1]
                     )
 
             self._engine.flush()
@@ -311,16 +311,18 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if q_index_0 in self._measured_qubits:
                 raise ValueError("Qubit requires re-preparation!")
 
-            angle = args[-1] * (2 * np.pi) / 65536
+            angle_0 = args[0] * (2 * np.pi) / 65536
             gate = self._parameterised_gate_dict[op]
             if cmd_type == "SINGLE":
-                self.apply_gate(gate, q_index_0, parameter_0=angle)
+                self.apply_gate(gate, q_index_0, parameter_0=angle_0)
             else:
+                angle_1 = args[1] * (2 * np.pi) / 65536
                 self.apply_gate(
                     gate,
                     qubit_index_0=q_index_0,
                     qubit_index_1=q_index_1,
-                    parameter_0=angle
+                    parameter_0=angle_0,
+                    parameter_1=angle_1
                 )
 
         elif op_obj.param == "CONST":

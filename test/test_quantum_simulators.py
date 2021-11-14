@@ -22,6 +22,10 @@ class TestQuantumSimulators(unittest.TestCase):
 
     def test_circuit_equivalence(self):
 
+        import projectq
+        from projectq.ops import X, H, T, S, Swap, Sdag, Tdag, Rz, SqrtX, CNOT
+        from qhal.quantum_simulators._projectq_quantum_simulator import Sx, Pswap, PiXY
+        from qhal.hal._utils import angle_binary_representation
         # set the size of the register
         n_qubits = 3
 
@@ -43,12 +47,12 @@ class TestQuantumSimulators(unittest.TestCase):
             ["SWAP", 0, 1, 0, 2],
             ["T", 0, 2],
             ["INVS", 0, 2],
-            ['RZ', 672, 1],
+            ['RZ', angle_binary_representation(1234*np.pi/2**16), 1],
             ['SQRT_X', 0, 0],
-            ['PSWAP', 200, 0, 0, 1],
+            ['PSWAP', angle_binary_representation(10000*np.pi/2**16), 0, 0, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
-            ["PIXY", 458, 1],
+            ["PIXY", angle_binary_representation(20000*np.pi/2**16), 1],
         ]
 
         for commands in circuit:
@@ -59,16 +63,27 @@ class TestQuantumSimulators(unittest.TestCase):
         # extract wavefunction at the end of the circuit (before measuring)
         psi_projq = np.array(projQ_backend._engine.backend.cheat()[1])
 
-        self.assertEqual(
-            list(psi_projq), [(-0.3535292059549881+0.00413527953536358j),
-            (0.2682885699548113+0.23026342139298261j),
-            (-0.026887840403694796+0.35252949385608207j),
-            (0.25290698307982507-0.2470588146767102j),
-            (0.3535292059549881-0.00413527953536358j),
-            (-0.2682885699548113-0.23026342139298261j),
-            (0.026887840403694796-0.35252949385608207j),
-            (-0.25290698307982507+0.2470588146767102j)]
-        )
+        # Evaluate expected wavefunction
+        eng = projectq.MainEngine()
+        qubits = eng.allocate_qureg(n_qubits)
+        X | qubits[0]
+        H | qubits[2]
+        T | qubits[0]
+        Sx | qubits[1]
+        T | qubits[2]
+        S | qubits[2]
+        Swap | (qubits[1], qubits[2])
+        T | qubits[2]
+        Sdag | qubits[2]
+        Rz(1234*np.pi/2**16) | qubits[1]
+        SqrtX | qubits[0]
+        Pswap(10000*np.pi/2**16) | (qubits[0],qubits[1])
+        CNOT | (qubits[0],qubits[2])
+        H | qubits[2]
+        PiXY(20000*np.pi/2**16) | qubits[1]
+        eng.flush()
+        expected_psi = np.array(eng.backend.cheat()[1])
+        self.assertTrue(np.allclose(psi_projq, expected_psi,1e-10))
         projQ_backend.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
     def test_individual_qubit_measurements(self):
