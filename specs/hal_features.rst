@@ -71,7 +71,7 @@ The following table lists the basic single qubit HAL commands.
       - All
     * - Qubit measure
       - Angles
-      - Return the measured state of a qubit in the chosen basis. Arguments are the polar (rotation about Y axis) and azimuthal (rotation about Z axis)
+      - Return the measured state of a qubit in the chosen basis. Arguments are the polar and azimuthal
         angle of the +1 eigenstate on the Bloch sphere (respectively). Measurements in the computational basis have both arguments = 0.
       - All
     * - Rx
