@@ -231,13 +231,10 @@ def command_unpacker(
 
     qubits.append(cmd & Masks.QUBIT0_MASK.value)
     args.append((cmd & Masks.ARG0_MASK.value) >> Shifts.ARG0.value)
+    args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
 
     if opcode.cmd_type == "DUAL":
         qubits.append((cmd & Masks.QUBIT1_MASK.value) >> Shifts.IDX1.value)
-        args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
-
-    if opcode.name == "QUBIT_MEASURE":
-        args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
 
     return (opcode.name, opcode.cmd_type, args, qubits)
 

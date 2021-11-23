@@ -24,7 +24,7 @@ class HALTest(unittest.TestCase):
                                         opcode.name,
                                         arg0,
                                         qubit0,
-                                        arg1,
+                                        arg1
                                     )
                                 ),
                                 (
@@ -40,7 +40,7 @@ class HALTest(unittest.TestCase):
                         self.assertEqual(
                             command_unpacker(command_creator(
                                 opcode.name, arg0, qubit0
-                            )), (opcode.name, opcode.cmd_type, [arg0], [qubit0])
+                            )), (opcode.name, opcode.cmd_type, [arg0, 0], [qubit0])
                         )
             else:
                 for qubit0 in range(8):

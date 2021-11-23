@@ -284,11 +284,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 raise ValueError("Qubit already measured!")
 
             # In the ProjectQ simulator we implement this via a rotation and then measurement.
-            angles = np.zeros(2) 
-            for i in range(len(args)):
-                angles[i] = args[i]
-            arg0 = angles[0] * (2 * np.pi) / 65536
-            arg1 = angles[1] * (2 * np.pi) / 65536
+            arg0 = args[0] * (2 * np.pi) / 65536
+            arg1 = args[1] * (2 * np.pi) / 65536
             Rz(-arg1) | self._qubit_register[q_index_0]
             Ry(-arg0) | self._qubit_register[q_index_0]
             Measure | self._qubit_register[q_index_0]
@@ -318,16 +315,18 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if q_index_0 in self._measured_qubits:
                 raise ValueError("Qubit requires re-preparation!")
 
-            angle = args[-1] * (2 * np.pi) / 65536
+            arg0 = args[0] * (2 * np.pi) / 65536
+            arg1 = args[1] * (2 * np.pi) / 65536
             gate = self._parameterised_gate_dict[op]
             if cmd_type == "SINGLE":
-                self.apply_gate(gate, q_index_0, parameter_0=angle)
+                self.apply_gate(gate, q_index_0, parameter_0=arg0, parameter_1=arg1)
             else:
                 self.apply_gate(
                     gate,
                     qubit_index_0=q_index_0,
                     qubit_index_1=q_index_1,
-                    parameter_0=angle
+                    parameter_0=arg0,
+                    parameter_1=arg1
                 )
 
         elif op_obj.param == "CONST":
