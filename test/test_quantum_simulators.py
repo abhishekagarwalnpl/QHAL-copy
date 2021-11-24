@@ -35,81 +35,74 @@ class TestQuantumSimulators(unittest.TestCase):
             backend=Simulator
         )
 
-        circuit = [
+        hal_circuit = [
             ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0],
-            ['H', 0, 2],
+            ['H', 0, 1],
             ["T", 0, 0],
             ["SX", 0, 1],
             ["T", 0, 2],
             ["S", 0, 2],
-            ["SWAP", 0, 2, 0, 1],
+            ["SWAP", 0, 1, 0, 2],
             ["T", 0, 2],
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-#            ['PSWAP', 200, 1, 0, 0],
+            ['PSWAP', 200, 0, 0, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
-            ["PIXY", 458, 1],
+            ["PIXY", 458, 2],
         ]
 
-        for commands in circuit:
-
+        for commands in hal_circuit:
             hal_cmd = command_creator(*commands)
             projQ_backend.accept_command(hal_cmd)
 
         # extract wavefunction at the end of the circuit (before measuring)
         psi_projq_hal = np.array(projQ_backend._engine.backend.cheat()[1])
-
         projQ_backend.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
         projQ_eng = MainEngine()
-        qubit0 = projQ_eng.allocate_qubit()
-        qubit1 = projQ_eng.allocate_qubit()
-        qubit2 = projQ_eng.allocate_qubit()
+        projQ_register = projQ_eng.allocate_qureg(n_qubits)
+        qubit0 = projQ_register[0]
+        qubit1 = projQ_register[1]
+        qubit2 = projQ_register[2]
+        pq_circuit = [
+            (X, qubit0),
+            (H, qubit1),
+            (T, qubit0),
+            (X, qubit1),
+            (S, qubit1),
+            (T, qubit2),
+            (S, qubit2),
+            (Swap, (qubit1, qubit2)),
+            (T, qubit2),
+            (DaggeredGate(S), qubit2),
+            (Rz(672*(2*np.pi)/65536), qubit1),
+            (SqrtX, qubit0),
+            ### PSWAP:
+            (CNOT, (qubit1, qubit0)),
+            (R(200*(2*np.pi)/65536), qubit0),
+            (CNOT, (qubit0, qubit1)),
+            (CNOT, (qubit1, qubit0)),
+            ###
+            (CNOT, (qubit2, qubit0)),
+            (H, qubit2),
+            (Rz(-2*458*(2*np.pi)/65536), qubit2),
+            (Rx(32768*(2*np.pi)/65536), qubit2)
+        ]
 
-        X | qubit0
-        H | qubit2
-        T | qubit0
-        X | qubit1
-        S | qubit1
-        T | qubit2
-        S | qubit2
-        Swap | (qubit1, qubit2)
-        T | qubit2
-        DaggeredGate(S) | qubit2
-        Rz(672*(2*np.pi)/65536) | qubit1
-        SqrtX | qubit0
-
-        # PSWAP:
-#        CNOT | (qubit0, qubit1)
-#        R(200*(2*np.pi)/65536) | qubit1
-#        CNOT | (qubit1, qubit0)
-#        CNOT | (qubit0, qubit1)
-
-        CNOT | (qubit2, qubit0)
-        H | qubit2
-        Rz(-2*458*(2*np.pi)/65536) | qubit1
-        Rx(32768*(2*np.pi)/65536) | qubit1
-
-        projQ_eng.flush()
+        for command in pq_circuit:
+            command[0] | command[1]
+            projQ_eng.flush()
 
         psi_projq_sim = np.array(projQ_eng.backend.cheat()[1])
+        All(Measure) | projQ_register
+        projQ_eng.flush()
 
-        for n,i in enumerate(list(psi_projq_sim)):
+        for n, i in enumerate(list(psi_projq_sim)):
             self.assertAlmostEqual(i, list(psi_projq_hal)[n])
-#        self.assertEqual(
-#            list(psi_projq), [(-0.3535292059549881+0.00413527953536358j),
-#            (0.2682885699548113+0.23026342139298261j),
-#            (-0.026887840403694796+0.35252949385608207j),
-#            (0.25290698307982507-0.2470588146767102j),
-#            (0.3535292059549881-0.00413527953536358j),
-#            (-0.2682885699548113-0.23026342139298261j),
-#            (0.026887840403694796-0.35252949385608207j),
-#            (-0.25290698307982507+0.2470588146767102j)]
-#        )
 
     def test_individual_qubit_measurements(self):
 
