@@ -6,6 +6,7 @@ from projectq.ops import (All, C, CNOT, DaggeredGate, H, Measure, R,
                           Rx, Ry, Rz, S, SqrtX, Swap, T, X, Y, Z,
                           Rxx, Rzz)
 from projectq.backends import Simulator
+from projectq.cengines._manualmapper import ManualMapper
 
 from qhal.quantum_simulators import ProjectqQuantumSimulator
 from qhal.hal import command_creator, measurement_unpacker
@@ -61,9 +62,11 @@ class TestQuantumSimulators(unittest.TestCase):
 
         # extract wavefunction at the end of the circuit (before measuring)
         psi_projq_hal = np.array(projQ_backend._engine.backend.cheat()[1])
+        hal_ordering = projQ_backend._engine.backend.cheat()[0]
         projQ_backend.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
         projQ_eng = MainEngine()
+        projQ_eng.mapper = ManualMapper()
         #qubit2 = projQ_eng.allocate_qubit()
         #qubit1 = projQ_eng.allocate_qubit()
         #qubit0 = projQ_eng.allocate_qubit()
@@ -99,6 +102,10 @@ class TestQuantumSimulators(unittest.TestCase):
         projQ_eng.flush()
 
         psi_projq_sim = np.array(projQ_eng.backend.cheat()[1])
+        projq_ordering = projQ_eng.backend.cheat()[0]
+
+        self.assertDictEqual(hal_ordering,projq_ordering)
+
 
         for n,i in enumerate(list(psi_projq_sim)):
             self.assertAlmostEqual(i, list(psi_projq_hal)[n])
