@@ -48,7 +48,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-            #['PSWAP', 200, 0, 0, 1],
+            ['PSWAP', 200, 0, 0, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 2],
@@ -82,10 +82,10 @@ class TestQuantumSimulators(unittest.TestCase):
             (Rz(672*(2*np.pi)/65536), qubit1),
             (SqrtX, qubit0),
             ### PSWAP:
-            #(CNOT, (qubit0, qubit1)),
-            #(R(200*(2*np.pi)/65536), qubit1),
-            #(CNOT, (qubit1, qubit0)),
-            #(CNOT, (qubit0, qubit1)),
+            (CNOT, (qubit1, qubit0)),
+            (R(200*(2*np.pi)/65536), qubit1),
+            (CNOT, (qubit0, qubit1)),
+            (CNOT, (qubit1, qubit0)),
             ###
             (CNOT, (qubit2, qubit0)),
             (H, qubit2),
