@@ -10,6 +10,7 @@ from projectq.backends import Simulator
 from qhal.quantum_simulators import ProjectqQuantumSimulator
 from qhal.hal import command_creator, measurement_unpacker
 
+
 class MockProjectqQuantumSimulator(ProjectqQuantumSimulator):
 
     def get_offset(self, qubit_index: int):
