@@ -63,10 +63,12 @@ class TestQuantumSimulators(unittest.TestCase):
         projQ_backend.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
         projQ_eng = MainEngine()
-        projQ_register = projQ_eng.allocate_qureg(3)
+        projQ_register = projQ_eng.allocate_qureg(n_qubits)
         qubit0 = projQ_register[0]
         qubit1 = projQ_register[1]
         qubit2 = projQ_register[2]
+
+        resoln = (2*np.pi)/65536
 
         pq_circuit = [
             (X, qubit0),
@@ -79,18 +81,18 @@ class TestQuantumSimulators(unittest.TestCase):
             (Swap, (qubit1, qubit2)),
             (T, qubit2),
             (DaggeredGate(S), qubit2),
-            (Rz(672*(2*np.pi)/65536), qubit1),
+            (Rz(672*resoln), qubit1),
             (SqrtX, qubit0),
             ### PSWAP:
             (CNOT, (qubit1, qubit0)),
-            (R(200*(2*np.pi)/65536), qubit1),
+            (R(200*resoln), qubit1),
             (CNOT, (qubit0, qubit1)),
             (CNOT, (qubit1, qubit0)),
             ###
             (CNOT, (qubit2, qubit0)),
             (H, qubit2),
-            (Rz(-2*458*(2*np.pi)/65536), qubit2),
-            (Rx(32768*(2*np.pi)/65536), qubit2)
+            (Rz(-2*458*resoln), qubit2),
+            (Rx(32768*resoln), qubit2)
         ]
 
         for command in pq_circuit:
@@ -102,7 +104,7 @@ class TestQuantumSimulators(unittest.TestCase):
         projQ_eng.flush()
 
         for n, i in enumerate(list(psi_projq_sim)):
-            self.assertAlmostEqual(i, list(psi_projq_hal)[n])
+            self.assertAlmostEqual(i, list(psi_projq_hal)[n], places=10)
 
     def test_individual_qubit_measurements(self):
 
