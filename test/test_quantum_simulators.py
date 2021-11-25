@@ -37,6 +37,7 @@ class TestQuantumSimulators(unittest.TestCase):
         hal_circuit = [
             ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
+            ["X", 0, 0],
             ['X', 0, 0],
             ['H', 0, 1],
             ["T", 0, 0],
@@ -48,7 +49,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-            ['PSWAP', 200, 0, 0, 1],
+            ['PSWAP', 0, 0, 200, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 2],
@@ -72,6 +73,7 @@ class TestQuantumSimulators(unittest.TestCase):
 
         pq_circuit = [
             (X, qubit0),
+            (X, qubit0),
             (H, qubit1),
             (T, qubit0),
             (X, qubit1),
@@ -85,7 +87,7 @@ class TestQuantumSimulators(unittest.TestCase):
             (SqrtX, qubit0),
             ### PSWAP:
             (CNOT, (qubit1, qubit0)),
-            (R(200*resoln), qubit1),
+            (R(200*resoln), qubit0),
             (CNOT, (qubit0, qubit1)),
             (CNOT, (qubit1, qubit0)),
             ###
