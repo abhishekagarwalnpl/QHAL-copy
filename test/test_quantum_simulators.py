@@ -8,7 +8,8 @@ from projectq.ops import (All, C, CNOT, DaggeredGate, H, Measure, R,
 from projectq.backends import Simulator
 
 from qhal.quantum_simulators import ProjectqQuantumSimulator
-from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal import (command_creator, measurement_unpacker,
+                      angle_binary_representation, binary_angle_conversion)
 
 
 class MockProjectqQuantumSimulator(ProjectqQuantumSimulator):
@@ -69,8 +70,6 @@ class TestQuantumSimulators(unittest.TestCase):
         qubit1 = projQ_register[1]
         qubit2 = projQ_register[2]
 
-        resoln = (2*np.pi)/65536
-
         pq_circuit = [
             (X, qubit0),
             (X, qubit0),
@@ -83,18 +82,18 @@ class TestQuantumSimulators(unittest.TestCase):
             (Swap, (qubit1, qubit2)),
             (T, qubit2),
             (DaggeredGate(S), qubit2),
-            (Rz(672*resoln), qubit1),
+            (Rz(binary_angle_conversion(672)), qubit1),
             (SqrtX, qubit0),
             ### PSWAP:
             (CNOT, (qubit1, qubit0)),
-            (R(200*resoln), qubit0),
+            (R(binary_angle_conversion(200)), qubit0),
             (CNOT, (qubit0, qubit1)),
             (CNOT, (qubit1, qubit0)),
             ###
             (CNOT, (qubit2, qubit0)),
             (H, qubit2),
-            (Rz(-2*458*resoln), qubit2),
-            (Rx(32768*resoln), qubit2)
+            (Rz(binary_angle_conversion(-2*458)), qubit2),
+            (Rx(binary_angle_conversion(32768)), qubit2)
         ]
 
         for command in pq_circuit:
