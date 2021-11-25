@@ -13,6 +13,7 @@ from projectq.ops._basics import BasicGate, BasicRotationGate
 
 from . import IQuantumSimulator
 from ..hal import command_unpacker, string_to_opcode
+from ..hal._utils import binary_angle_conversion
 
 
 class SxGate(BasicGate):
@@ -284,8 +285,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 raise ValueError("Qubit already measured!")
 
             # In the ProjectQ simulator we implement this via a rotation and then measurement.
-            arg0 = args[0] * (2 * np.pi) / 65536
-            arg1 = args[1] * (2 * np.pi) / 65536
+            arg0 = binary_angle_conversion(args[0])
+            arg1 = binary_angle_conversion(args[1])
             Rz(-arg1) | self._qubit_register[q_index_0]
             Ry(-arg0) | self._qubit_register[q_index_0]
             Measure | self._qubit_register[q_index_0]
@@ -315,8 +316,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if q_index_0 in self._measured_qubits:
                 raise ValueError("Qubit requires re-preparation!")
 
-            arg0 = args[0] * (2 * np.pi) / 65536
-            arg1 = args[1] * (2 * np.pi) / 65536
+            arg0 = binary_angle_conversion(args[0])
+            arg1 = binary_angle_conversion(args[1])
             gate = self._parameterised_gate_dict[op]
             if cmd_type == "SINGLE":
                 self.apply_gate(gate, q_index_0, parameter_0=arg0, parameter_1=arg1)

@@ -49,7 +49,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-            ['PSWAP', 0, 0, 200, 1],
+            ['PSWAP', 200, 0, 0, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 2],
@@ -167,7 +167,7 @@ class TestQuantumSimulators(unittest.TestCase):
 
 
     def test_measurement_failures(self):
-        """Tests thats you can't measure the same qubit twice, or can't
+        """Tests that you can't measure the same qubit twice, or can't
         manipulate the qubit after measurement, but you can if you re-prepare
         the qubit state.
         """
