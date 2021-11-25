@@ -8,14 +8,14 @@ from projectq.ops import (All, C, CNOT, DaggeredGate, H, Measure, R,
 from projectq.backends import Simulator
 
 from qhal.quantum_simulators import ProjectqQuantumSimulator
-from qhal.hal import command_creator, measurement_unpacker
+from qhal.hal import (command_creator, measurement_unpacker,
+                      angle_binary_representation, binary_angle_conversion)
 
-# ProjectQ can only address a small number of qubits. We
+
 class MockProjectqQuantumSimulator(ProjectqQuantumSimulator):
 
     def get_offset(self, qubit_index: int):
         return self._offset_registers[qubit_index] * 10
-
 
 
 class TestQuantumSimulators(unittest.TestCase):
@@ -49,7 +49,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-            ['PSWAP', 200, 0, 0, 1],
+            ['PSWAP', 0, 0, 200, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 2],
@@ -68,6 +68,7 @@ class TestQuantumSimulators(unittest.TestCase):
         qubit0 = projQ_register[0]
         qubit1 = projQ_register[1]
         qubit2 = projQ_register[2]
+
         pq_circuit = [
             (X, qubit0),
             (H, qubit1),
@@ -79,18 +80,18 @@ class TestQuantumSimulators(unittest.TestCase):
             (Swap, (qubit1, qubit2)),
             (T, qubit2),
             (DaggeredGate(S), qubit2),
-            (Rz(672*(2*np.pi)/65536), qubit1),
+            (Rz(binary_angle_conversion(672)), qubit1),
             (SqrtX, qubit0),
             ### PSWAP:
             (CNOT, (qubit1, qubit0)),
-            (R(200*(2*np.pi)/65536), qubit0),
+            (R(binary_angle_conversion(200)), qubit0),
             (CNOT, (qubit0, qubit1)),
             (CNOT, (qubit1, qubit0)),
             ###
             (CNOT, (qubit2, qubit0)),
             (H, qubit2),
-            (Rz(-2*458*(2*np.pi)/65536), qubit2),
-            (Rx(32768*(2*np.pi)/65536), qubit2)
+            (Rz(binary_angle_conversion(-2*458)), qubit2),
+            (Rx(binary_angle_conversion(32768)), qubit2)
         ]
 
         for command in pq_circuit:
@@ -102,7 +103,7 @@ class TestQuantumSimulators(unittest.TestCase):
         projQ_eng.flush()
 
         for n, i in enumerate(list(psi_projq_sim)):
-            self.assertAlmostEqual(i, list(psi_projq_hal)[n])
+            self.assertAlmostEqual(i, list(psi_projq_hal)[n], places=10)
 
     def test_individual_qubit_measurements(self):
 
@@ -350,7 +351,6 @@ class TestQuantumSimulators(unittest.TestCase):
         self.assertEqual((decoded_hal_result_0[3] + decoded_hal_result_1[3]), 1)
 
         projQ_backend.accept_command(command_creator("END_SESSION", 0, 0))
-
 
 if __name__ == "__main__":
     unittest.main()
