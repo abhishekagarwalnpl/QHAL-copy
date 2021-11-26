@@ -38,7 +38,6 @@ class TestQuantumSimulators(unittest.TestCase):
         hal_circuit = [
             ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
-            ["X", 0, 0],
             ['X', 0, 0],
             ['H', 0, 1],
             ["T", 0, 0],
@@ -50,7 +49,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["INVS", 0, 2],
             ['RZ', 672, 1],
             ['SQRT_X', 0, 0],
-            ['PSWAP', 0, 0, 200, 1],
+            ['PSWAP', 200, 0, 0, 1],
             ["CNOT", 0, 0, 0, 2],
             ["H", 0, 2],
             ["PIXY", 458, 2],
@@ -71,7 +70,6 @@ class TestQuantumSimulators(unittest.TestCase):
         qubit2 = projQ_register[2]
 
         pq_circuit = [
-            (X, qubit0),
             (X, qubit0),
             (H, qubit1),
             (T, qubit0),
@@ -127,10 +125,10 @@ class TestQuantumSimulators(unittest.TestCase):
             projQ_backend.accept_command(hal_cmd)
 
         hal_res_0 = projQ_backend.accept_command(
-            command_creator("QUBIT_MEASURE", 0, 0)
+            command_creator("QUBIT_MEASURE", 0, 0, 0)
         )
         hal_res_1 = projQ_backend.accept_command(
-            command_creator("QUBIT_MEASURE", 0, 1)
+            command_creator("QUBIT_MEASURE", 0, 1, 0)
         )
 
         decoded_hal_result_0 = measurement_unpacker(hal_res_0)
@@ -141,8 +139,35 @@ class TestQuantumSimulators(unittest.TestCase):
         self.assertEqual(decoded_hal_result_1[0], 1)
         self.assertEqual(decoded_hal_result_1[3], 0)
 
+    def test_variable_basis_measurement(self):
+        """Tests that measuring in a rotated basis is equivalent
+        to a rotation then measurement in the computational basis.
+        """
+
+        n = 4
+
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=n,
+            seed=234,
+            backend=Simulator
+        )
+
+        projQ_backend.accept_command(command_creator("START_SESSION", 0, 0))
+        projQ_backend.accept_command(command_creator("STATE_PREPARATION_ALL", 0, 0))
+
+        list_arg0 = [0, 458, 0, 672]
+        list_arg1 = [0, 0, 234, 458]
+
+        for i in range(n):
+            projQ_backend.accept_command(command_creator("RY", list_arg0[i], i))
+            projQ_backend.accept_command(command_creator("RZ", list_arg1[i], i))
+            hal_res = projQ_backend.accept_command(command_creator("QUBIT_MEASURE", list_arg0[i], i, list_arg1[i]))
+            decoded_hal_result = measurement_unpacker(hal_res)
+            self.assertEqual(decoded_hal_result[3], 0)
+
+
     def test_measurement_failures(self):
-        """Tests thats you can't measure the same qubit twice, or can't
+        """Tests that you can't measure the same qubit twice, or can't
         manipulate the qubit after measurement, but you can if you re-prepare
         the qubit state.
         """
@@ -168,7 +193,7 @@ class TestQuantumSimulators(unittest.TestCase):
 
         with self.assertRaises(ValueError):
             projQ_backend.accept_command(
-                command_creator(*['QUBIT_MEASURE', 0, 0])
+                command_creator(*['QUBIT_MEASURE', 0, 0, 0])
             )
         projQ_backend.accept_command(command_creator(*['END_SESSION', 0, 0]))
 
@@ -183,7 +208,7 @@ class TestQuantumSimulators(unittest.TestCase):
             ["START_SESSION", 0, 0],
             ["STATE_PREPARATION_ALL", 0, 0],
             ['X', 0, 0],
-            ['QUBIT_MEASURE', 0, 0]
+            ['QUBIT_MEASURE', 0, 0, 0]
         ]
 
         for commands in circuit:
@@ -194,7 +219,7 @@ class TestQuantumSimulators(unittest.TestCase):
         # try double measurement
         with self.assertRaises(ValueError):
             projQ_backend.accept_command(
-                command_creator(*['QUBIT_MEASURE', 0, 0])
+                command_creator(*['QUBIT_MEASURE', 0, 0, 0])
             )
 
         # try manipulation after measurement
@@ -211,7 +236,7 @@ class TestQuantumSimulators(unittest.TestCase):
             command_creator(*['X', 0, 0])
         )
         res = projQ_backend.accept_command(
-            command_creator(*['QUBIT_MEASURE', 0, 0])
+            command_creator(*['QUBIT_MEASURE', 0, 0, 0])
         )
 
         self.assertEqual(res, 1)
@@ -241,7 +266,7 @@ class TestQuantumSimulators(unittest.TestCase):
 
         res = measurement_unpacker(
             projQ_backend.accept_command(
-                command_creator(*['QUBIT_MEASURE', 0, 0])
+                command_creator(*['QUBIT_MEASURE', 0, 0, 0])
             )
         )
 
@@ -312,10 +337,10 @@ class TestQuantumSimulators(unittest.TestCase):
             projQ_backend.accept_command(hal_cmd)
 
         hal_res_0 = projQ_backend.accept_command(
-            command_creator("QUBIT_MEASURE", 0, 0)
+            command_creator("QUBIT_MEASURE", 0, 0, 0)
         )
         hal_res_1 = projQ_backend.accept_command(
-            command_creator("QUBIT_MEASURE", 0, 1)
+            command_creator("QUBIT_MEASURE", 0, 1, 0)
         )
 
         decoded_hal_result_0 = measurement_unpacker(hal_res_0)

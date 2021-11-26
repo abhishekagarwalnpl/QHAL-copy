@@ -13,7 +13,7 @@ For more information on Docker and how to install it [docs](https://docs.docker.
 To execute all the tests run from a terminal:
 
 ```sh
- make tests
+ make test
 ```
 
 **Example usage**
