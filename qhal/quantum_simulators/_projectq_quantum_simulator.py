@@ -256,7 +256,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             q_index_1 = qubit_indexes[1] + self.get_offset(1)
 
         for index in qubit_indexes:
-            assert index <= self._qubit_register_size, \
+            assert index < self._qubit_register_size, \
                 f"Qubit index {index} greater than register size " + \
                 f"({self._qubit_register_size})!"
 
