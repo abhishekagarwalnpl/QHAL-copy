@@ -22,9 +22,6 @@ class HALMetadataTest(unittest.TestCase):
     def test_metadata_encoding_decoding(self):
         """Tests metadata encoding is consistent between HAL object creation
         and metadata request commands.
-
-
-
         """
         test_input_output_data = [
             (  # NUM_QUBITS - metadata index 1 (001)
@@ -108,11 +105,11 @@ class HALMetadataTest(unittest.TestCase):
                 res = hal.accept_command(
                     command_creator(
                         "REQUEST_METADATA",
-                        arg0=metadata_index,
-                        arg1=(
+                        [metadata_index,
+                        (
                             test_input_output_data[4][0][output_count] << 13
                             if metadata_index == 5 else 0
-                        )
+                        )]
                     )
                 )
 
@@ -136,9 +133,9 @@ class HALMetadataTest(unittest.TestCase):
             res = hal.accept_command(
                 command_creator(
                     "REQUEST_METADATA",
-                    arg0=4,
-                    arg1=(1 << 15),  # request single row
-                    qidx0=1  # specifiy row index
+                    [4,
+                    (1 << 15)],  # request single row
+                    [1]  # specifiy row index
                 )
             )
 
@@ -168,10 +165,9 @@ class HALMetadataTest(unittest.TestCase):
                 res = hal.accept_command(
                     command_creator(
                         "REQUEST_METADATA",
-                        arg0=5,
-                        # request single row
-                        arg1=(i << 13) + (1 << 12),
-                        qidx0=(3 - i)  # specifiy row index
+                        [5,
+                        (i << 13) + (1 << 12)], # request single row
+                        [(3 - i)]  # specifiy row index
                     )
                 )
 
@@ -199,7 +195,7 @@ class HALMetadataTest(unittest.TestCase):
         for metadata_index in range(1, 6):
 
             res = hal.accept_command(
-                command_creator("REQUEST_METADATA", arg0=metadata_index)
+                command_creator("REQUEST_METADATA", [metadata_index])
             )
 
             self.assertEqual(

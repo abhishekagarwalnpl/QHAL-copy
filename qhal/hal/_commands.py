@@ -160,7 +160,7 @@ def int_to_opcode(op_code: uint64) -> Opcode:
 
 
 def command_creator(
-    op: str, arg0: int = 0, qidx0: int = 0, arg1: int = 0, qidx1: int = 0
+        op: str, args: List[int] = [0,0], qubits: List[int] = [0,0] 
 ) -> uint64:
     """Helper function to create HAL commands.
 
@@ -168,10 +168,10 @@ def command_creator(
     ----------
     op : str
         Name of opcode.
-    argument : int
-        Integer representation of argument value
-    qubit : int
-        Integer representation of qubit address
+    args : List[int]
+        List of integer representation of argument value [arg0, arg1]
+    qubit : List[int]
+        List of integer representation of qubit address [qidx0, qidx1]
     Returns
     -------
     uint64
@@ -180,10 +180,24 @@ def command_creator(
 
     opcode = string_to_opcode(op)
 
+    arg0 = args[0]
+    qidx0 = qubits[0]
+
+    if len(args) > 1:
+        arg1 = args[1]
+    else:
+        arg1 = 0
+
+    if len(qubits) > 1:
+        qidx1 = qubits[1]
+    else:
+        qidx1 = 0
+
     cmd = (
         (opcode.code << Shifts.OPCODE.value)
         | (arg0 << Shifts.ARG0.value)
         | (arg1 << Shifts.ARG1.value)
+        | (qidx1 << Shifts.IDX1.value)
         | qidx0
     )
 
@@ -191,7 +205,6 @@ def command_creator(
 
         cmd = (
             (Masks.OPCODE_DUAL_MASK.value << Shifts.OPCODE.value)
-            | (qidx1 << Shifts.IDX1.value)
             | (cmd)
         )
 
