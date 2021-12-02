@@ -14,7 +14,8 @@ class HALMetadata:
         num_qubits: int = 0,
         max_depth: int = 0,
         native_gates: Dict[int, Tuple[int, np.array]] = {},
-        connectivity: np.array = np.array([])
+        connectivity: np.array = np.array([]),
+        measurement_angles: np.array = np.zeros((2,3))
     ):
 
         def _error_raiser(metadata_item: str) -> None:
@@ -36,6 +37,7 @@ class HALMetadata:
                 [t[1] for t in native_gates.values()]
             ]) \
             else _error_raiser("native_gates")
+        self.measurement_angles = measurement_angles
 
 
 class HardwareAbstractionLayer:
@@ -75,10 +77,21 @@ class HardwareAbstractionLayer:
 
             native_gates[i].append(
                 (3 << 61) +
-                (i << 57) +
-                (string_to_opcode(gate).code << 45) +
+                (i << 56) +
+                (string_to_opcode(gate).code << 44) +
                 gate_data[0]
             )
+
+#            if gate == "MEASURE":
+#                native_gates[i].append(
+#                    (
+#                        (3 << 61) +
+#                        (
+#                    ),
+#                    (
+#
+#                    )
+#                )
 
         self._encoded_metadata["NATIVE_GATES"] = native_gates
 
@@ -107,7 +120,7 @@ class HardwareAbstractionLayer:
             calls until the "final" flag is receieved.
         """
 
-        # check if we've receieved a metadata request
+        # check if we've received a metadata request
         opcode, _, param, idx = command_unpacker(hal_command)
         if opcode == "REQUEST_METADATA":
 
