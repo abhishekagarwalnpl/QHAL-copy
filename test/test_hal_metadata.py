@@ -4,6 +4,7 @@ import numpy as np
 
 from qhal.hal import command_creator, HALMetadata, HardwareAbstractionLayer
 from qhal.quantum_simulators import IQuantumSimulator
+from qhal.hal._utils import angle_binary_representation
 
 
 class MockQuantumSimulator(IQuantumSimulator):
@@ -44,16 +45,18 @@ class HALMetadataTest(unittest.TestCase):
                             [0.03, 0, 0.03, 0],
                             [0, 0.05, 0, 0.04],
                             [0, 0, 0.02, 0]
-                        ]
-                    ))
-                },
+                        ])),
+                    "QUBIT_MEASURE": (16000, np.array([0.014, 0.015, 0.013, 0.014, 0.017]))
+                 },
                 # expected output for metadata req 011
                 [
                     int('110000001000000101000000000000000000000000000000000000001100100',2),
                     int('110000101000000101100000000000000000000000000000000000011001000',2),
                     int('110001001000000110000000000000000000000000000000000000011001000',2),
-                    int('111001110000011110000000000000000000000000000000000001111101000',2)
-
+                    int('110001110000011110000000000000000000000000000000000001111101000',2),
+                    int('110010001000000011100000000000000000000000000000011111010000000',2),
+                    int('110010001000000000000000100000000000000000000000000000000000000',2),
+                    int('111010000000000000000001111111111111111000000000001000000000000',2),
                 ],
                 # expected output for metadata req 101
                 [
@@ -77,6 +80,14 @@ class HALMetadataTest(unittest.TestCase):
                 # expected output for metadata req 100
                 [9223373137442244611, 10379675639228661760]
             ),
+            (  # MEASUREMENT ANGLES - metadata index 3 (if provided)
+                # input data
+                [np.array([
+                    [angle_binary_representation(np.pi/2),
+                        angle_binary_representation(np.pi/2),0],
+                    [0,angle_binary_representation(2*np.pi*((2**16-1)/2**16)),16]
+                    ])]
+            ),
             (  # ERROR_RATES - metadata index 5 (101)
                 # input data already given in NATIVE_GATES
                 [0, 0, 1, 2, 3, 3],
@@ -93,7 +104,7 @@ class HALMetadataTest(unittest.TestCase):
 
         hal = HardwareAbstractionLayer(
             MockQuantumSimulator(),
-            HALMetadata(*[i[0] for i in test_input_output_data[:4]])
+            HALMetadata(*[i[0] for i in test_input_output_data[:5]])
         )
 
         for metadata_index in range(1, 6):  # metadata indexes = 1 -> 5
@@ -108,7 +119,7 @@ class HALMetadataTest(unittest.TestCase):
                         "REQUEST_METADATA",
                         [metadata_index,
                         (
-                            test_input_output_data[4][0][output_count] << 13
+                            test_input_output_data[5][0][output_count] << 13
                             if metadata_index == 5 else 0
                         )]
                     )
@@ -116,7 +127,11 @@ class HALMetadataTest(unittest.TestCase):
 
                 self.assertEqual(
                     res,
-                    test_input_output_data[metadata_index - 1][1][output_count]
+                    (
+                        test_input_output_data[5][1][output_count] \
+                        if metadata_index == 5 else \
+                        test_input_output_data[metadata_index - 1][1][output_count]
+                    )
                 )
 
                 output_count += 1
