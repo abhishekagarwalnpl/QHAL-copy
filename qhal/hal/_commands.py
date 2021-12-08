@@ -129,6 +129,7 @@ _OPCODES = [
     Opcode("FOR_END", 51 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("IF", 52 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("WHILE", 53 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("MODIFIER", 54 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
 
     # DUAL WORD Commands
     Opcode("CNOT", 60 | Masks.OPCODE_DUAL_MASK.value, "DUAL", "CONST"),
@@ -160,7 +161,7 @@ def int_to_opcode(op_code: uint64) -> Opcode:
 
 
 def command_creator(
-        op: str, args: List[int] = [0,0], qubits: List[int] = [0,0] 
+        op: str, args: List[int] = [0,0], qubits: List[int] = [0,0], reqs: List[int] = [] 
 ) -> uint64:
     """Helper function to create HAL commands.
 
@@ -172,6 +173,9 @@ def command_creator(
         List of integer representation of argument value [arg0, arg1]
     qubit : List[int]
         List of integer representation of qubit address [qidx0, qidx1]
+    reqs : List[int]
+        List of measurement results required by modifier
+
     Returns
     -------
     uint64
@@ -211,7 +215,18 @@ def command_creator(
     if opcode.param == "PARAM":
         cmd = cmd | Masks.OPCODE_PARAM_MASK.value << Shifts.OPCODE.value
 
-    return cmd
+    if opcode.name != "MODIFIER":
+        return cmd
+
+    else:
+        cmds = [cmd]
+        dependencies = []
+
+        
+
+        for i in dependencies:
+            cmds.append[i]
+        return cmds
 
 
 def command_unpacker(
