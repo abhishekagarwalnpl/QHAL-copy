@@ -1,0 +1,11 @@
+WARNING: while setting up extension sphinx.addnodes: node class 'meta' is already registered, its visitors will be overridden
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:313: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:325: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:338: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:350: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:363: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:375: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:402: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:416: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:450: WARNING: Bullet list ends without a blank line; unexpected unindent.
+/__w/QHAL_internal/QHAL_internal/specs/metadata.rst:466: WARNING: Bullet list ends without a blank line; unexpected unindent.

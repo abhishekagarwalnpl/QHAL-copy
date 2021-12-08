@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>general &mdash; Quantum HAL Specificationsdev</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HAL Architecture" href="hal_architecture.html" />
+    <link rel="prev" title="Glossary and Abbreviations" href="glossary.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                dev
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary and Abbreviations</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal_req.html">HAL Commands Minimal Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_features.html">HAL Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_commands_specifications.html">HAL Commands Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL Packages/Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_reading.html">Further reading</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>general</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/general.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h1>
+<p>The main purpose of the HAL is to establish a unified northbound API-based
+framework across different QPU technologies.
+The challenges and architectural issues we endeavour to resolve in developing
+the HAL are:</p>
+<ol class="arabic simple">
+<li><p>Defining the position of Multi-level HAL within the system stack (see <a class="reference internal" href="#fig-multi-level-hal"><span class="std std-numref">Fig. 1</span></a> below) <a class="footnote-reference brackets" href="#footnote-1" id="footnote-reference-1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a></p></li>
+<li><p>Maximising portability with minimal loss of performance</p></li>
+<li><p>Maximising the range of common features, while keeping the optional, hardware dependent features at a minimum</p></li>
+<li><p>Supporting for advanced features such as compiler optimisations, measurement-based control, and error correction</p></li>
+</ol>
+<figure class="align-default" id="figure-1">
+<span id="fig-multi-level-hal"></span><img alt="_images/image1.png" src="_images/image1.png" />
+<figcaption>
+<p><span class="caption-number">Fig. 1 </span><span class="caption-text">Positions of Multi-level HAL layers within the QPU system stack</span><a class="headerlink" href="#figure-1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<p>The HAL APIs considered in this document MAY be divided into the following groups: <a class="footnote-reference brackets" href="#footnote-2" id="footnote-reference-2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a></p>
+<ul class="simple">
+<li><p>General APIs
+These are most common APIs across different interfaces and platforms.</p>
+<ul>
+<li><p>Register/De-register APIs</p></li>
+<li><p>Discover APIs</p></li>
+<li><p>HAL/APIs authentication/authorisation</p></li>
+<li><p>HAL versioning</p></li>
+</ul>
+</li>
+<li><p>Technical area specific (QPU System related)</p>
+<ul>
+<li><p>Metadata of the system capabilities/properties</p></li>
+<li><p>Required HAL/QPU commands</p></li>
+<li><p>Optional HAL/QPU hardware specific commands</p></li>
+</ul>
+</li>
+<li><p>Technical area specific (QPU System advanced features related)</p>
+<ul>
+<li><p>HAL supported level authentication and authorisation</p></li>
+<li><p>HAL Advanced/Optional features</p></li>
+</ul>
+</li>
+</ul>
+<aside class="footnote brackets" id="footnote-1" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#footnote-reference-1">1</a><span class="fn-bracket">]</span></span>
+<p>Metadata is part of the HAL, and in some cases, it seems that data may reflect details of the lowest levels of the QPU stack including some details of the qubit implementation to help guide cross-implementation translation. The CPU could be involved in translation too, especially if it changes across implementations as should be anticipated (example: a constant representing the CPU architecture). If this is correct, then The HAL may cover as much as the whole stack, not just the middle. [Does it need clarifications?]</p>
+</aside>
+<aside class="footnote brackets" id="footnote-2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#footnote-reference-2">2</a><span class="fn-bracket">]</span></span>
+<p>Are groups and levels disjoint and distinct? Are all groups (or levels) expected to be implemented by all vendors even if they are not all exposed to all customers? Or may vendors choose to build bespoke versions of some in ways that do not coordinate with other components? This could prove relevant if the OS implementation and HAL components are “certified” or “conformant” for use and might even be commercially traded among parties to Deltaflow.OS, since the HAL itself appears to have the option to be closed source software even if Deltaflow.OS itself remains open source. If they are not required to be implemented should some be explicitly denoted as optional, and if they are, then should that be stated here at the start? [Added Multi-Level HAL extra specifications]</p>
+</aside>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="glossary.html" class="btn btn-neutral float-left" title="Glossary and Abbreviations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hal_architecture.html" class="btn btn-neutral float-right" title="HAL Architecture" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: dev
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+           </strong> 
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,1 @@
+WARNING: while setting up extension sphinx.addnodes: node class 'meta' is already registered, its visitors will be overridden

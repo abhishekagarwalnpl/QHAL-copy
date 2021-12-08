@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAL Features &mdash; Quantum HAL Specificationsv0.2.0</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HAL Commands Format Specification" href="hal_commands_specifications.html" />
+    <link rel="prev" title="HAL Commands Minimal Requirements" href="minimal_req.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                v0.2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary and Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal_req.html">HAL Commands Minimal Requirements</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HAL Features</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#required-hal-commands">Required HAL commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#control-commands">Control commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#single-qubit-hal-commands">Single-qubit HAL commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#two-qubit-hal-commands">Two-qubit HAL commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#native-two-qubit-gates">Native two-qubit gates</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#optional-hal-commands">Optional HAL commands</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#required-hal-responses">Required HAL responses</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hal_commands_specifications.html">HAL Commands Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL Packages/Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_reading.html">Further reading</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>HAL Features</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/hal_features.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="hal-features">
+<h1>HAL Features<a class="headerlink" href="#hal-features" title="Permalink to this headline"></a></h1>
+<p>For purposes of this document, the HAL features are presented as a
+set of commands and a set of metadata. The commands are categorised as either
+core, fundamental qubit commands which are common across all quantum technologies, or
+advanced or optional as defined in this document, which is specific to the vendor implementation.</p>
+<section id="required-hal-commands">
+<h2>Required HAL commands<a class="headerlink" href="#required-hal-commands" title="Permalink to this headline"></a></h2>
+<p>The following is a non-exhaustive list of core HAL commands that MAY be extended
+in the future.
+Core HAL commands are mandatory and SHOULD be implemented for every system following
+the HAL specification. HAL command support will be conveyed through HAL metadata.
+Core commands MAY be extended in future with the introduction of new universal commands.</p>
+</section>
+<section id="control-commands">
+<h2>Control commands<a class="headerlink" href="#control-commands" title="Permalink to this headline"></a></h2>
+<p>The following table lists control commands that are required to enable advanced functionalities (e.g. multi-users, large addressing).</p>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-number">Table 23 </span><span class="caption-text">Control Commands</span><a class="headerlink" href="#table-1" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Parameters</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>HAL Level</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Start of Session</p></td>
+<td><p>Type of Section</p></td>
+<td><p>Defines the type of session, emulator, hardware, simulator. It is used to route the commands to the right destinations.</p></td>
+<td><p>3-2 [*]</p></td>
+</tr>
+<tr class="row-odd"><td><p>End of Session</p></td>
+<td><p>None</p></td>
+<td><p>Closes a session.</p></td>
+<td><p>3-2 [*]</p></td>
+</tr>
+<tr class="row-even"><td><p>Set Page Qubit0</p></td>
+<td><p>Offset for the qubit index (0)</p></td>
+<td><p>Modifies the offset used in the qubit index computation. The register associated with the offset must be reset by a new Start of Session Command.</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>Set Page Qubit1</p></td>
+<td><p>Offset for the qubit index (1)</p></td>
+<td><p>Modifies the offset used in the qubit index computation. The register associated with the offset must be reset by a new Start of Session Command.</p></td>
+<td><p>All</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="single-qubit-hal-commands">
+<h2>Single-qubit HAL commands<a class="headerlink" href="#single-qubit-hal-commands" title="Permalink to this headline"></a></h2>
+<p>The following table lists the basic single qubit HAL commands.</p>
+<table class="docutils align-default" id="table-2">
+<caption><span class="caption-number">Table 24 </span><span class="caption-text">Single-qubit HAL commands</span><a class="headerlink" href="#table-2" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Parameters (excluding qubit address)</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>HAL Level</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>NOP</p></td>
+<td><p>None</p></td>
+<td><p>Performs no operation</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>State Prepare</p></td>
+<td><p>|0&gt;or |1&gt;</p></td>
+<td><p>Prepare specific qubit to a known state</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>State Prepare all</p></td>
+<td><p>|0&gt;or |1&gt;</p></td>
+<td><p>Prepares all the qubits to a known state</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>Qubit measure</p></td>
+<td><p>None</p></td>
+<td><p>Return the measured state of a qubit</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>Rx</p></td>
+<td><p>Angle</p></td>
+<td><p>Perform qubit rotation <a class="footnote-reference brackets" href="#footnote-1" id="footnote-reference-1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> about X axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>Ry</p></td>
+<td><p>Angle</p></td>
+<td><p>Perform qubit rotation <a class="footnote-reference brackets" href="#footnote-1" id="footnote-reference-2" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> about Y axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>Rz</p></td>
+<td><p>Angle</p></td>
+<td><p>Perform qubit rotation <a class="footnote-reference brackets" href="#footnote-1" id="footnote-reference-3" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> about Z axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>X</p></td>
+<td><p>None</p></td>
+<td><p>Perform 180° qubit rotation about X axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>Y</p></td>
+<td><p>None</p></td>
+<td><p>Perform 180° qubit rotation about Y axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>Z</p></td>
+<td><p>None</p></td>
+<td><p>Perform 180° qubit rotation about Z axis of Bloch sphere</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>H</p></td>
+<td><p>None</p></td>
+<td><p>Perform Hadamard gate equivalent to Rx(180°) then Ry(90°)</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-odd"><td><p>S</p></td>
+<td><p>None</p></td>
+<td><p>Perform Phase gate equivalent to Rz(90°)</p></td>
+<td><p>All</p></td>
+</tr>
+<tr class="row-even"><td><p>T</p></td>
+<td><p>None</p></td>
+<td><p>Perform T gate equivalent to Rz(45°)</p></td>
+<td><p>All</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="two-qubit-hal-commands">
+<h2>Two-qubit HAL commands<a class="headerlink" href="#two-qubit-hal-commands" title="Permalink to this headline"></a></h2>
+<p>The implementation of 2 qubit gates commands across the HAL is for further
+consideration, and it might even be outside the scope of this document. <a class="footnote-reference brackets" href="#footnote-2" id="footnote-reference-4" role="doc-noteref"><span class="fn-bracket">[</span>3<span class="fn-bracket">]</span></a></p>
+<table class="docutils align-default" id="table-3">
+<caption><span class="caption-number">Table 25 </span><span class="caption-text">Two-qubit HAL commands</span><a class="headerlink" href="#table-3" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Parameters</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>HAL Level</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CNOT</p></td>
+<td><p>Qubit addresses</p></td>
+<td><p>Performs a Controlled-NOT operation</p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table>
+<p>However, implementing core native 2-qubit gate sets will, in most cases,
+be necessary.
+Each vendor should define via optional commands the Level 2 and Level 1 implementation
+of the CNOT command.</p>
+</section>
+<section id="native-two-qubit-gates">
+<h2>Native two-qubit gates<a class="headerlink" href="#native-two-qubit-gates" title="Permalink to this headline"></a></h2>
+<p>Since native two-qubit gates are necessary to operate at a Level 1 HAL,
+hardware vendors SHOULD specify their native gates in the Optional HAL section.</p>
+</section>
+<section id="optional-hal-commands">
+<h2>Optional HAL commands<a class="headerlink" href="#optional-hal-commands" title="Permalink to this headline"></a></h2>
+<p>Commands specific to qubit implementations that are not relevant to others
+or contain potentially confidential information of a specific hardware platform
+are optional. The disclosure of a specific native hardware gate or the hardware
+topology is optional: disclosure to the user will improve performance, but some
+vendors might prefer not to disclose such information. <a class="footnote-reference brackets" href="#footnote-3" id="footnote-reference-5" role="doc-noteref"><span class="fn-bracket">[</span>4<span class="fn-bracket">]</span></a></p>
+<p>Additionally, native 2-qubit gates are optional. For example, the RZZ 2-qubit gate or
+the CPHASE gate.</p>
+<table class="docutils align-default" id="table-4">
+<caption><span class="caption-number">Table 26 </span><span class="caption-text">Optional HAL commands.</span><a class="headerlink" href="#table-4" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Parameters</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>HAL Level</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>32 QBit Measure</p></td>
+<td><p>Starting index of the qubit to read</p></td>
+<td><p>Returns 32 measurements in parallel.</p></td>
+<td><p>All <a class="footnote-reference brackets" href="#footnote-4" id="footnote-reference-6" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>For/If/While</p></td>
+<td><p>To be defined.</p></td>
+<td><p>Conditional execution. Hardware specific in terms of format and limits</p></td>
+<td><p>All <a class="footnote-reference brackets" href="#footnote-4" id="footnote-reference-7" role="doc-noteref"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>Opt1</p></td>
+<td><p>None</p></td>
+<td><p>Optional commands for hardware-specific instructions.</p></td>
+<td><p>Specific.</p></td>
+</tr>
+<tr class="row-odd"><td><p>Opt2</p></td>
+<td><p>None</p></td>
+<td><p>Optional commands for hardware-specific instructions.</p></td>
+<td><p>Specific.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="required-hal-responses">
+<h2>Required HAL responses<a class="headerlink" href="#required-hal-responses" title="Permalink to this headline"></a></h2>
+<p>Users should at least be informed when:</p>
+<ul class="simple">
+<li><p>The circuit completes successfully. Only required at Level 3 and Level 2 and define as completion ACKNOWLEDGE.</p></li>
+<li><p>The commands they sent are INVALID. An example would be CNOT(0,0), a CNOT with both inputs being qubit 0;</p></li>
+<li><p>An error has occurred in the quantum computer and the computation is INCORRECT.</p></li>
+</ul>
+<p>Hardware labs can specify additional error codes to handle specific scenarios.</p>
+<p>The format of the response:</p>
+<table class="docutils align-default" id="table-5">
+<caption><span class="caption-number">Table 27 </span><span class="caption-text">Response format</span><a class="headerlink" href="#table-5" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Response (4 bits)</p></th>
+<th class="head"><p>CIRCUIT ID (12 bits)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Defines the type of error as per Table 7.6</p></td>
+<td><p>Unique ID that identifies user and circuit. Needed in case of multi-user/multi-circuit execution</p></td>
+</tr>
+</tbody>
+</table>
+<p>And the codes for the responses:</p>
+<table class="docutils align-default" id="table-6">
+<caption><span class="caption-number">Table 28 </span><span class="caption-text">Response codes</span><a class="headerlink" href="#table-6" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Response</p></th>
+<th class="head"><p>VALUE</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>ACKNOWLEDGE</p></td>
+<td><p>0</p></td>
+<td><p>The circuit execution was succesful</p></td>
+</tr>
+<tr class="row-odd"><td><p>INCORRECT</p></td>
+<td><p>1</p></td>
+<td><p>The execution encountered an error. Returned measurements should be discarded</p></td>
+</tr>
+<tr class="row-even"><td><p>INVALID</p></td>
+<td><p>2</p></td>
+<td><p>One or more of the commands sent are incorrect. Nothing has been executed.</p></td>
+</tr>
+</tbody>
+</table>
+<p>Level 1 access types are not required to return responses as the latency to
+acknowledge them would impact significantly performance and quantum up time.</p>
+<aside class="footnote brackets" id="footnote-1" role="note">
+<span class="label"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#footnote-reference-1">1</a>,<a role="doc-backlink" href="#footnote-reference-2">2</a>,<a role="doc-backlink" href="#footnote-reference-3">3</a>)</span>
+<p>This is still open for debate and will depend on hardware provider as well as qubit tech. Likely, something to include in metadata rather than specify.</p>
+</aside>
+<aside class="footnote brackets" id="footnote-2" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#footnote-reference-4">3</a><span class="fn-bracket">]</span></span>
+<p>If a vendor conforms to the structure of the HAL for their internal features then they could benefit from examples and some standardisation for their group properties APIs even if not for their implementation.</p>
+</aside>
+<aside class="footnote brackets" id="footnote-3" role="note">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#footnote-reference-5">4</a><span class="fn-bracket">]</span></span>
+<p>Consequently, do we want to explicitly state that members of this category may not translate across implementations, resulting in defaulting back to core commands and speeds? [Tentative response in Multi-Level HAL additional considerations]</p>
+</aside>
+<aside class="footnote brackets" id="footnote-4" role="note">
+<span class="label"><span class="fn-bracket">[</span>5<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#footnote-reference-6">1</a>,<a role="doc-backlink" href="#footnote-reference-7">2</a>)</span>
+<p>For optional commands, the hardware provider has to specify the HAL level(s) to which they apply.</p>
+</aside>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="minimal_req.html" class="btn btn-neutral float-left" title="HAL Commands Minimal Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hal_commands_specifications.html" class="btn btn-neutral float-right" title="HAL Commands Format Specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: v0.2.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+          
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Glossary &mdash; Quantum HAL Specificationsv0.1.1</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="References" href="references.html" />
+    <link rel="prev" title="Appendix 3: Use Case 2 – holoVQE" href="appendix3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                v0.1.1
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal_req.html">HAL Commands Minimal Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_features.html">HAL Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_commands_specifications.html">HAL Commands Format specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL packages/modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Case 1 – Shor’s Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix3.html">Appendix 3: Use Case 2 – holoVQE</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Glossary</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/glossary.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="glossary">
+<h1>Glossary<a class="headerlink" href="#glossary" title="Permalink to this headline"></a></h1>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-text">Definitions and Abbreviations</span><a class="headerlink" href="#table-1" title="Permalink to this table"></a></caption>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Term</p></th>
+<th class="head"><p>Definition/Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SHALL</p></td>
+<td><p>This word, or the terms “REQUIRED” or “MUST”, mean that the definition is an absolute requirement of the specification.[REF_3]</p></td>
+</tr>
+<tr class="row-odd"><td><p>SHOULD</p></td>
+<td><p>This word, or the adjective “RECOMMENDED”, mean that there may exist valid reasons in particular circumstances to ignore a particular item, but the full implications must be understood and carefully weighed before choosing a different course.[REF_3]</p></td>
+</tr>
+<tr class="row-even"><td><p>MAY</p></td>
+<td><p>This word, or the adjective “OPTIONAL”, mean that an item is trulyoptional. One vendor may choose to include the item because a particular marketplace requires it or because the vendor feels thatit enhances the product while another vendor may omit the same item. An implementation which does not include a particular option MUST be prepared to interoperate with another implementation which does include the option, though perhaps with reduced functionality. In the same vein an implementation which does include a particular option MUST be prepared to interoperate with another implementation which does not include the option (except, of course, for the feature the option provides.)[REF_3]</p></td>
+</tr>
+<tr class="row-odd"><td><p>HAL</p></td>
+<td><p>Hardware Abstraction Layer</p></td>
+</tr>
+<tr class="row-even"><td><p>NISQ</p></td>
+<td><p>Noisy Intermediate-Scale Quantum</p></td>
+</tr>
+<tr class="row-odd"><td><p>ISCF</p></td>
+<td><p>Industrial Strategy Challenge Fund</p></td>
+</tr>
+<tr class="row-even"><td><p>API</p></td>
+<td><p>Application Programming Interface</p></td>
+</tr>
+<tr class="row-odd"><td><p>QPU</p></td>
+<td><p>Quantum Processing Unit</p></td>
+</tr>
+<tr class="row-even"><td><p>CPU</p></td>
+<td><p>Central Processing Unit</p></td>
+</tr>
+<tr class="row-odd"><td><p>FPGA</p></td>
+<td><p>Field Programmable Gate Array</p></td>
+</tr>
+<tr class="row-even"><td><p>VQA</p></td>
+<td><p>Variational Quantum Algorithm</p></td>
+</tr>
+<tr class="row-odd"><td><p>VQE</p></td>
+<td><p>Variational Quantum Eigensolver</p></td>
+</tr>
+<tr class="row-even"><td><p>QNN</p></td>
+<td><p>Quantum Neural Network</p></td>
+</tr>
+<tr class="row-odd"><td><p>QoS</p></td>
+<td><p>Quality of Service</p></td>
+</tr>
+<tr class="row-even"><td><p>Northbound Interface</p></td>
+<td><p>In Computer Networking and Computer Architecture, a northboundinterface of a component is an interface that allows the component to communicate to a higher-level component, using the latter component’s southbound interface</p></td>
+</tr>
+<tr class="row-odd"><td><p>Transpiler</p></td>
+<td><p>Transpiling is a specific term for taking source code written in one language and transforming into another language that has a similar level of abstraction</p></td>
+</tr>
+<tr class="row-even"><td><p>Quantum Machine</p></td>
+<td><p>A human-made device whose collective operation follows the laws of quantum mechanics</p></td>
+</tr>
+<tr class="row-odd"><td><p>Adjacency Matrix</p></td>
+<td><p>A square matrix normally used to represent a finite graph by defining adjacency of vertices as well as self-loops.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="appendix3.html" class="btn btn-neutral float-left" title="Appendix 3: Use Case 2 – holoVQE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="references.html" class="btn btn-neutral float-right" title="References" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: v0.1.1
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+          
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

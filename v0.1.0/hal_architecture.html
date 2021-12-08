@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>hal_architecture &mdash; Quantum HAL Specificationsv0.1.0</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Metadata Format specification" href="metadata.html" />
+    <link rel="prev" title="General" href="general.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                v0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="#introduction">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#multi-level-hal-and-associated-algorithms">Multi-level HAL and associated algorithms</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multi-level-hal-extra-considerations">Multi-level HAL extra considerations</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal_req.html">HAL Commands Minimal Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_features.html">HAL Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_commands_specifications.html">HAL Commands Format specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL packages/modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Case 1 – Shor’s Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix3.html">Appendix 3: Use Case 2 – holoVQE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>hal_architecture</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/hal_architecture.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="hal-architecture">
+<h1>HAL Architecture<a class="headerlink" href="#hal-architecture" title="Permalink to this headline"></a></h1>
+</section>
+<section id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h1>
+<p>The HAL allows algorithm developers to abstract away the details of a
+hardware implementation by providing a standard set of commands which
+can be implemented to somedegree on most devices.
+This brings two benefits:</p>
+<ul class="simple">
+<li><p>the developer can focus on the algorithm as opposed to the implementation.</p></li>
+<li><p>the algorithm can be easily ported to other devices.</p></li>
+</ul>
+<p>Basic quantum algorithms and software use a high-level HAL representing a circuit
+model, which means taking advantage in a controlled way of advanced hardware
+capabilities. There are now algorithms being developed that require functionalities
+which this circuit model does not support.</p>
+<p>In general, it is because they require some functionality that cannot be implemented
+by a classical CPU model connected over some high latency link (e.g. the cloud)
+to a quantum device. These algorithms require much quicker communication between
+a classical controller and device to be efficient and/or access to some native
+functionalities of the device.</p>
+<section id="multi-level-hal-and-associated-algorithms">
+<h2>Multi-level HAL and associated algorithms<a class="headerlink" href="#multi-level-hal-and-associated-algorithms" title="Permalink to this headline"></a></h2>
+<p>The HAL must be capable of supporting advanced algorithms with different
+degrees of quantum/classical interaction. Current algorithms can be
+reconducted into three main groups with growing requirements in classical
+to quantum latency. We associate these groups to three levels of HAL as follows.</p>
+<p>The highest level is 3, the ability to run large batches of a static circuit.
+This is implementable in a setting with high latency, typically much larger
+than the decoherence time, and is equipotent to commercial quantum devices
+available over the cloud.</p>
+<p>In level 2, there is no change to the quantum
+device’s abilities, but the latency of the classicalcontrol is now in order
+of qubit decoherence time.
+The controlling hardware can now make circuit updates based upon a single
+circuit’s results, without a significant proportion of qubit “dead time”.</p>
+<p>In level 1, the ability to make mid circuit measurements, and control of
+the QPU based on the measurement outcome, is included.
+This requires the controlling device to make changes or store results on
+the gate time order on the quantum device and hence well below the
+decoherence time, so communication must also be of very low latency.
+The following table summarises the HAL levels 3-1, the timescales and
+corresponding algorithms considered in the first version of the specification.
+A general aim is to define a multi-level HAL flexible enough to cater to
+future developments and additions. [q3]</p>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-text">HAL Levels</span><a class="headerlink" href="#table-1" title="Permalink to this table"></a></caption>
+<tbody>
+<tr class="row-odd"><td><p>HAL Level</p></td>
+<td><p>Timescale</p></td>
+<td><p>Ability</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>Slow, communication between server and QPU (timescale much longer than coherence time)</p></td>
+<td><p>Able to run large batches of circuits (e.g., may contain thousands of shots). Equipotent to what is available via IBM cloud, AWS, etc.Much slower than the coherence timeSupported algorithms: Gradient-free VQE</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>Faster, communication between QPU and controller (timescale in order of the coherence time)</p></td>
+<td><p>Actions can be taken based on the results of a single circuit and small batches of circuits
+(e.g., may contain tenths of shots).
+This usually cannot be done in level 1 due to the bandwidth or latency issues encountered
+when making decisions on small numbers of circuits. Operates within coherence time.</p></td>
+</tr>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>Fastest, within decoherencetime of qubits (timescale much shorter than the coherence time)</p></td>
+<td><p>Results of qubit measurement can be acted upon within a single circuit. This requires the HAL to be implemented via fast local control elements (e.g. FPGAs, application-specific CPUs).Supported algorithms: QNN dropout, holo-VQE, quantum autoencoder, simple error correction</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="multi-level-hal-extra-considerations">
+<h2>Multi-level HAL extra considerations<a class="headerlink" href="#multi-level-hal-extra-considerations" title="Permalink to this headline"></a></h2>
+<p>It is important to raise awareness of the following considerations:</p>
+<ul>
+<li><p>Hardware companies can expose one or more of the HAL levels</p></li>
+<li><p>Companies might want to certify the hidden levels (i.e., those considered
+private and not exposed). In this case, care should be taken to implement
+the levels above the exposed ones as per specifications.
+An example of this approach’s benefit: hardware company can outsource the
+development of applications to a group of developers already familiar
+with designing solutions at HAL Level 1-2-3, with a level of access
+lower than the public one.</p></li>
+<li><p>Metadata should allow the conversion of a sequence of HAL commands across
+architectures and layers. Each conversion must come with an associated set
+of acceptance checks that the user/hardware company can execute.
+In order of complexity, we envision:
+d
+- Metadata checks. The conversion can be checked for feasibility by simply examining the metadata with no compilation.</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Example of conversion: from a Level 3 HAL representation targeting different hardware.</p></li>
+<li><p>Example of check: the number of qubits and circuit depth required must be available on the new target architecture.</p></li>
+</ul>
+</div></blockquote>
+<ul class="simple">
+<li><p>Compilation checks. A conversion that needs to be remapped to a new gate set and analysed to understand if they meet the hardware constraints.</p>
+<ul>
+<li><p>Example of conversion: from a Level 2 representation, Hardware A to a Level 2, Hardware B</p></li>
+<li><p>Example of check: verify all original gates can be transpiled into Hardware B native gateset</p></li>
+</ul>
+</li>
+<li><p>Performance checks. In the case of guaranteed QOS (for example, on error rates), conversions need to analyse the final solution’s performance.</p>
+<ul>
+<li><p>Example of conversion: from a Level 2 representation, Hardware A to a Level 2, Hardware B with user expecting final fidelity &gt; X.</p></li>
+<li><p>Example of check: on top of the compilation checks, verify that the transpiled version of the circuit can meet the QoS requirement by usingsingle and two qubits fidelities.</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="general.html" class="btn btn-neutral float-left" title="General" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="metadata.html" class="btn btn-neutral float-right" title="Metadata Format specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: v0.1.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+          
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAL Commands Minimal Requirements &mdash; Quantum HAL Specificationsv0.2.0</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="HAL Features" href="hal_features.html" />
+    <link rel="prev" title="Metadata Format Specification" href="metadata.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                v0.2.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary and Abbreviations</a></li>
+<li class="toctree-l1"><a class="reference internal" href="general.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format Specification</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HAL Commands Minimal Requirements</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#level-3-hal">Level 3 HAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#level-2-hal">Level 2 HAL</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#level-1-hal">Level 1 HAL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="hal_features.html">HAL Features</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_commands_specifications.html">HAL Commands Format Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL Packages/Modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case Scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Cases</a></li>
+<li class="toctree-l1"><a class="reference internal" href="further_reading.html">Further reading</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>HAL Commands Minimal Requirements</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/minimal_req.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="hal-commands-minimal-requirements">
+<h1>HAL Commands Minimal Requirements<a class="headerlink" href="#hal-commands-minimal-requirements" title="Permalink to this headline"></a></h1>
+<p>To allow for the best usage of resources while preserving the desired user intents,
+we should allow each HAL layer to have a different set of commands.
+This allows a tuning of the commands to fit the associated level best.
+In this Section we have used the following considerations to drive our proposal:</p>
+<ul class="simple">
+<li><p>A Level 3 or Level 2 HAL needs to perform one or more of compilation, transpilation and
+timing allocation of instructions. At Level 1, commands that are already usable by the hardware
+should be presented.</p></li>
+<li><p>Users will want to execute on emulators as well as on real quantum resources.
+Hardware vendors might want to expose a single HAL interface and internally route
+the circuits to an emulator or the real system. To ease this process and consequently
+allocation, billing and scheduling, Level 2 and Level 3 HAL should have implemented
+this concept.</p></li>
+<li><p>We don’t believe the user needs a complete set of traditional sequence modifiers
+(FOR, WHILE, DO, etc) but just the bare minimum to express repetition and branching.
+We are suggesting FOR and IF statements to achieve that.</p></li>
+</ul>
+<section id="level-3-hal">
+<h2>Level 3 HAL<a class="headerlink" href="#level-3-hal" title="Permalink to this headline"></a></h2>
+<p>“Able to run large batches of circuits”</p>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-number">Table 20 </span><span class="caption-text">Level 3 HAL commands</span><a class="headerlink" href="#table-1" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Motivations</p></th>
+<th class="head"><p>Implications</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gates from a universal gateset</p></td>
+<td><p>Define the circuits to execute</p></td>
+<td><p>Compilers and transpilers are needed to convert it to a usable representation</p></td>
+<td><p>None</p></td>
+</tr>
+<tr class="row-odd"><td><p>Section commands</p></td>
+<td><p>Confines the code that belong to one user and associate it to hardware or emulation facilities</p></td>
+<td><p>The compilation flow should support both targets</p></td>
+<td><p>The user can transmit circuits back-to-back as a binary sequence. Section commands are used to delimit these sequences (as a START and STOP equivalent) allowing optimisations and compilations on the received circuits.</p></td>
+</tr>
+</tbody>
+</table>
+<p>At Level 3, the classical logic is in charge of acting upon measurements and
+selecting the next sequence of circuits to execute.
+Circuits can be fully precompiled and buffered.
+Acceptance criteria may be applied to the provided code to verify that it is
+within the capabilities of the compiler and the hardware.</p>
+<p>Requires:</p>
+<ul class="simple">
+<li><p>Validation of the user-provided algorithm to access its feasibility</p></li>
+<li><p>Highly parallelised compilation flow to avoid execution underflowing and suboptimal
+utilisation of the quantum hardware.</p></li>
+</ul>
+</section>
+<section id="level-2-hal">
+<h2>Level 2 HAL<a class="headerlink" href="#level-2-hal" title="Permalink to this headline"></a></h2>
+<p>“The results of a single circuit and small batches of circuits can be acted upon.”</p>
+<table class="docutils align-default" id="table-2">
+<caption><span class="caption-number">Table 21 </span><span class="caption-text">Level 2 HAL commands</span><a class="headerlink" href="#table-2" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Motivations</p></th>
+<th class="head"><p>Implications</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gates from the native gateset</p></td>
+<td><p>Define the circuits to execute</p></td>
+<td><p>Transpilers are needed to convert it to a hardware representation (e.g. sequence of pulses)</p></td>
+<td><p>It can contain optional commands (e.g. CPHASE, CCX, ACTIVE RESET) that the hardware supports</p></td>
+</tr>
+</tbody>
+</table>
+<p>At Level 2, the classical logic is in charge of acting upon measurements and select the next circuit(s) to execute.</p>
+<p>Requires:</p>
+<ul class="simple">
+<li><p>Parallel compilation of circuits to handle branching statements</p></li>
+<li><p>Low overhead repetition/reloading of the same circuit</p></li>
+</ul>
+</section>
+<section id="level-1-hal">
+<h2>Level 1 HAL<a class="headerlink" href="#level-1-hal" title="Permalink to this headline"></a></h2>
+<p>“Results of qubit measurement can be acted upon within a single circuit.”</p>
+<table class="docutils align-default" id="table-3">
+<caption><span class="caption-number">Table 22 </span><span class="caption-text">Level 1 HAL commands</span><a class="headerlink" href="#table-3" title="Permalink to this table"></a></caption>
+<thead>
+<tr class="row-odd"><th class="head"><p>Command</p></th>
+<th class="head"><p>Motivations</p></th>
+<th class="head"><p>Implications</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Gates from the native gateset</p></td>
+<td><p>Define the circuits to execute</p></td>
+<td><p>None</p></td>
+<td><p>If the hardware supports them the user should be allowed to use arbitrary controlled gates (e.g. CPHASE) and (b) multi-qubit (&gt;2) gates</p></td>
+</tr>
+</tbody>
+</table>
+<p>At Level 1, the classical logic is in charge of acting upon measurements and select the next gate(s) to execute.</p>
+<p>Requires:</p>
+<ul class="simple">
+<li><p>Fast conversion of native gateset representation to hardware controls</p></li>
+<li><p>Fast loading of these sequences</p></li>
+<li><p>Fast path from measurement to user logic</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="metadata.html" class="btn btn-neutral float-left" title="Metadata Format Specification" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="hal_features.html" class="btn btn-neutral float-right" title="HAL Features" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: v0.2.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+          
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

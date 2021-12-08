@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HAL Commands Format specification &mdash; Quantum HAL Specificationsv0.1.0</title><link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/graphviz.css" type="text/css" />
+      <link rel="stylesheet" href="_static/copybutton.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  <script id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/clipboard.min.js"></script>
+        <script src="_static/copybutton.js"></script>
+        <script src="_static/toggleprompt.js"></script>
+        <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Security" href="security.html" />
+    <link rel="prev" title="HAL Features" href="hal_features.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> Quantum HAL Specifications
+          </a>
+              <div class="version">
+                v0.1.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption"><span class="caption-text">Contents</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="general.html">General</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html">HAL Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_architecture.html#introduction">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metadata.html">Metadata Format specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minimal_req.html">HAL Commands Minimal Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="hal_features.html">HAL Features</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">HAL Commands Format specification</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#considerations-on-transmission">Considerations on transmission</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#considerations-on-decoding">Considerations on Decoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#command-format-option-i">Command Format: Option I</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="security.html">Security</a></li>
+<li class="toctree-l1"><a class="reference internal" href="optional_packages.html">Optional HAL packages/modules</a></li>
+<li class="toctree-l1"><a class="reference internal" href="standards.html">Standards and Interfaces</a></li>
+<li class="toctree-l1"><a class="reference internal" href="use_case_scenarios.html">Use Case scenarios</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix1.html">Appendix 1</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix2.html">Appendix 2: Use Case 1 – Shor’s Algorithm</a></li>
+<li class="toctree-l1"><a class="reference internal" href="appendix3.html">Appendix 3: Use Case 2 – holoVQE</a></li>
+<li class="toctree-l1"><a class="reference internal" href="glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="references.html">References</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">Quantum HAL Specifications</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>HAL Commands Format specification</li>
+      <li class="wy-breadcrumbs-aside">
+              <a href="https://github.com/riverlane/QHAL_internal/blob/dev/docs/hal_commands_specifications.rst" class="fa fa-github"> Edit on GitHub</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  
+<style>
+/* CSS overrides for sphinx_rtd_theme */
+
+/* 24px margin */
+.nbinput.nblast.container,
+.nboutput.nblast.container {
+    margin-bottom: 19px;  /* padding has already 5px */
+}
+
+/* ... except between code cells! */
+.nblast.container + .nbinput.container {
+    margin-top: -19px;
+}
+
+.admonition > p:before {
+    margin-right: 4px;  /* make room for the exclamation icon */
+}
+
+/* Fix math alignment, see https://github.com/rtfd/sphinx_rtd_theme/pull/686 */
+.math {
+    text-align: unset;
+}
+</style>
+<section id="hal-commands-format-specification">
+<h1>HAL Commands Format specification<a class="headerlink" href="#hal-commands-format-specification" title="Permalink to this headline"></a></h1>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline"></a></h2>
+<p>The HAL commands should have a format that provides the best generality and expressivity whilst keeping the decoding logic (and consequently its latency) to the minimum. Before describing the format, the considerations that have motivated the choice of this format are outlined. We will touch on the two main sets of implications that relate to the command format.</p>
+<ul class="simple">
+<li><p>Commands must be transmitted to the QPU</p></li>
+<li><p>Commands must be parsed and decoded. If errors occur in any of the two processes they should be returned.</p></li>
+</ul>
+</section>
+<section id="considerations-on-transmission">
+<h2>Considerations on transmission<a class="headerlink" href="#considerations-on-transmission" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p>The transmission of the HAL commands occurs via physical wires (electrical or optical) and/or via internal on-chip traces (e.g. FPGA routing resources)</p></li>
+<li><p>We will assume error-free (or classically error-corrected) transmission of the commands in this version of this proposal.</p></li>
+<li><p>We will assume that different quantum hardware will have different requirements in terms of connectivity, required bandwidth (of commands), and link-latencies. For this reason, we have tentatively listed in Table 1 some metrics related to standard (public) interfaces.</p></li>
+<li><p>It is important to point out that:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Most transmission protocols listed in the physical layer could be adapted to handle arbitrary packet sizes. It is worth pointing out that this will require a custom implementation of the link-layer logic for both transmitter and receiver.</p></li>
+<li><p>Ad-hoc protocols might use generic parallel-busses of any width (i.e., not standard interfaces). We think that addressing these specific scenarios might lead to a loss of generality for this set of specifications.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<table class="docutils align-default" id="table-1">
+<caption><span class="caption-text">Transport Protocols - illustration</span><a class="headerlink" href="#table-1" title="Permalink to this table"></a></caption>
+<tbody>
+<tr class="row-odd"><td><p>Protocol</p></td>
+<td><p>Minimum Packet Size/Increments</p></td>
+<td><p>Technology Supported</p></td>
+<td><p>Notes</p></td>
+</tr>
+<tr class="row-even"><td><p>Ethernet (raw)</p></td>
+<td><p>46 bytes/1 byte (up to 1500 bytes)</p></td>
+<td><p>CPU, FPGA, ASIC</p></td>
+<td><p>Large transmission overhead</p></td>
+</tr>
+<tr class="row-odd"><td><p>PCIe3.0/4.0</p></td>
+<td><p>128/256/512 bytes (Root complex dependant)</p></td>
+<td><p>CPU, FPGA, ASIC</p></td>
+<td><p>Short reach</p></td>
+</tr>
+<tr class="row-even"><td><p>USB3.x</p></td>
+<td><p>1 byte/1 byte (up to 1024 bytes)</p></td>
+<td><p>CPU, FPGA[*], ASIC</p></td>
+<td><p>Transmission overhead (protocol defined transmission timeslots)</p></td>
+</tr>
+<tr class="row-odd"><td><p>Intra-chip communication (AMBA-AXI)</p></td>
+<td><p>4 bytes/4 bytes (up to 128 bytes[**])</p></td>
+<td><p>FPGA, ASIC, CPU[***]</p></td>
+<td><p>Ultra-short reach</p></td>
+</tr>
+<tr class="row-even"><td><p>Serial Peripheral Interface (SPI)</p></td>
+<td><p>1 byte/1 byte (up to 1024 bytes[****])</p></td>
+<td><p>FPGA, ASIC, CPU</p></td>
+<td><p>Low bandwidth</p></td>
+</tr>
+</tbody>
+</table>
+<p>[*]   USB3.2 2x2 might require special cards to implement the initial speed negotiation (10 Gbps mode) that might not be commercially available.
+[**]  The AMBA protocol does not set an upper limit on the size of the bus but the physical routing of the logic normally limits this value to be 1024 bits threshold
+[***] Hard/Soft-CPU only. Only CPU that are integrated into the same die as the ASIC/FPGA (either permanently or in a reconfigurable fashion).
+[****]        Generally, controller limited. Some controllers support up to 65535 bytes.</p>
+</section>
+<section id="considerations-on-decoding">
+<h2>Considerations on Decoding<a class="headerlink" href="#considerations-on-decoding" title="Permalink to this headline"></a></h2>
+<ul>
+<li><p>To guarantee applications portability, we recommend for the HAL specification to define a consistent representation for all the commands in terms of the number of bits and their significance.</p></li>
+<li><p>Bit shifts and bit masking can be implemented with limited effort and low latency on CPU, FPGA and ASICs</p></li>
+<li><p>The identifier of the command (OPCODE) can be of:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Fixed-length (i.e. all OPCODES are implemented using the same number of bits)</p></li>
+<li><p>Variable-length (i.e. OPCODES can use a different number of bits)</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic simple">
+<li><p>provides the fastest decoding (e.g. look-up tables based) while (2) can increase the content of information transmitted via better usage of the available bits</p></li>
+</ol>
+<ul>
+<li><p>Qubit indexing can be implemented as:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>a combination of one-hot encoding (e.g. 1001 indicates that index 0 and 3 are active)</p></li>
+<li><p>or in a binary format (e.g. 1001 indicates that the index 9 is active).</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<p>/(1)/ enables the addressing of multiple qubits via a single command while /(2)/ provides a much larger qubit addressing space (N vs 2**N)</p>
+<ul>
+<li><p>Commands that do not fit in a single word can be split and transmitted as a sequence of parts (multi-word commands). We envision three possible scenarios here:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>The list of commands that require more than one word (multi-word commands) is fixed and predefined. Their OPCODE is sufficient to inform the decoding logic that they are composed of multiple words.</p></li>
+<li><p>The list of multi-word commands is not known a priori. A field/flag can be set to indicate that the command is composed of extra words. This field/flag will require at least one extra bit to be always dedicated to this specific purpose.</p></li>
+<li><p>The list of multi-word commands is not known a priori. A special command needs to be issued to indicate that what follows is a sequence of multi-word commands. One possible implementation uses the first command argument to indicate the number of words composing the real multi-word command to execute.</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<ol class="arabic simple">
+<li><p>provides the simplest decoding logic (fixed-length commands with deterministic latency), (2) and (3) have slightly more complex logic with at least one extra conditional branch. If statistically, the likelihood of multi-word commands is low, (3) provides a lower bit requirement overhead than (2).</p></li>
+</ol>
+<ul>
+<li><p>Multi-Qubit commands (e.g. CNOT) require (a) the definition of two indexes as well as (b) the execution of two parallel sequences of control. While (a) is in line with previous considerations, (b) requires additional considerations. The decoder logic should effectively extract both the indexes (ideally in a single instruction) and inform the associated branches of the control logic (if independent). We identified the following options:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Single-word command with halved addressing space. We preserve the format of the command but consider the lower half of the index field pertaining to qubit 0 and the upper part to qubit 1</p></li>
+<li><p>Longer command. We append a second indexing field to the end of the command to address the second index.</p></li>
+<li><p>Double-word command. We extend the command with the second index and padding.</p></li>
+<li><p>Two-words command. We split the command into two portions, and we send them as two separate tokens. e.g., we split a CNOT into in a “Control” and “Controlled” set of commands (CNOT_CTRL, CNOT_DATA).</p></li>
+</ol>
+</div></blockquote>
+</li>
+</ul>
+<p>(1)-(4) require almost no changes to the architecture for 1 qubit commands in storage and decoding. (4) though does introduces a barrier on execution. Because now the two commands are independent, the transport layer can delay the transmission of the second one, requiring buffering of the command. (2) - (3) require an extra buffer/register to store the second portion of the command and potentially forces us to decouple the command width from the transport layer width, but they do enforce the command’s atomicity.</p>
+</section>
+<section id="command-format-option-i">
+<h2>Command Format: Option I<a class="headerlink" href="#command-format-option-i" title="Permalink to this headline"></a></h2>
+<p>We would like to conclude this Section by proposing at least one possible format for the HAL commands.
+Table 9 contains two representations, a “single-word” command (64 bits) and a “dual-word” command (128 bits). The goals of this format are (a) low complexity decoding logic (with buffering), (b) no significant performance penalty.</p>
+<table class="docutils align-default" id="table-2">
+<caption><span class="caption-text">Format proposal</span><a class="headerlink" href="#table-2" title="Permalink to this table"></a></caption>
+<tbody>
+<tr class="row-odd"><td><p>Command type</p></td>
+<td><p>OPCODE</p></td>
+<td><p>ARGUMENT</p></td>
+<td><p>QUBIT INDEX</p></td>
+</tr>
+<tr class="row-even"><td><p>Single/Dual Word</p></td>
+<td><p>Identifies the type of instruction to execute</p></td>
+<td><p>Associate an argument to the instruction (e.g. the angle of a rotation)</p></td>
+<td><p>Indicates the index of the QUBIT to manipulate</p></td>
+</tr>
+<tr class="row-odd"><td><p>SINGLE WORD</p></td>
+<td><p>[63-48]</p></td>
+<td><p>[47-32]</p></td>
+<td><p>[31-0]</p></td>
+</tr>
+<tr class="row-even"><td><p>DUAL WORD</p></td>
+<td><p>[127-112] + 16 bits padding</p></td>
+<td><p>[95-80] – qubit1, [79-63] – qubit0</p></td>
+<td><p>[63-32] – qubit 1, [31-0] -  qubit0</p></td>
+</tr>
+</tbody>
+</table>
+<p>The following considerations have been made:</p>
+<ul class="simple">
+<li><p>We recommend defining byte-aligned fields to avoid decoding penalty in the technologies (e.g. CPUs) with coarse access granularity.</p></li>
+<li><p>By fixing the OPCODE length, the decoder logic can use lookup tables. We consider 65536 codes (16 bits) to be more than sufficient. Note: It might be possible to reduce them to 256 (8 bits) by intelligent usage of special commands that allow an exception to the format (MODIFIERS, two examples will follow).</p></li>
+<li><p>The addressable number of qubits (2**32) should accommodate the needs of NISQ and the early post-NISQ era. Note: We could consider pre-emptively doubling the INDEX field’s size at the cost of an initial transmission overhead.</p></li>
+<li><p>The full instruction space (2**16) and the argument field (2**16) should similarly be future proof.</p></li>
+<li><p>No field has been allocated to support multi-word commands.</p></li>
+<li><p>The DOUBLE-WORD command can be clearly identified by the OPCODE (we suggest using the MSB bit to indicate whether it is a SINGLE or DUAL WORD command). The implications in terms of logic are that we (a) need to buffer the command if the transport layer as width &lt; 128 bits, (b) have a slightly different decoding logic for SINGLE WORD and DUAL WORD command. We consider (b) of minor impact being everything word aligned and in both CPU and FPGA/ASIC logic that can still be implemented via simple shifting.</p></li>
+<li><p>We can introduce the following optional SINGLE WORD commands to define large scale atomicity and barriers:</p>
+<ul>
+<li><dl class="simple">
+<dt>MULTI_WORD.</dt><dd><p>Argument: the number (M) of words that compose the command. The command should be executed after the Mth word has been received. This requires special treatment on the buffer side but can be used to support commands with extra-long arguments.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>MULTI_CMD.</dt><dd><p>Argument: the number (N) of commands that compose an “atomic” sequence. The N commands that will follow should be executed at the same time.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="hal_features.html" class="btn btn-neutral float-left" title="HAL Features" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="security.html" class="btn btn-neutral float-right" title="Security" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, ISCF Quantum HAL Steering Consortium.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+
+  <div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      <span class="fa fa-book"> Read the Docs</span>
+      v: v0.1.0
+      <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+      
+      
+      <dl>
+        <dt>Versions</dt>
+        
+          
+          <dd><a href="/QHAL_internal/dev/">dev</a></dd>
+          
+        
+          
+          <dd><a href="/QHAL_internal/v0.2.0/">v0.2.0</a></dd>
+          
+        
+           <strong> 
+          <dd><a href="/QHAL_internal/v0.1.0/">v0.1.0</a></dd>
+           </strong> 
+        
+          
+          <dd><a href="/QHAL_internal/v0.1.1/">v0.1.1</a></dd>
+          
+        
+      </dl>
+      
+      
+      
+      <hr/>
+      Document hosting provided by <a href="https://pages.github.com/">GitHub Pages</a>.
+ 
+    </div>
+  </div>
+
+ <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
