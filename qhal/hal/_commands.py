@@ -129,7 +129,7 @@ _OPCODES = [
     Opcode("FOR_END", 51 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("IF", 52 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("WHILE", 53 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("MODIFIER", 54 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
+    Opcode("MODIFIER", 54 | Masks.OPCODE_PARAM_MASK.value, "DUAL", "PARAM"),
 
     # DUAL WORD Commands
     Opcode("CNOT", 60 | Masks.OPCODE_DUAL_MASK.value, "DUAL", "CONST"),
@@ -162,7 +162,7 @@ def int_to_opcode(op_code: uint64) -> Opcode:
 
 def command_creator(
         op: str, args: List[int] = [0,0], qubits: List[int] = [0,0], reqs: List[int] = [] 
-) -> uint64:
+) -> List[uint64]:
     """Helper function to create HAL commands.
 
     Parameters
@@ -178,8 +178,8 @@ def command_creator(
 
     Returns
     -------
-    uint64
-        64-bit (8 bytes) HAL command.
+    List[uint64]
+        List of 64-bit (8 bytes) HAL commands.
     """
 
     opcode = string_to_opcode(op)
@@ -216,22 +216,31 @@ def command_creator(
         cmd = cmd | Masks.OPCODE_PARAM_MASK.value << Shifts.OPCODE.value
 
     if opcode.name != "MODIFIER":
-        return cmd
+        return [cmd]
 
     else:
         cmds = [cmd]
-        dependencies = []
 
-        
+        num_aux_msgs = -(len(reqs) // -5.0)
 
-        for i in dependencies:
-            cmds.append[i]
+        for i in range(num_aux_msgs-1):
+            temp_cmd = opcode.code << Shifts.OPCODE.value
+            for j in range(5):
+                temp_cmd += reqs[5*i + j] << (49 - j*10)
+                        
+        if len(reqs)%5 != 0:
+            temp_cmd = opcode.code << Shifts.OPCODE.value
+            for j in range(len(reqs)%5):
+                temp_cmd += reqs[5*num_aux_msgs + j] << (49 - j*10)
+
+        cmds[-1] += (1 << 51)  
+
         return cmds
 
 
 def command_unpacker(
     cmd: uint64
-) -> Tuple[str, str, List[int], List[int]]:
+) -> Tuple[str, str, List[int], List[int], bool]:
     """Helper function to unpack HAL commands.
 
     Parameters
@@ -249,6 +258,8 @@ def command_unpacker(
         List of integer representation of argument value(s).
     qubit_indexes : List[int]
         List of integer representation of qubit addresses.
+    final : bool
+        Flags final command of a sequence.
     """
 
     cmd_op_section = (cmd >> (Shifts.OPCODE.value))
@@ -256,15 +267,23 @@ def command_unpacker(
     # Extracting args and qubits
     args = []
     qubits = []
+    final = True
 
-    qubits.append(cmd & Masks.QUBIT0_MASK.value)
-    args.append((cmd & Masks.ARG0_MASK.value) >> Shifts.ARG0.value)
-    args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
+    if opcode.name == "MODIFIER" and ((cmd >> (Shifts.ARG0.value + 14) & 0b01) == 1):
 
-    if opcode.cmd_type == "DUAL":
-        qubits.append((cmd & Masks.QUBIT1_MASK.value) >> Shifts.IDX1.value)
 
-    return (opcode.name, opcode.cmd_type, args, qubits)
+
+        if 
+
+    else:
+        qubits.append(cmd & Masks.QUBIT0_MASK.value)
+        args.append((cmd & Masks.ARG0_MASK.value) >> Shifts.ARG0.value)
+        args.append((cmd & Masks.ARG1_MASK.value) >> Shifts.ARG1.value)
+    
+        if opcode.cmd_type == "DUAL":
+            qubits.append((cmd & Masks.QUBIT1_MASK.value) >> Shifts.IDX1.value)
+
+    return (opcode.name, opcode.cmd_type, args, qubits, final)
 
 
 def measurement_creator(
