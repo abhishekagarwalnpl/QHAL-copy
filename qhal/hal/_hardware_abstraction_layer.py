@@ -60,7 +60,7 @@ class HardwareAbstractionLayer:
         hal_metadata: HALMetadata
     ):
 
-        def mk_command(i, j, angles):
+        def measurement_angle_command(i, j, angles):
             return ((3 << 61) +
                     (i << 56) +
                     (angles[j][0] << 40) +
@@ -91,8 +91,8 @@ class HardwareAbstractionLayer:
             )
 
             if gate == "QUBIT_MEASURE":
-                native_gates[i].append(mk_command(i, 0, hal_metadata.measurement_angles)) 
-                native_gates[i].append(mk_command(i, 1, hal_metadata.measurement_angles))
+                native_gates[i].append(measurement_angle_command(i, 0, hal_metadata.measurement_angles)) 
+                native_gates[i].append(measurement_angle_command(i, 1, hal_metadata.measurement_angles))
         
         self._encoded_metadata["NATIVE_GATES"] = native_gates
 
