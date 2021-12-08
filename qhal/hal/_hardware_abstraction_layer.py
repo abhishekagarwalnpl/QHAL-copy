@@ -59,6 +59,14 @@ class HardwareAbstractionLayer:
         quantum_simulator: IQuantumSimulator,
         hal_metadata: HALMetadata
     ):
+
+        def mk_command(i, j, angles):
+            return ((3 << 61) +
+                    (i << 56) +
+                    (angles[j][0] << 40) +
+                    (angles[j][1] << 24) +
+                    (angles[j][2] << 8))
+
         self._quantum_simulator = quantum_simulator
 
         # set up some of the metadata in correct format
@@ -83,21 +91,9 @@ class HardwareAbstractionLayer:
             )
 
             if gate == "QUBIT_MEASURE":
-                native_gates[i].append(   
-                    (3 << 61) +
-                    (i << 56) +
-                    (hal_metadata.measurement_angles[0][0] << 40) +
-                    (hal_metadata.measurement_angles[0][1] << 24) +
-                    (hal_metadata.measurement_angles[0][2] << 8)
-                )
-                native_gates[i].append(
-                    (3 << 61) +
-                    (i << 56) +
-                    (hal_metadata.measurement_angles[1][0] << 40) +
-                    (hal_metadata.measurement_angles[1][1] << 24) +
-                    (hal_metadata.measurement_angles[1][2] << 8)
-                )
-
+                native_gates[i].append(mk_command(i, 0, hal_metadata.measurement_angles)) 
+                native_gates[i].append(mk_command(i, 1, hal_metadata.measurement_angles))
+        
         self._encoded_metadata["NATIVE_GATES"] = native_gates
 
         # useful state flags
