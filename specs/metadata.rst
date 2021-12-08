@@ -394,6 +394,56 @@ structure of their corresponding HAL command request:
       requesting native gate-specific metadata, such as the ERROR_RATE below
     - **Gate Time**: 44-bit unsigned integer for gate time, specified in picoseconds
 
+**MEASUREMENT_ANGLES**:
+
+- These are two additional messages sent as part of the NATIVE_GATES
+  metadata, in order to specify which measurement angles are accepted.
+
+- Request: see NATIVE_GATES request
+
+- Response:
+.. list-table::
+
+ * - Metadata Index [3] *(3)* 
+   - Final [1] *(e.g. false)*
+   - Gate index [4] *(e.g. 0)*
+   - Start polar angle [16] *(e.g. 0)*
+   - End polar angle [16] *(e.g. 180°)*
+   - Resolution [16] *(e.g. 100)*
+   - Padding [8]
+ * - 011
+   - 0
+   - 0000
+   - 0000000000000000
+   - 1000000000000000
+   - 0000000001100100
+   - 00000000
+
+.. list-table::
+
+ * - Metadata Index [3] *(3)* 
+   - Final [1] *(e.g. false)*
+   - Gate index [4] *(e.g. 0)*
+   - Start azimuthal angle [16] *(e.g. 0)*
+   - End azimuthal angle [16] *(e.g. 360°)*
+   - Resolution [16] *(e.g. 200)*
+   - Padding [8]
+ * - 011
+   - 0
+   - 0000
+   - 0000000000000000
+   - 1111111111111111
+   - 0000000011001000
+   - 00000000
+
+- Notes: 
+    - The start and end angles show the potential range of angles
+      accepted for the polar and azimuthal measurement angles.
+    - The resolution is such that the measurement angles are
+      accepted with precision of *(end angle - start angle)/resolution*.
+    - If measurements only occur in the computational basis, all parameters
+      are zero, in which case these metadata could be omitted. 
+
 
 **CONNECTIVITY**:
 
