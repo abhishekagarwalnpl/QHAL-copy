@@ -225,11 +225,13 @@ def command_creator(
 
         for i in range(num_aux_msgs-1):
             temp_cmd = opcode.code << Shifts.OPCODE.value
+            temp_cmd += (1 << 50)
             for j in range(5):
                 temp_cmd += reqs[5*i + j] << (49 - j*10)
                         
         if len(reqs)%5 != 0:
             temp_cmd = opcode.code << Shifts.OPCODE.value
+            temp_cmd += (1 << 50)
             for j in range(len(reqs)%5):
                 temp_cmd += reqs[5*num_aux_msgs + j] << (49 - j*10)
 
@@ -270,10 +272,15 @@ def command_unpacker(
     final = True
 
     if opcode.name == "MODIFIER" and ((cmd >> (Shifts.ARG0.value + 14) & 0b01) == 1):
+        args.append(cmd & 0x3FF)
+        args.append((cmd >> 10) & 0x3FF)
+        args.append((cmd >> 20) & 0x3FF)
+        args.append((cmd >> 30) & 0x3FF)
+        args.append((cmd >> 40) & 0x3FF)
 
-
-
-        if 
+        if cmd >> (Shift.ARG0.value + 15) == 0:
+            final = False
+        return (opcode.name, opcode.cmd_type, args, qubits, final)
 
     else:
         qubits.append(cmd & Masks.QUBIT0_MASK.value)
