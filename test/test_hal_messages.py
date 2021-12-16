@@ -24,22 +24,22 @@ class HALTest(unittest.TestCase):
                                         command_creator(
                                             opcode.name,
                                             [param_set[0], param_set[1]],
-                                            [param_set[2]])),
+                                            [param_set[2]])[0]),
                                         (opcode.name,
                                          opcode.cmd_type,
                                          [param_set[0], param_set[1]],
-                                         [param_set[2]]))
-            else:
+                                         [param_set[2]], True))
+            elif opcode.name != "MODIFIER":
                 for param_set in dual_params:
                     self.assertEqual(command_unpacker(
                                         command_creator(
                                             opcode.name,
                                             [param_set[0], param_set[1]],
-                                            [param_set[2], param_set[3]])),
+                                            [param_set[2], param_set[3]])[0]),
                                         (opcode.name,
                                          opcode.cmd_type,
                                          [param_set[0], param_set[1]],
-                                         [param_set[2], param_set[3]]))
+                                         [param_set[2], param_set[3]], True))
 
     def test_measurement_creator_unpacker(self):
         """Tests measurement encoding is consistent between measurement creator

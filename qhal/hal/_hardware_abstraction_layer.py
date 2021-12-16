@@ -108,7 +108,7 @@ class HardwareAbstractionLayer:
         """
 
         # check if we've receieved a metadata request
-        opcode, _, param, idx = command_unpacker(hal_command)
+        opcode, _, param, idx, final_flag = command_unpacker(hal_command)
         if opcode == "REQUEST_METADATA":
 
             # reset the internal counter for streaming back data

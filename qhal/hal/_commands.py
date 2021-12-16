@@ -129,7 +129,8 @@ _OPCODES = [
     Opcode("FOR_END", 51 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("IF", 52 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
     Opcode("WHILE", 53 | Masks.OPCODE_PARAM_MASK.value, "SINGLE", "PARAM"),
-    Opcode("MODIFIER", 54 | Masks.OPCODE_PARAM_MASK.value, "DUAL", "PARAM"),
+    Opcode("MODIFIER", 54 | (Masks.OPCODE_DUAL_MASK.value | Masks.OPCODE_PARAM_MASK.value), 
+            "DUAL", "PARAM"),
 
     # DUAL WORD Commands
     Opcode("CNOT", 60 | Masks.OPCODE_DUAL_MASK.value, "DUAL", "CONST"),
@@ -221,7 +222,7 @@ def command_creator(
     else:
         cmds = [cmd]
 
-        num_aux_msgs = -(len(reqs) // -5.0)
+        num_aux_msgs = int(-(len(reqs) // -5.0))
 
         for i in range(num_aux_msgs-1):
             temp_cmd = opcode.code << Shifts.OPCODE.value

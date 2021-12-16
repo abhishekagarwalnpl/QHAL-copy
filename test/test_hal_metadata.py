@@ -110,7 +110,7 @@ class HALMetadataTest(unittest.TestCase):
                             test_input_output_data[4][0][output_count] << 13
                             if metadata_index == 5 else 0
                         )]
-                    )
+                    )[0]
                 )
 
                 self.assertEqual(
@@ -136,7 +136,7 @@ class HALMetadataTest(unittest.TestCase):
                     [4,
                     (1 << 15)],  # request single row
                     [1]  # specifiy row index
-                )
+                )[0]
             )
 
             self.assertEqual(
@@ -168,7 +168,7 @@ class HALMetadataTest(unittest.TestCase):
                         [5,
                         (i << 13) + (1 << 12)], # request single row
                         [(3 - i)]  # specifiy row index
-                    )
+                    )[0]
                 )
 
                 self.assertEqual(
@@ -195,7 +195,7 @@ class HALMetadataTest(unittest.TestCase):
         for metadata_index in range(1, 6):
 
             res = hal.accept_command(
-                command_creator("REQUEST_METADATA", [metadata_index])
+                command_creator("REQUEST_METADATA", [metadata_index])[0]
             )
 
             self.assertEqual(
