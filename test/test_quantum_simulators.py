@@ -352,5 +352,33 @@ class TestQuantumSimulators(unittest.TestCase):
 
         projQ_backend.accept_command(command_creator("END_SESSION", [0], [0])[0])
 
+
+    def test_modifiers(self):
+        projQ_backend = ProjectqQuantumSimulator(
+            register_size=2,
+            seed=234,
+            backend=Simulator
+        )
+
+        circuit1 = [
+            ["START_SESSION", [0], [0]],
+            ["STATE_PREPARATION_ALL", [0], [0]],
+            ["QUBIT_MEASURE", [0,0], [0]],
+            ["MODIFIER", [0, 0], [0, 1], True],
+            ["X", [0], [1]],
+            ["QUBIT_MEASURE", [0,0], [1]],
+            ["END_SESSION", [0], [0]]
+        ]
+
+        circuit2 = [
+            ["START_SESSION", [0], [0]],
+            ["STATE_PREPARATION_ALL", [0], [0]],
+            ["QUBIT_MEASURE", [0,0], [0]],
+            ["QUBIT_MEASURE", [0,0], [1]],
+            ["END_SESSION", [0], [0]]
+        ]
+
+        self.assertEqual(0, 0)
+
 if __name__ == "__main__":
     unittest.main()
