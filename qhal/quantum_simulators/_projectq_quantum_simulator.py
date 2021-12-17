@@ -117,6 +117,9 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         self._qubit_register = None
         self._measured_qubits = []
         self._offset_registers = [0, 0]  # offsets for qubit indexes 0 and 1
+        self._reqs = [] # Required measurements for dependencies
+        self._update_fn = 0 # Instructions for calculating condtnl execution
+        self._cmd_update = 0 # Instructions to modify next command
 
         # defaulted to 16 because the bitcode status return
         # has 16 bits assigned for measurement results.
@@ -184,6 +187,18 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
     def get_offset(self, qubit_index: int):
         return self._offset_registers[qubit_index]
+
+    def modify_command(self, update_fn = 0,
+                             cmd_update = 0,
+                             reqs = []):
+        if (0 #This should be sum of measurement results 
+                + update_fn) % 2 == 1:
+            self._update_fn = 0
+
+        else:
+            self._cmd_update = 0
+            self._update_fn = 0
+
 
     def apply_gate(self,
                    gate: BasicGate,
@@ -260,6 +275,9 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
                 f"Qubit index {index} greater than register size " + \
                 f"({self._qubit_register_size})!"
 
+        if self._cmd_update == 1: # This is the 'do not execute' flag
+            pass
+
         if op == "START_SESSION":
             self._init_engine()
 
@@ -322,13 +340,18 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if cmd_type == "SINGLE":
                 self.apply_gate(gate, q_index_0, parameter_0=arg0, parameter_1=arg1)
             else:
-                self.apply_gate(
-                    gate,
-                    qubit_index_0=q_index_0,
-                    qubit_index_1=q_index_1,
-                    parameter_0=arg0,
-                    parameter_1=arg1
-                )
+                if op == "MODIFIER" and ((command >> 50) & 0b01) == 1:
+                   self._reqs.append(args)
+                   if final_flag == True:
+                       self.modify_command(self._update_fn, self._cmd_update, self._reqs)
+                else:
+                    self.apply_gate(
+                        gate,
+                        qubit_index_0=q_index_0,
+                        qubit_index_1=q_index_1,
+                        parameter_0=arg0,
+                        parameter_1=arg1
+                    )
 
         elif op_obj.param == "CONST":
             if q_index_0 in self._measured_qubits:

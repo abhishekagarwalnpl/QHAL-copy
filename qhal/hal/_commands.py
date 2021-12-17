@@ -216,10 +216,7 @@ def command_creator(
     if opcode.param == "PARAM":
         cmd = cmd | Masks.OPCODE_PARAM_MASK.value << Shifts.OPCODE.value
 
-    if opcode.name != "MODIFIER":
-        return [cmd]
-
-    else:
+    if opcode.name == "MODIFIER":
         cmds = [cmd]
 
         num_aux_msgs = int(-(len(reqs) // -5.0))
@@ -239,6 +236,9 @@ def command_creator(
         cmds[-1] += (1 << 51)  
 
         return cmds
+
+    else:
+        return [cmd]
 
 
 def command_unpacker(
