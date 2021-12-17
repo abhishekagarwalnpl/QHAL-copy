@@ -247,7 +247,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         command: uint64
     ) -> uint64:
 
-        op, cmd_type, args, qubit_indexes = command_unpacker(command)
+        op, cmd_type, args, qubit_indexes, final_flag = command_unpacker(command)
         op_obj = string_to_opcode(op)
 
         q_index_0 = qubit_indexes[0] + self.get_offset(0)
