@@ -305,6 +305,18 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             # In the ProjectQ simulator we implement this via a rotation and then measurement.
             arg0 = binary_angle_conversion(args[0])
             arg1 = binary_angle_conversion(args[1])
+
+            if self._cmd_update == 1: # X-update
+                arg0 = -arg0 + np.pi
+                arg1 = -arg1 
+
+            if self._cmd_update == 2: # Y-update
+                arg0 = -arg0 + np.pi
+                arg1 = -arg1 + np.pi
+
+            if self._cmd_update == 3: # Z-update
+                arg1 += np.pi
+
             Rz(-arg1) | self._qubit_register[q_index_0]
             Ry(-arg0) | self._qubit_register[q_index_0]
             Measure | self._qubit_register[q_index_0]
@@ -340,7 +352,14 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
             if cmd_type == "SINGLE":
                 self.apply_gate(gate, q_index_0, parameter_0=arg0, parameter_1=arg1)
             else:
-                if op == "MODIFIER" and ((command >> 50) & 0b01) == 1:
+                if op == "MODIFIER" and ((command >> 50) & 0b01) == 0:
+                    self._reqs.append(args[1])
+                    self._update_fn = (args[1] >> 15)
+                    self._cmd_update = args[0]
+                    if final_flag == True:
+                        self.modify_command(self._update_fn, self._cmd_update, self._reqs)
+
+                elif op == "MODIFIER" and ((command >> 50) & 0b01) == 1:
                    self._reqs.append(args)
                    if final_flag == True:
                        self.modify_command(self._update_fn, self._cmd_update, self._reqs)
