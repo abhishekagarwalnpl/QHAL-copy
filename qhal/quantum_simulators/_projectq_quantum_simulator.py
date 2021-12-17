@@ -120,6 +120,7 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
         self._reqs = [] # Required measurements for dependencies
         self._update_fn = 0 # Instructions for calculating condtnl execution
         self._cmd_update = 0 # Instructions to modify next command
+        self._measurement_results = {}
 
         # defaulted to 16 because the bitcode status return
         # has 16 bits assigned for measurement results.
@@ -191,8 +192,11 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
     def modify_command(self, update_fn = 0,
                              cmd_update = 0,
                              reqs = []):
-        if (0 #This should be sum of measurement results 
-                + update_fn) % 2 == 1:
+        reqs_sum = 0
+        for requirement in reqs:
+            reqs_sum += self._measurement_results[requirement] % 2
+
+        if (reqs_sum + update_fn) % 2 == 1:
             self._update_fn = 0
 
         else:
@@ -324,6 +328,8 @@ class ProjectqQuantumSimulator(IQuantumSimulator):
 
             measurement = int(self._qubit_register[q_index_0])
             self._measured_qubits.append(q_index_0)
+
+            self._measurement_results[q_index_0] = measurement
 
             if len(self._qubit_register) == len(self._measured_qubits):
                 self._qubit_register = None
